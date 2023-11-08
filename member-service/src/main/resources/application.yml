@@ -1,1 +1,18 @@
+spring:
+  profiles:
+    active: private
+  datasource:
+    url: ${url}
+    username: ${username_}
+    password: ${password}
+    driver-class-name: ${driver-class-name}
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        physical_naming_strategy: com.farmted.memberservice.config.CumstomCamelCaseToSnakeAndUpperCaseStrategy
+    show-sql: true
+    hibernate:
+      ddl-auto: create
 
