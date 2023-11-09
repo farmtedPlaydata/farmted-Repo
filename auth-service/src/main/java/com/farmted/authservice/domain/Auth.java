@@ -19,6 +19,9 @@ public class Auth extends TimeStamp implements Serializable {
     @Column(nullable = false, unique = true)
     private String authEmail;
 
+    @Column(nullable = false, unique = true)
+    private String uuid;
+
     @Column(nullable = false)
     private String authPassword;
 
@@ -27,10 +30,9 @@ public class Auth extends TimeStamp implements Serializable {
 
     private Boolean authStatus;
 
+    private String socialId;
+
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
-
-    @Column(nullable = false, unique = true)
-    private String socialEmail;
 
 }
