@@ -25,7 +25,7 @@ public class Auth extends TimeStamp implements Serializable {
     @Enumerated(EnumType.STRING)
     private RoleEnums authRole;
 
-    private Boolean auth_status;
+    private Boolean authStatus;
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
