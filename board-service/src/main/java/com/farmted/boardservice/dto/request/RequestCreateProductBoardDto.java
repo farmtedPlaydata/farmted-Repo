@@ -1,4 +1,4 @@
-package com.farmted.boardservice.dto;
+package com.farmted.boardservice.dto.request;
 
 import com.farmted.boardservice.domain.Board;
 import com.farmted.boardservice.enums.BoardType;
@@ -30,13 +30,14 @@ public record RequestCreateProductBoardDto (
     }
 
     // 상품 전용 데이터 - 전송용 VO
-    public ProductVo toProduct(){
+    public ProductVo toProduct(String boardUuid){
         return ProductVo.builder()
                 .productName(this.productName)
                 .productStock(this.productStock)
                 .productPrice(this.productPrice)
                 .productSource(this.productSource)
                 .productImage(this.productImage)
+                .boardUuid(boardUuid)
                 .build();
     }
 }
