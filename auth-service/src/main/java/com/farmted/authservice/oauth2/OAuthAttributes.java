@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Map;
+import java.util.UUID;
 
 
 // 각 소셜에서 받아오는 데이터가 다르므로 데이터를 분기 처리하는 DTO 클래스
@@ -51,11 +52,19 @@ public class OAuthAttributes {
                 .build();
     }
 
+    /*
+    * of 메서드로 OAuthAttribues 객체가 생성, 유저 정보들이 담긴 OAuth2UserInfo가 소셜 타입별로 주입된 상태
+    * OAuth2UserInfo에서 socialId(식별값), email, imageUrl을 가져오고
+    * JWT에 담기위한 값으로 랜덤 UUID, role은 GUEST로 설정하여 build
+    * */
+
     public Auth toEntity(SocialType socialType, OAuth2UserInfo oAuth2UserInfo) {
         return Auth.builder()
                 .socialType(socialType)
                 .socialId(oAuth2UserInfo.getId())
                 .authEmail(oAuth2UserInfo.getEmail())
+                .uuid(UUID.randomUUID().toString())
+                .imageUrl(oAuth2UserInfo.getImageUrl())
                 .authRole(RoleEnums.GUEST)
                 .build();
     }
