@@ -1,4 +1,4 @@
-package com.farmted.authservice.oauth2.userinfo;
+package com.farmted.authservice.util.oauth2.userinfo;
 
 import java.util.Map;
 

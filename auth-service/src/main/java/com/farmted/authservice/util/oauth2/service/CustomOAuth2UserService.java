@@ -1,10 +1,10 @@
-package com.farmted.authservice.oauth2.service;
+package com.farmted.authservice.util.oauth2.service;
 
-import com.farmted.authservice.domain.Auth;
+import com.farmted.authservice.domain.Pass;
 import com.farmted.authservice.enums.SocialType;
-import com.farmted.authservice.oauth2.CustomOAuth2User;
-import com.farmted.authservice.oauth2.OAuthAttributes;
-import com.farmted.authservice.repository.AuthRepository;
+import com.farmted.authservice.util.oauth2.CustomOAuth2User;
+import com.farmted.authservice.util.oauth2.OAuthAttributes;
+import com.farmted.authservice.repository.PassRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,7 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final AuthRepository authRepository;
+    private final PassRepository passRepository;
 
 
     @Override
@@ -45,31 +45,31 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // socialType에 따라 유저 정보를 통해 OAuthAttribues 객체 생성
         OAuthAttributes extractAttributes = OAuthAttributes.of(socialType, userNameAttributeName, attributes);
 
-        Auth createdAuth = getAuth(extractAttributes, socialType);   // getAuth() 메서드로 Auth 객체 생성 후 반환
+        Pass createdPass = getPass(extractAttributes, socialType);   // getAuth() 메서드로 Pass 객체 생성 후 반환
 
         return new CustomOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(createdAuth.getAuthRole().getKey())),
+                Collections.singleton(new SimpleGrantedAuthority(createdPass.getRole().getKey())),
                         attributes,
                         extractAttributes.getNameAttributeKey(),
-                        createdAuth.getAuthEmail(),
-                        createdAuth.getAuthRole()
+                        createdPass.getEmail(),
+                        createdPass.getRole()
                 );
     }
 
     // socialType과 attributes에 들어있는 소셜 로그인의 식별값 id를 통해 회원을 찾아 반환하는 메서드
     // 만약 찾은 회원이 있다면 그대로 반환, 없다면 saveUser()를 호출하여 회원 저장
-    private Auth getAuth(OAuthAttributes attributes, SocialType socialType) {
-        Auth findAuth = authRepository.findBySocialTypeAndSocialId(socialType, attributes.getOAuth2UserInfo().getId()).orElse(null);
+    private Pass getPass(OAuthAttributes attributes, SocialType socialType) {
+        Pass findPass = passRepository.findBySocialTypeAndSocialId(socialType, attributes.getOAuth2UserInfo().getId()).orElse(null);
 
-        if(findAuth == null) return saveAuth(attributes, socialType);
+        if(findPass == null) return savePass(attributes, socialType);
 
-        return findAuth;
+        return findPass;
     }
 
     // OAuthAttributes의 toEntity() 메서드를 통해 builder로 Auth 객체 생성 후 반환
-    private Auth saveAuth(OAuthAttributes attributes, SocialType socialType) {
-        Auth createdAuth = attributes.toEntity(socialType, attributes.getOAuth2UserInfo());
-        return authRepository.save(createdAuth);
+    private Pass savePass(OAuthAttributes attributes, SocialType socialType) {
+        Pass createdPass = attributes.toEntity(socialType, attributes.getOAuth2UserInfo());
+        return passRepository.save(createdPass);
     }
 
     private SocialType getSocialType(String registrationId) {

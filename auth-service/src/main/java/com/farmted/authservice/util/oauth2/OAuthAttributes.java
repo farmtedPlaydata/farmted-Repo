@@ -1,10 +1,10 @@
-package com.farmted.authservice.oauth2;
+package com.farmted.authservice.util.oauth2;
 
-import com.farmted.authservice.domain.Auth;
+import com.farmted.authservice.domain.Pass;
 import com.farmted.authservice.enums.RoleEnums;
 import com.farmted.authservice.enums.SocialType;
-import com.farmted.authservice.oauth2.userinfo.GoogleOAuth2UserInfo;
-import com.farmted.authservice.oauth2.userinfo.OAuth2UserInfo;
+import com.farmted.authservice.util.oauth2.userinfo.GoogleOAuth2UserInfo;
+import com.farmted.authservice.util.oauth2.userinfo.OAuth2UserInfo;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -58,14 +58,14 @@ public class OAuthAttributes {
     * JWT에 담기위한 값으로 랜덤 UUID, role은 GUEST로 설정하여 build
     * */
 
-    public Auth toEntity(SocialType socialType, OAuth2UserInfo oAuth2UserInfo) {
-        return Auth.builder()
+    public Pass toEntity(SocialType socialType, OAuth2UserInfo oAuth2UserInfo) {
+        return Pass.builder()
                 .socialType(socialType)
                 .socialId(oAuth2UserInfo.getId())
-                .authEmail(oAuth2UserInfo.getEmail())
+                .email(oAuth2UserInfo.getEmail())
                 .uuid(UUID.randomUUID().toString())
                 .imageUrl(oAuth2UserInfo.getImageUrl())
-                .authRole(RoleEnums.GUEST)
+                .role(RoleEnums.GUEST)
                 .build();
     }
 }

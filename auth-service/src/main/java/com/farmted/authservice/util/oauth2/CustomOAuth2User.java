@@ -1,4 +1,4 @@
-package com.farmted.authservice.oauth2;
+package com.farmted.authservice.util.oauth2;
 
 import com.farmted.authservice.enums.RoleEnums;
 import lombok.Getter;

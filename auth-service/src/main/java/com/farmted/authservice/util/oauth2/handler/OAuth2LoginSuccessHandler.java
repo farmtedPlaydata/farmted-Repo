@@ -1,6 +1,7 @@
-package com.farmted.authservice.oauth2.handler;
+package com.farmted.authservice.util.oauth2.handler;
 
-import com.farmted.authservice.repository.AuthRepository;
+import com.farmted.authservice.repository.PassRepository;
+import com.farmted.authservice.util.jwt.JwtProdiver;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,8 +17,9 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
-    
-    private final AuthRepository authRepository;
+
+    private final JwtProdiver jwtProvider;
+    private final PassRepository passRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
