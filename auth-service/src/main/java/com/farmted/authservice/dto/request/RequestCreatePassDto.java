@@ -22,7 +22,7 @@ public class RequestCreatePassDto {
                 .password(this.password)
                 .uuid(UUID.randomUUID().toString())
                 .role(RoleEnums.GUEST)
-                .status(true)
+                .status(false)
                 .build();
     }
 }

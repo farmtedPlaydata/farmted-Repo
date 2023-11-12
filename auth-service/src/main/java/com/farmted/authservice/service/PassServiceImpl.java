@@ -3,6 +3,7 @@ package com.farmted.authservice.service;
 import com.farmted.authservice.domain.Pass;
 import com.farmted.authservice.dto.request.RequestCreatePassDto;
 import com.farmted.authservice.repository.PassRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

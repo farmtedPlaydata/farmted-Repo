@@ -1,5 +1,6 @@
 package com.farmted.authservice.util.redis;
 
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;

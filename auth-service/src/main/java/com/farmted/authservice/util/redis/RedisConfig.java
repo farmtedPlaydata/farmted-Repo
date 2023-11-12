@@ -15,11 +15,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @RequiredArgsConstructor
 @EnableRedisRepositories
 public class RedisConfig {
-    private RedisProperties properties;
+    private final RedisProperties redisProperties;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(properties.getHost(), properties.getPort());
+        return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
     }
 
     @Bean
