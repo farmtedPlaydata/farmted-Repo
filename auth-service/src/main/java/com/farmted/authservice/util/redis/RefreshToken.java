@@ -1,9 +1,8 @@
 package com.farmted.authservice.util.redis;
 
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
@@ -14,6 +13,7 @@ public class RefreshToken {
 
     @Id
     private String uuid;
+
     private String refreshToken;
 
     @TimeToLive

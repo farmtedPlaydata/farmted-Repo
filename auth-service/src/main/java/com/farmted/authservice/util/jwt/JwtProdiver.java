@@ -3,8 +3,8 @@ package com.farmted.authservice.util.jwt;
 import com.farmted.authservice.enums.RoleEnums;
 import com.farmted.authservice.enums.TokenState;
 import com.farmted.authservice.enums.TokenType;
-import com.farmted.authservice.security.UserDetailsImpl;
-import com.farmted.authservice.security.UserDetailsServiceImpl;
+import com.farmted.authservice.global.security.UserDetailsImpl;
+import com.farmted.authservice.global.security.UserDetailsServiceImpl;
 import com.farmted.authservice.util.redis.RedisRepository;
 import com.farmted.authservice.util.redis.RefreshToken;
 import io.jsonwebtoken.Claims;
@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

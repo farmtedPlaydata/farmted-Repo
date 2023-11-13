@@ -1,4 +1,4 @@
-package com.farmted.authservice.config;
+package com.farmted.authservice.global.config;
 
 import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.hibernate.boot.model.naming.Identifier;

@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.UUID;
 
 // DefaultOAuth2User를 상속하고, email과 role 필드를 추가로 가짐
 

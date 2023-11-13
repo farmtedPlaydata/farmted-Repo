@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface PassRepository extends JpaRepository<Pass, Long> {
     Optional<Pass> findBySocialTypeAndSocialId(SocialType socialType, String id);
     Optional<Pass> findByUuid(String uuid);
-
+    Optional<Pass> findByEmail(String email);
 }
 
