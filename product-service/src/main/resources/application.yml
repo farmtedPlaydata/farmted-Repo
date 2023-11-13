@@ -1,1 +1,22 @@
 
+
+spring:
+  application:
+    name: product-service
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/farmted
+    username: root
+    password: 1234
+
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8081
