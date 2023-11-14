@@ -107,7 +107,7 @@ public class ServiceTest {
         Board board = boardRepository.findAll().get(0);
 
         // when
-        ResponseGetAuctionBoardDto responseDto = boardService.getAuctionBoardList(board.getBoardUuID());
+        ResponseGetAuctionBoardDto responseDto = boardService.getAuctionBoard(board.getBoardUuID());
 
         // then
         assertThat(responseDto.getBoardTitle()).isEqualTo(board.getBoardTitle());
