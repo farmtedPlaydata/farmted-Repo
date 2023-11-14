@@ -6,12 +6,13 @@ import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 
 import java.util.Locale;
 
-public class CumstomCamelCaseToSnakeAndUpperCaseStrategy extends CamelCaseToUnderscoresNamingStrategy {
+public class CustomCamelCaseToSnakeAndLowerCaseStrategy extends CamelCaseToUnderscoresNamingStrategy {
     @Override
     protected Identifier getIdentifier(String name, final boolean quoted, final JdbcEnvironment jdbcEnvironment) {
         if ( isCaseInsensitive( jdbcEnvironment ) ) {
-            name = name.toUpperCase( Locale.ROOT );
+            name = name.toLowerCase( Locale.ROOT );
         }
         return new Identifier( name, quoted );
     }
+
 }
