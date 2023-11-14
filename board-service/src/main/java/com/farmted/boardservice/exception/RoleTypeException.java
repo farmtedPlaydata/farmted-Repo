@@ -1,5 +1,6 @@
 package com.farmted.boardservice.exception;
 
+// 헤더를 통해 받아오는 RoleType에 대해 이상한 값이 존재하는 경우
 public class RoleTypeException extends RuntimeException{
     // 헤더에 이상한 타입이 들어온 경우
     public RoleTypeException(String type) {
