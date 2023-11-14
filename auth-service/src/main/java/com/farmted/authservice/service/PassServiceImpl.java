@@ -3,28 +3,26 @@ package com.farmted.authservice.service;
 import com.farmted.authservice.domain.Pass;
 import com.farmted.authservice.dto.request.RequestCreatePassDto;
 import com.farmted.authservice.dto.request.RequestLoginDto;
-import com.farmted.authservice.dto.response.ResponseLoginDto;
 import com.farmted.authservice.enums.TokenType;
 import com.farmted.authservice.repository.PassRepository;
 import com.farmted.authservice.util.jwt.JwtProdiver;
 import com.farmted.authservice.util.redis.RedisRepository;
 import com.farmted.authservice.util.redis.RefreshToken;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -45,11 +43,14 @@ public class PassServiceImpl implements PassService {
     }
 
     @Override
-    public ResponseEntity<ResponseLoginDto> login(RequestLoginDto dto) {
+    public ResponseEntity<?> login(RequestLoginDto dto, HttpServletResponse response) {
+        Pass pass = passRepository.findByEmail(dto.getEmail());
+
         checkPass(dto.getEmail(), dto.getPassword());
+        getAccessToken(pass, response);
+        getRefreshToken(pass, response);
 
-
-        return null;
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 
@@ -64,14 +65,12 @@ public class PassServiceImpl implements PassService {
 
     // 로그인 검증
     private void checkPass(String email, String password) {
-        passRepository.findByEmail(email)
-                .ifPresent(pass ->{
-                    String checkPass = pass.getPassword();
-                    if (!passwordEncoder.matches(password, checkPass)) {
-                        throw new RuntimeException("이메일, 또는 비밀번호가 일치하지 않습니다.");
-                    }
-                });
-        throw new RuntimeException("이메일, 또는 비밀번호가 일치하지 않습니다.");
+        Pass pass = passRepository.findByEmail(email);
+        if (passwordEncoder.matches(password, pass.getPassword())) {
+            log.info("비밀번호 체크 성공");
+        } else {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
     }
 
     // AccessToken 발급
@@ -108,7 +107,7 @@ public class PassServiceImpl implements PassService {
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
 
-        // Redis에서 UUID로 조회, 있다면 새로운 리프레시 토큰으로 업데이트, 없는 경우 새로운 리프레스 토큰 저장
+        // Redis에서 UUID로 조회, 있다면 새로운 리프레시 토큰으로 업데이트, 없는 경우 새로운 리프레시 토큰 저장
         redisRepository.findById(pass.getUuid())
                 .ifPresentOrElse(
                         refreshToken -> {
