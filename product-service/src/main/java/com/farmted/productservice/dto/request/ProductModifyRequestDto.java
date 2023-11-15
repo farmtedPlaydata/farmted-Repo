@@ -1,8 +1,9 @@
 package com.farmted.productservice.dto.request;
 
-import lombok.Getter;
+import lombok.*;
 
-@Getter
+@Getter @AllArgsConstructor @NoArgsConstructor
+@Builder @Setter
 public class ProductModifyRequestDto {
     int money;
 }

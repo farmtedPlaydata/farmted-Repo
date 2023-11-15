@@ -20,7 +20,9 @@ public class ProductSaveRequestDto {
 
     private String image;
 
-    public Product toEntity(){
+    private String boardUuid;
+
+    public Product toEntity(String memberUuid){
         return Product.builder()
                 .uuid(UUID.randomUUID().toString())
                 .name(this.getName())
@@ -28,8 +30,10 @@ public class ProductSaveRequestDto {
                 .price(this.getPrice())
                 .source(this.getSource())
                 .image(this.getImage())
-                .status(true) // 생성 시 기본 값 true
-                .auctionStatus(true) // 생성 시 기본 값 true
+                .memberUuid(memberUuid)
+                .boardUuid(this.getBoardUuid())
+                .status(true) // 생성 시 기본 값 true : 판매 자동 시작
+                .auctionStatus(true) // 생성 시 기본 값 true : 경매 자동 시작
                 .build();
     }
 

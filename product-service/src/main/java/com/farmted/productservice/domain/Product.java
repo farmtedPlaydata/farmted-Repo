@@ -1,9 +1,8 @@
 package com.farmted.productservice.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,26 +15,37 @@ public class Product extends TimeStamp{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String uuid; // FK 사용
+    @NotNull
+    @Column(unique = true)
+    private String uuid; // 식별자
 
+    @NotNull
     private String name;
 
     private int stock;
 
+    @NotNull
     private int price;
 
+    @NotNull
     private String source;
 
+    @Column(nullable = true)
     private String image;
 
+    @NotNull
     private boolean status;
 
+    @NotNull
     private boolean auctionStatus;
 
+    @NotNull
     private String memberUuid;
 
+    @NotNull
     private String boardUuid;
 
+    // 가격 수정
     public void modifyPrice(int price){
         this.price =price;
     }

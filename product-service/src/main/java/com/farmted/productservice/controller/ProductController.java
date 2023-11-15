@@ -1,9 +1,8 @@
 package com.farmted.productservice.controller;
 
-import com.farmted.productservice.domain.Product;
 import com.farmted.productservice.dto.request.ProductModifyRequestDto;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
-import com.farmted.productservice.dto.response.ProductResponseDTO;
+import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,39 +20,48 @@ public class ProductController {
 
     // 판매자 상품 등록
     @PostMapping("/products")
-    public ResponseEntity<?>  saveProduct(ProductSaveRequestDto productSaveRequestDto) {
-        productService.saveProduct(productSaveRequestDto);
+    public ResponseEntity<?>  saveProduct(
+            @RequestBody ProductSaveRequestDto productSaveRequestDto,
+            @RequestHeader("MemberUUID") String memberUuid // 멤버
+    ) {
+        productService.saveProduct(memberUuid,productSaveRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     // 판매자 등록 전체 상품 조회
-    @GetMapping("/products/{member_uuid}")
-    public ResponseEntity<List<Product>> getProductListSeller(@PathVariable (value = "member_uuid") String memberUuid) {
+    @GetMapping("/products/seller/{member_uuid}")
+    public ResponseEntity<List<ProductResponseDto>> getProductListSeller(@PathVariable (value = "member_uuid") String memberUuid) {
         return  ResponseEntity.ok(productService.getListProductSeller(memberUuid));
     }
 
     // 판매자 가격 수정
     @PatchMapping("/products/{product_uuid}")
-    public ResponseEntity<?> modifyProduct(@PathVariable (value = "product_uuid") String productUuid , ProductModifyRequestDto productModifyRequestDto)
+    public ResponseEntity<?> modifyProduct(
+            @PathVariable (value = "product_uuid") String productUuid ,
+            @RequestHeader("MemberUUID") String memberUuid, // 멤버
+            @RequestBody ProductModifyRequestDto productModifyRequestDto
+    )
     {
-        productService.modifyProduct(productUuid,productModifyRequestDto);
+        productService.modifyProduct(productUuid, memberUuid,productModifyRequestDto);
         return ResponseEntity.ok().build();
     }
 
-    // 판매자 가격 이외 수정 불가능? 가능
+    // 판매자 전체 수정
 
 
     // 전체 상품 조회
     @GetMapping("/products")
-    public ResponseEntity<?> getProductList(){
+    public ResponseEntity<List<ProductResponseDto>> getProductList(){
        return ResponseEntity.ok(productService.getListProduct());
     }
 
     // 상품 상세 조회
     @GetMapping("/products/{product_uuid}")
-    public ResponseEntity<ProductResponseDTO> getProductDetail(@PathVariable (value = "product_uuid") String productUuid){
+    public ResponseEntity<ProductResponseDto> getProductDetail(@PathVariable (value = "product_uuid") String productUuid){
         return ResponseEntity.ok(productService.getProductDetail(productUuid));
 
     }
 
 }
+
+
