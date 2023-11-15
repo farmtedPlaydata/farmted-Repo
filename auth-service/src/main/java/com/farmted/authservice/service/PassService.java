@@ -9,6 +9,6 @@ public interface PassService {
 
     void createPass(RequestCreatePassDto dto);
 
-    ResponseEntity<?> login(RequestLoginDto dto, HttpServletResponse response);
+    void login(RequestLoginDto dto, HttpServletResponse response);
 
 }

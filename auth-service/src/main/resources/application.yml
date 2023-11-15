@@ -17,7 +17,7 @@ spring:
         physical_naming_strategy: com.farmted.authservice.global.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
   #Redis
   data:
@@ -25,3 +25,13 @@ spring:
       host: 127.0.0.1
       port: 6379
       password: 5986
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 103819284407-g161ugj2ams4u5aosrgqvaq6lqlnimg2.apps.googleusercontent.com
+            client-secret: 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
+            scope: profile, email
+            redirect-uri: http://localhost:8080/pass-service/oauth/login/google

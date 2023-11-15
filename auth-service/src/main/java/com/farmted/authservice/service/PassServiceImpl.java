@@ -11,6 +11,7 @@ import com.farmted.authservice.util.redis.RefreshToken;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Request;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -43,14 +44,15 @@ public class PassServiceImpl implements PassService {
     }
 
     @Override
-    public ResponseEntity<?> login(RequestLoginDto dto, HttpServletResponse response) {
+    public void login(RequestLoginDto dto, HttpServletResponse response) {
         Pass pass = passRepository.findByEmail(dto.getEmail());
 
-        checkPass(dto.getEmail(), dto.getPassword());
+        checkPass(dto);
+
         getAccessToken(pass, response);
         getRefreshToken(pass, response);
 
-        return ResponseEntity.ok(HttpStatus.OK);
+        log.info("로그인 성공");
     }
 
 
@@ -64,13 +66,15 @@ public class PassServiceImpl implements PassService {
     }
 
     // 로그인 검증
-    private void checkPass(String email, String password) {
-        Pass pass = passRepository.findByEmail(email);
-        if (passwordEncoder.matches(password, pass.getPassword())) {
+    private Pass checkPass(RequestLoginDto dto) {
+        Pass pass = passRepository.findByEmail(dto.getEmail());
+        if (passwordEncoder.matches(dto.getPassword(), pass.getPassword())) {
             log.info("비밀번호 체크 성공");
         } else {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
+
+        return pass;
     }
 
     // AccessToken 발급

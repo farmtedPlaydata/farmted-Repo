@@ -27,7 +27,10 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             
             // Pass의 Role이 GUEST일 경우 회원가입이 완료되지 않은 회원이므로 회원 상세정보 적기 페이지로 리다이렉트
             if (oAuth2User.getRole() == RoleEnums.GUEST)
-                response.sendRedirect("상세정보 추가 페이지");
+                response.sendRedirect("/home");
+            else{
+                response.sendRedirect("/home");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -22,7 +22,7 @@ public class Pass extends TimeStamp implements Serializable {
     @Column(nullable = false, unique = true)
     private String uuid;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String password;
 
     @Enumerated(EnumType.STRING)

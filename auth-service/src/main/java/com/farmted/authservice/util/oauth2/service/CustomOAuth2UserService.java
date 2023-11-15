@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -52,7 +53,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                         attributes,
                         extractAttributes.getNameAttributeKey(),
                         createdPass.getEmail(),
-                        createdPass.getRole()
+                        createdPass.getRole(),
+                        UUID.randomUUID().toString()
                 );
     }
 
