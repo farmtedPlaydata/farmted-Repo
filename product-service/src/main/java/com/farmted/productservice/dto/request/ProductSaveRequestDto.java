@@ -3,8 +3,6 @@ package com.farmted.productservice.dto.request;
 import com.farmted.productservice.domain.Product;
 import lombok.*;
 
-import java.util.UUID;
-
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 @Builder
