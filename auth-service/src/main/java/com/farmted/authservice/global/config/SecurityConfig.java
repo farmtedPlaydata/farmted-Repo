@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
@@ -33,22 +34,22 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeHttpRequests((authz) -> authz
+                .requestMatchers("/", "/css/**", "/js/**", "/favicon.ico").permitAll()
+                .requestMatchers("/**").permitAll());
         httpSecurity
                 // csrf, formLogin 비활성화
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable);
+        httpSecurity.headers(headers-> headers
+                .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));  // X-Frame-Options 헤더 비활성화
         httpSecurity.oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
-                // 사용자가 로그인할 때 리다이렉션될 로그인 페이지
-                .loginPage("/home")
+                .loginPage("/login")
                 .successHandler(oAuth2LoginSuccessHandler)
                 .failureHandler(oAuth2LoginFailureHandler)
                 // customOAuth2UserService를 통해 사용자 정보를 가져옴
                 .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                         .userService(customOAuth2UserService)));
-        httpSecurity.headers(headers-> headers
-                .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));  // X-Frame-Options 헤더 비활성화
-        httpSecurity.authorizeHttpRequests(a -> a
-                .requestMatchers("/**", "/css/**", "/js/**", "/favicon.ico", "/").permitAll());       // 페이지 권한 설정
         return httpSecurity.build();
     }
 
