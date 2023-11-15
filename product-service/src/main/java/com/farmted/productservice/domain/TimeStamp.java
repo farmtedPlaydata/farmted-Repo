@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class) // BaseTimeEntity 클래스에 Auditing 기능을 포함시킵니다.
 public class TimeStamp {
 
-    @Column(nullable = false)
+    @Column(updatable = false, nullable = false)
     @CreatedDate
     private LocalDateTime createAt;
 

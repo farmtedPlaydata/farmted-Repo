@@ -1,12 +1,13 @@
 package com.farmted.productservice.domain;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Entity @Getter @Builder
 @NoArgsConstructor @AllArgsConstructor
@@ -44,6 +45,13 @@ public class Product extends TimeStamp{
 
     @NotNull
     private String boardUuid;
+
+    @PrePersist
+    public void createUuid(){
+        uuid = UUID.randomUUID().toString();
+        status = true;
+        auctionStatus = true;
+    }
 
     // 가격 수정
     public void modifyPrice(int price){
