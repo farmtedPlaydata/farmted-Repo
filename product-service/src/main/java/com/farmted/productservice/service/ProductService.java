@@ -4,6 +4,8 @@ import com.farmted.productservice.domain.Product;
 import com.farmted.productservice.dto.request.ProductModifyRequestDto;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
+import com.farmted.productservice.exception.ProductException;
+import com.farmted.productservice.exception.SellerException;
 import com.farmted.productservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,11 +31,11 @@ public class ProductService {
     public void modifyProduct(String productUuid, String memberUuId,ProductModifyRequestDto productModifyRequestDto){
         // 상품 판매자만 가격 수정 가능
         Product product = productRepository.findProductByUuidAndMemberUuid(productUuid,memberUuId)
-                .orElseThrow(()->new RuntimeException("일단 해당 상품 없음 .. 차후 예외처리 신명나게 진행할 예정"));
+                .orElseThrow(()-> new SellerException());
         if(!product.isAuctionStatus()){ // 경매 중이 아닌(상태값이 false) 경우만 가격 수정 가능
             product.modifyPrice(productModifyRequestDto.getMoney());
         }else{
-            new RuntimeException("경매 중에는 불가능 합니다");
+            new ProductException(product.isAuctionStatus());
         }
 
     }
@@ -44,7 +46,7 @@ public class ProductService {
     public List<ProductResponseDto> getListProductSeller(String memberUuid){
         // 해당 판매자가 존재하는 지 확인
         List<Product> productList= productRepository.findProductByMemberUuid(memberUuid)
-               .orElseThrow(() -> new RuntimeException("일단 해당 판매자가 없음.. 차후 예외처리 할래"));
+               .orElseThrow(() -> new SellerException());
 
         List<ProductResponseDto> productListSeller = new ArrayList<>();
         for(Product product: productList){
