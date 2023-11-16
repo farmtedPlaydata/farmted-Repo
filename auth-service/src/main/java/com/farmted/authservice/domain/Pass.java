@@ -3,6 +3,7 @@ package com.farmted.authservice.domain;
 import com.farmted.authservice.enums.RoleEnums;
 import com.farmted.authservice.enums.SocialType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serializable;
@@ -16,10 +17,12 @@ public class Pass extends TimeStamp implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @NotNull
+    @Column(unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @NotNull
+    @Column(unique = true)
     private String uuid;
 
     @Column(nullable = true)

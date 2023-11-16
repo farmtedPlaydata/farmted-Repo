@@ -20,13 +20,13 @@ public class PassController {
 
     private final PassService passService;
 
-    @PostMapping("/pass")
+    @PostMapping("/passes")
     public ResponseEntity<?> createPass(@RequestBody RequestCreatePassDto dto) {
         passService.createPass(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<?> loginPass(@RequestBody RequestLoginDto dto, HttpServletResponse response) {
         passService.login(dto, response);
         return new ResponseEntity<>(HttpStatus.OK);
