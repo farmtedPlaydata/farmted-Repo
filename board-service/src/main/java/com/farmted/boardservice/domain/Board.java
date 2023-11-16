@@ -1,6 +1,7 @@
 package com.farmted.boardservice.domain;
 
 
+import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDTO;
 import com.farmted.boardservice.enums.BoardType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor  //JPA쪽에선 Default 생성자 필요
-public class Board extends TimeStamp{
+public class Board extends TimeStamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,7 +62,10 @@ public class Board extends TimeStamp{
     public void deactiveStatus(){
         boardStatus = false;
     }
-    public void activeStatus(){
-        boardStatus = true;
+    // 게시글 업데이트 로직
+    public void updateBoardInfo(RequestUpdateProductBoardDTO updateDTO){
+        boardType = updateDTO.boardType();
+        boardTitle = updateDTO.boardTitle();
+        boardContent = updateDTO.boardContent();
     }
 }
