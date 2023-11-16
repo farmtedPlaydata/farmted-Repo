@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class PassController {
 
     private final PassService passService;
-    private final CustomOAuth2UserService oAuth2UserService;
 
     @PostMapping("/pass")
     public ResponseEntity<?> createPass(@RequestBody RequestCreatePassDto dto) {
@@ -32,10 +31,4 @@ public class PassController {
         passService.login(dto, response);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-//    @GetMapping("/oauth2/login")
-//    public ResponseEntity<?> googleLogin(@RequestBody OAuth2UserRequest request) {
-//        oAuth2UserService.loadUser(request);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
 }

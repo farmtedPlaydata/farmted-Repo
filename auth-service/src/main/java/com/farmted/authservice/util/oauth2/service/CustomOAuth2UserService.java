@@ -2,19 +2,28 @@ package com.farmted.authservice.util.oauth2.service;
 
 import com.farmted.authservice.domain.Pass;
 import com.farmted.authservice.enums.SocialType;
+import com.farmted.authservice.enums.TokenType;
+import com.farmted.authservice.util.jwt.JwtProdiver;
 import com.farmted.authservice.util.oauth2.CustomOAuth2User;
 import com.farmted.authservice.util.oauth2.OAuthAttributes;
 import com.farmted.authservice.repository.PassRepository;
+import com.farmted.authservice.util.redis.RedisRepository;
+import com.farmted.authservice.util.redis.RefreshToken;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
@@ -25,6 +34,8 @@ import java.util.UUID;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final PassRepository passRepository;
+    private final JwtProdiver jwtProdiver;
+    private final RedisRepository redisRepository;
 
 
     @Override
@@ -46,7 +57,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // socialType에 따라 유저 정보를 통해 OAuthAttribues 객체 생성
         OAuthAttributes extractAttributes = OAuthAttributes.of(socialType, userNameAttributeName, attributes);
 
-        Pass createdPass = getPass(extractAttributes, socialType);   // getAuth() 메서드로 Pass 객체 생성 후 반환
+        Pass createdPass = getPass(extractAttributes, socialType);   // getPass() 메서드로 Pass 객체 생성 후 반환
+
 
         return new CustomOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(createdPass.getRole().getKey())),
@@ -79,4 +91,5 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 //        if(KAKAO.equals(registrationId)) return SocialType.KAKAO;
         return SocialType.GOOGLE;
     }
+
 }

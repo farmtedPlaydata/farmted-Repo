@@ -17,7 +17,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String uuid) throws UsernameNotFoundException {
         Pass pass = passRepository.findByUuid(uuid)
-                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습닌다."));
 
         return new UserDetailsImpl(pass, pass.getEmail(), pass.getUuid());
     }

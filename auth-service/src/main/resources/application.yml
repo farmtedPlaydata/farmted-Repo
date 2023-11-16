@@ -17,7 +17,7 @@ spring:
         physical_naming_strategy: com.farmted.authservice.global.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
   #Redis
   data:

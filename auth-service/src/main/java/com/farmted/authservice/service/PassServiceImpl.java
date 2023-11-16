@@ -11,10 +11,7 @@ import com.farmted.authservice.util.redis.RefreshToken;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Request;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,15 +63,13 @@ public class PassServiceImpl implements PassService {
     }
 
     // 로그인 검증
-    private Pass checkPass(RequestLoginDto dto) {
+    private void checkPass(RequestLoginDto dto) {
         Pass pass = passRepository.findByEmail(dto.getEmail());
         if (passwordEncoder.matches(dto.getPassword(), pass.getPassword())) {
             log.info("비밀번호 체크 성공");
         } else {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
-
-        return pass;
     }
 
     // AccessToken 발급
