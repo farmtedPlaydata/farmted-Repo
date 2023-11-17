@@ -9,6 +9,6 @@ public interface PassService {
 
     void createPass(RequestCreatePassDto dto);
 
-    void login(RequestLoginDto dto, HttpServletResponse response);
+    String login(RequestLoginDto dto);
 
 }
