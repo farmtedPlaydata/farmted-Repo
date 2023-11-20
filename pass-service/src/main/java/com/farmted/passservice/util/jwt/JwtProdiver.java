@@ -90,14 +90,21 @@ public class JwtProdiver {
             return TokenState.EXPIRED;  // 만료된 경우 EXPIRED 반환. 검증실패
         }
     }
+
+    
     
     // refreshToken 검증
     public Boolean validateRefreshToken(String accessToken) {
+        try {
+            // DB에 저장된 토큰과 비교
+            Optional<RefreshToken> savedRefreshToken = redisRepository.findById(getUserInfoFromToken(accessToken).getSubject());
 
-        // DB에 저장된 토큰과 비교
-        Optional<RefreshToken> savedRefreshToken = redisRepository.findById(getUserInfoFromToken(accessToken).getSubject());
+            return savedRefreshToken.isPresent() && accessToken.equals(savedRefreshToken.get().getRefreshToken().substring(7));
 
-        return savedRefreshToken.isPresent() && accessToken.equals(savedRefreshToken.get().getRefreshToken().substring(7));
+        } catch (ExpiredJwtException e) {
+            log.info("이미 만료된 엑세스 토큰입니다.");
+            return null;
+        }
     }
 
     public Claims getUserInfoFromToken(String token) {
