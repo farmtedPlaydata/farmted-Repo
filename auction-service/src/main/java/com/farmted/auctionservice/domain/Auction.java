@@ -1,28 +1,43 @@
 package com.farmted.auctionservice.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Entity
+@NoArgsConstructor @AllArgsConstructor
+@Getter @Builder
 public class Auction extends TimeStamp{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name="auction_id")
+    private Long auction_id;
 
-    private int price;
+    @Column(unique = true)
+    private String auctionUuid;
 
-    private String bidder;
+    private int auctionPrice;
 
-    private String buyer;
+    private String auctionBidder;
 
-    private String deadline;
+    private String auctionBuyer;
 
-    private Boolean status; // 0: 경매중, 1:  경매 종료
+    private String auctionDeadline;
+
+    private Boolean auctionStatus; // 0: 경매중, 1:  경매 종료
 
     private String member_uuid;
 
     private String board_uuid;
+
+    @PrePersist
+    public void createUuid(){
+        auctionUuid = UUID.randomUUID().toString();
+        auctionStatus =true;
+    }
 
 }
