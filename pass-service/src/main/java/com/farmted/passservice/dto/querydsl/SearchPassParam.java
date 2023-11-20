@@ -1,6 +1,6 @@
-package com.farmted.passservice.util.querydsl;
+package com.farmted.passservice.dto.querydsl;
 
-import com.farmted.passservice.util.querydsl.dto.SearchUserDto;
+import com.farmted.passservice.dto.querydsl.dto.SearchUserDto;
 import lombok.*;
 
 @Getter @Setter

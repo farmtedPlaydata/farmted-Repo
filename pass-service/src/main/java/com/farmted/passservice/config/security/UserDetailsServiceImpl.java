@@ -1,4 +1,4 @@
-package com.farmted.passservice.global.security;
+package com.farmted.passservice.config.security;
 
 import com.farmted.passservice.domain.Pass;
 import com.farmted.passservice.repository.PassRepository;

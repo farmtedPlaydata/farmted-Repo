@@ -1,4 +1,4 @@
-package com.farmted.passservice.util.querydsl.dto;
+package com.farmted.passservice.dto.querydsl.dto;
 
 import jakarta.validation.constraints.Min;
 import lombok.Getter;

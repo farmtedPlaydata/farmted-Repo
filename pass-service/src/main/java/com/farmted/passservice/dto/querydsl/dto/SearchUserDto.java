@@ -1,4 +1,4 @@
-package com.farmted.passservice.util.querydsl.dto;
+package com.farmted.passservice.dto.querydsl.dto;
 
 public class SearchUserDto extends PagingDto {
 

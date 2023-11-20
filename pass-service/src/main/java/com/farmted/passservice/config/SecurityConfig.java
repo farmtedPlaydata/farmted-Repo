@@ -1,4 +1,4 @@
-package com.farmted.passservice.global.config;
+package com.farmted.passservice.config;
 
 import com.farmted.passservice.util.jwt.JwtFilter;
 import com.farmted.passservice.util.jwt.JwtProdiver;

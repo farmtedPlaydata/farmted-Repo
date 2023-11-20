@@ -1,4 +1,4 @@
-package com.farmted.passservice.global.config;
+package com.farmted.passservice.config;
 
 import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.hibernate.boot.model.naming.Identifier;
