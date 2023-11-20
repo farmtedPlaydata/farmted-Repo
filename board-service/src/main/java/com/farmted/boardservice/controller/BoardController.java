@@ -1,12 +1,12 @@
 package com.farmted.boardservice.controller;
 
-import com.farmted.boardservice.dto.request.RequestCreateProductBoardDTO;
-import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDTO;
+import com.farmted.boardservice.dto.request.RequestCreateProductBoardDto;
+import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDto;
 import com.farmted.boardservice.service.BoardService;
 import com.farmted.boardservice.vo.ProductVo;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,17 +22,19 @@ public class BoardController {
     // 경매 게시글 작성
     @PostMapping(value = "/boards/auctions")
     public ResponseEntity<?> createAuctionBoard(
-            @Valid @RequestBody RequestCreateProductBoardDTO productBoardDto,
+            @Valid @RequestBody RequestCreateProductBoardDto productBoardDto,
             @RequestHeader("UUID") String uuid,
             @RequestHeader("ROLE") String role){
         ProductVo productVo = boardService.createActionBoard(productBoardDto, uuid, role);
         return new ResponseEntity<>(productVo, HttpStatus.CREATED);
     }
 
-    // 전체 경매 게시글 조회
+    // N 페이지의 경매 게시글 조회
     @GetMapping(value = "/boards/auctions")
-    public ResponseEntity<?> getAuctionBoardList(){
-        return new ResponseEntity<>(boardService.getAuctionBoardList(), HttpStatus.OK);
+    public ResponseEntity<?> getAuctionBoardList(@RequestParam(required = false,
+                                                         defaultValue = "0",
+                                                                value = "page") int pageNo){
+        return new ResponseEntity<>(boardService.getAuctionBoardList(pageNo-1), HttpStatus.OK);
     }
 
     // 개별 경매 게시글 상세 조회
@@ -55,7 +57,7 @@ public class BoardController {
     // 개별 경매 게시글 수정
     @PutMapping(value = "/boards/{board_uuid}/auctions")
     public ResponseEntity<?> updateAuctionBoard(@PathVariable(value= "board_uuid") String boardUuid,
-                                        @Valid @RequestBody RequestUpdateProductBoardDTO updateDTO){
+                                        @Valid @RequestBody RequestUpdateProductBoardDto updateDTO){
         ProductVo productVo = boardService.updateAuctionBoard(updateDTO, boardUuid);
         return new ResponseEntity<>(productVo, HttpStatus.OK);
         // Feign 통신 구현 후엔 아래 값 리턴 예정 (성공적으로 요청을 처리했지만, 응답할 내용 없음->비동기처리할거니까)

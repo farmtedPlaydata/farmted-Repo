@@ -1,27 +1,36 @@
 package com.farmted.boardservice.service;
 
 import com.farmted.boardservice.domain.Board;
-import com.farmted.boardservice.dto.request.RequestCreateProductBoardDTO;
-import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDTO;
-import com.farmted.boardservice.dto.response.ResponseGetAuctionBoardDTO;
-import com.farmted.boardservice.dto.response.ResponseGetAuctionBoardListDTO;
+import com.farmted.boardservice.dto.request.RequestCreateProductBoardDto;
+import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDto;
+import com.farmted.boardservice.dto.response.ResponseGetAuctionBoardDto;
+import com.farmted.boardservice.dto.response.ResponseGetAuctionBoardListDto;
 import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.exception.RoleTypeException;
 import com.farmted.boardservice.repository.BoardRepository;
 import com.farmted.boardservice.vo.ProductVo;
+import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+    // 스케줄러 cron값 임의 변경 가능하도록
+//@TestPropertySource(properties = "schedules.cron= * * * * * *")
 @Transactional
 public class ServiceTest {
 
@@ -38,28 +47,19 @@ public class ServiceTest {
     public void reset(){
         boardRepository.deleteAll();
         // 더미데이터 생성
-        RequestCreateProductBoardDTO dummyData = new RequestCreateProductBoardDTO(
-                BoardType.AUCTION,             // BoardType 값
-                "게시글 내용",                  // 게시글 내용
-                "게시글 제목",                  // 게시글 제목
-                "상품 이름",                    // 상품 이름
-                10,                             // 상품 재고
-                10_000L,                         // 상품 가격
-                "상품 출처",                    // 상품 출처
-                "상품 이미지 URL"               // 상품 이미지 URL
+        IntStream.rangeClosed(1, 5).forEach( (i)->{
+                boardService.createActionBoard(new RequestCreateProductBoardDto(
+                    BoardType.AUCTION,             // BoardType 값
+                    "게시글 내용"+i,                  // 게시글 내용
+                    "게시글 제목"+i,                  // 게시글 제목
+                    "상품 이름"+i,                    // 상품 이름
+                    10*i,                             // 상품 재고
+                    10_000L*i,                         // 상품 가격
+                    "상품 출처"+i,                    // 상품 출처
+                    "상품 이미지 URL"+i               // 상품 이미지 URL
+                ), "uuid"+i, "ROLE_USER");
+                }
         );
-        RequestCreateProductBoardDTO dummyData2 = new RequestCreateProductBoardDTO(
-                BoardType.AUCTION,             // BoardType 값
-                "게시글 내용2",                  // 게시글 내용
-                "게시글 제목2",                  // 게시글 제목
-                "상품 이름2",                    // 상품 이름
-                20,                             // 상품 재고
-                20_000L,                         // 상품 가격
-                "상품 출처2",                    // 상품 출처
-                "상품 이미지 URL2"               // 상품 이미지 URL
-        );
-        boardService.createActionBoard(dummyData, "uuid", "ROLE_USER");
-        boardService.createActionBoard(dummyData2, "uuid", "ROLE_USER");
     }
 
 // Create 로직
@@ -68,7 +68,7 @@ public class ServiceTest {
     public void createBoardTest(){
         // given
             // 더미데이터 생성
-        RequestCreateProductBoardDTO dummyData = new RequestCreateProductBoardDTO(
+        RequestCreateProductBoardDto dummyData = new RequestCreateProductBoardDto(
                 BoardType.AUCTION,             // BoardType 값
                 "게시글 내용",                  // 게시글 내용
                 "Example",                  // 게시글 제목
@@ -100,7 +100,7 @@ public class ServiceTest {
     public void createBoardWhenWeirdRole(){
         // given
         // 더미데이터 생성
-        RequestCreateProductBoardDTO dummyData = new RequestCreateProductBoardDTO(
+        RequestCreateProductBoardDto dummyData = new RequestCreateProductBoardDto(
                 BoardType.AUCTION,             // BoardType 값
                 "게시글 내용",                  // 게시글 내용
                 "Example",                  // 게시글 제목
@@ -121,7 +121,7 @@ public class ServiceTest {
     public void createBoardWhenGuest(){
         // given
         // 더미데이터 생성
-        RequestCreateProductBoardDTO dummyData = new RequestCreateProductBoardDTO(
+        RequestCreateProductBoardDto dummyData = new RequestCreateProductBoardDto(
                 BoardType.AUCTION,             // BoardType 값
                 "게시글 내용",                  // 게시글 내용
                 "Example",                  // 게시글 제목
@@ -141,14 +141,36 @@ public class ServiceTest {
 
 // Read 로직
     // 전체 경매 게시글 조회
+        // 1페이지인 경우 ( 페이징 캐시 )
+//    @Test
+//    public void getAuctionBoardPage1() throws InterruptedException {
+//        // given
+//        int page = 1;
+//
+//        // when
+//        // then
+//            // 1초 단위 스케줄러 실행을 위해 2초 대기
+//        System.out.println("@@@ + "+ boardRepository.findByBoardTypeAndBoardStatus(BoardType.AUCTION, true,
+//                        PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createAt")))
+//                .map(ResponseGetAuctionBoardListDto::new).getContent());
+//        Awaitility.await().atMost(1000, TimeUnit.MILLISECONDS)
+//                .until( ()-> {
+//                            // 여기서 스케줄러에 의해 업데이트된 값을 가져와서 검증
+//                            Page<ResponseGetAuctionBoardListDto> responseDto = boardService.getAuctionBoardList(page - 1);
+//                            return responseDto.getContent().size() == 3;
+//                });
+//        System.out.println("####"+boardRepository.findAll().size());
+//    }
+        // 1페이지가 아닌 경우
     @Test
     public void getAuctionBoardList(){
         // given
+        int page = 2;
         // when
-        List<ResponseGetAuctionBoardListDTO> responseDto = boardService.getAuctionBoardList();
+        Page<ResponseGetAuctionBoardListDto> responseDto = boardService.getAuctionBoardList(page-1);
 
         // then
-        assertThat(responseDto.size()).isEqualTo(2);
+        assertThat(responseDto.getContent().size()).isEqualTo(2);
     }
 
     // 개별 경매 게시글 조회
@@ -159,7 +181,7 @@ public class ServiceTest {
         Board board = boardRepository.findAll().get(0);
 
         // when
-        ResponseGetAuctionBoardDTO responseDto = boardService.getAuctionBoard(board.getBoardUuID());
+        ResponseGetAuctionBoardDto responseDto = boardService.getAuctionBoard(board.getBoardUuID());
 
         // then
         assertThat(responseDto.getBoardTitle()).isEqualTo(board.getBoardTitle());
@@ -194,7 +216,7 @@ public class ServiceTest {
     @Test
     public void updateAuctionBoard(){
         // given
-        RequestUpdateProductBoardDTO dummyData = new RequestUpdateProductBoardDTO(
+        RequestUpdateProductBoardDto dummyData = new RequestUpdateProductBoardDto(
                 BoardType.SALE,           // BoardType 값
                 "수정된 게시글 내용",         // 수정된 게시글 내용
                 "수정된 게시글 제목",         // 수정된 게시글 제목
