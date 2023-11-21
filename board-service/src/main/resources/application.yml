@@ -15,6 +15,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        physical_naming_strategy: com.farmted.boardservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
     show-sql: true
 ## Discovery Client 세팅
 eureka:
