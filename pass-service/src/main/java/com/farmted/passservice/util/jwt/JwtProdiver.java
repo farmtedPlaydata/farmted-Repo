@@ -43,7 +43,7 @@ public class JwtProdiver {
     public static final String AUTH_KEY = "auth";
     public static final String BEARER_PREFIX = "Bearer-";
 
-    public static final long ACCESS_TOKEN_TIME = 10 * 1000L;
+    public static final long ACCESS_TOKEN_TIME = 10 * 60 * 60 * 1000L;
     public static final long REFRESH_TOKEN_TIME = 14 * 24 * 60 * 60 * 1000L;    // 2주
 
 

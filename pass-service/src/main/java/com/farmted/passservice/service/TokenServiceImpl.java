@@ -5,6 +5,8 @@ import com.farmted.passservice.enums.TokenType;
 import com.farmted.passservice.util.jwt.JwtProdiver;
 import com.farmted.passservice.util.redis.RedisRepository;
 import com.farmted.passservice.util.redis.RefreshToken;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
@@ -63,5 +65,22 @@ public class TokenServiceImpl implements TokenService {
                 .build();
         // 응답 헤더에 쿠키 추가
         response.addHeader("Set-Cookie", cookie.toString());
+    }
+
+    @Override
+    public void deleteCookie(HttpServletResponse response, HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                ResponseCookie responseCookie = ResponseCookie.from(cookie.getName(), null).
+                        path("/").
+                        httpOnly(true).
+                        sameSite("None").
+                        secure(true).
+                        maxAge(1).
+                        build();
+                response.addHeader("Set-Cookie", responseCookie.toString());
+            }
+        }
     }
 }
