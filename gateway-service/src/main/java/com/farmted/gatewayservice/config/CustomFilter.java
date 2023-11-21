@@ -21,9 +21,10 @@ public class CustomFilter extends AbstractGatewayFilterFactory<CustomFilter.Conf
             ServerHttpRequest request = exchange.getRequest();
             ServerHttpResponse response = exchange.getResponse();
 
-            // 해더에 uuid, role값 강제로 넣기
-            request.mutate().header("UUID", "uuid1")
-                            .header("ROLE", "ROLE_USER").build();
+            // 헤더에 uuid, role값 강제로 넣기
+            request.mutate().header("UUID", request.getHeaders().get("UUID").get(0))
+                            .header("ROLE", request.getHeaders().get("ROLE").get(0))
+                    .build();
             // pre filter는 그냥 내부에 실행문으로 작성하면 돌아갑니다.
             System.out.println("Custom pre filter : " + request.getId());
             System.out.println("Custom pre path : " + request.getPath());
