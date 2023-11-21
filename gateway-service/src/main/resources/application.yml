@@ -1,0 +1,31 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: gateway-server
+  cloud:
+    gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            message: Global Filter Default Message Test
+            pre: true
+            post: true
+      routes: # ?? ??????? ??? routes? ???
+        - id: board-service
+          uri: lb://board-service
+          predicates:
+            - Path=/board-service/**
+          filters:
+            - CustomFilter
+            - LogFilter
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      default-zone: http://127.0.0.1:8761/eureka
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
