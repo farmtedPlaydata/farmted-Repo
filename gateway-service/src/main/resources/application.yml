@@ -7,19 +7,19 @@ spring:
   cloud:
     gateway:
       default-filters:
-        - name: GlobalFilter
+        - name: GlobalFilter  # 추후에 사용할 전역 필터 틀
           args:
             message: Global Filter Default Message Test
             pre: true
             post: true
-      routes: # ?? ??????? ??? routes? ???
+      routes: # 개별 마이크로서비스 정보를 routes에 기입함
         - id: board-service
           uri: lb://board-service
           predicates:
             - Path=/board-service/**
           filters:
-            - CustomFilter
-            - LogFilter
+            - CustomFilter  # 일단 강제로 헤더에 uuid, role값 집어넣는 필터
+            #- LogFilter #필요할 때 커스텀해서 사용할 로그 필터
 
 eureka:
   client:
