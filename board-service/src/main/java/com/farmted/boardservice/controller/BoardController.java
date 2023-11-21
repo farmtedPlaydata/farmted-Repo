@@ -25,8 +25,8 @@ public class BoardController {
             @Valid @RequestBody RequestCreateProductBoardDto productBoardDto,
             @RequestHeader("UUID") String uuid,
             @RequestHeader("ROLE") String role){
-        ProductVo productVo = boardService.createActionBoard(productBoardDto, uuid, role);
-        return new ResponseEntity<>(productVo, HttpStatus.CREATED);
+        boardService.createActionBoard(productBoardDto, uuid, role);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     // N 페이지의 경매 게시글 조회
@@ -43,24 +43,26 @@ public class BoardController {
         return new ResponseEntity<>(boardService.getAuctionBoard(boardUuid), HttpStatus.OK);
     }
 
+    // 개별 경매 게시글 수정
+    @PutMapping(value = "/boards/{board_uuid}/auctions")
+    public ResponseEntity<?> updateAuctionBoard(@PathVariable(value= "board_uuid") String boardUuid,
+                                                @Valid @RequestBody RequestUpdateProductBoardDto updateDTO,
+                                                @RequestHeader("UUID") String uuid){
+        boardService.updateAuctionBoard(updateDTO, boardUuid, uuid);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        // Feign 통신 구현 후엔 아래 값 리턴 예정 (성공적으로 요청을 처리했지만, 응답할 내용 없음->비동기처리할거니까)
+        // 리다이렉트?
+    }
+
     // 개별 경매 게시글 삭제
     @DeleteMapping(value = "/boards/{board_uuid}/auctions")
-    public ResponseEntity<?> deleteAuctionBoard(@PathVariable(value = "board_uuid") String boardUuid) {
-        boardService.deleteAuctionBoard(boardUuid);
+    public ResponseEntity<?> deleteAuctionBoard(@PathVariable(value = "board_uuid") String boardUuid,
+                                                @RequestHeader("UUID") String uuid) {
+        boardService.deleteAuctionBoard(boardUuid, uuid);
         // 헤더 설정이므로 컨트롤러에서 사용했음. 클라이언트와의 상호작용이므로
             // 상태코드 303, 리다이렉트를 나타냄 + 어차피 조회 메소드로 이동할거니까 body값 null
         return ResponseEntity.status(HttpStatus.SEE_OTHER)
                 .location(URI.create("/board-service/boards/auctions"))
                 .body(null);
-    }
-
-    // 개별 경매 게시글 수정
-    @PutMapping(value = "/boards/{board_uuid}/auctions")
-    public ResponseEntity<?> updateAuctionBoard(@PathVariable(value= "board_uuid") String boardUuid,
-                                        @Valid @RequestBody RequestUpdateProductBoardDto updateDTO){
-        ProductVo productVo = boardService.updateAuctionBoard(updateDTO, boardUuid);
-        return new ResponseEntity<>(productVo, HttpStatus.OK);
-        // Feign 통신 구현 후엔 아래 값 리턴 예정 (성공적으로 요청을 처리했지만, 응답할 내용 없음->비동기처리할거니까)
-        // return  ResponseEntity.status(HttpStatus.NO_CONTENT);
     }
 }

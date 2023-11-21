@@ -46,7 +46,6 @@ public class ResponseGetAuctionBoardDto {
     private boolean productStatus;
     // 경매용 정보
     private int auctionPrice;
-    private String auctionBidder;
     private String auctionBuyer;
     private LocalDateTime auctionDeadline;
         // 경매 상태의 경우, GET 요청엔 필요하다 판단해서 추가
@@ -63,7 +62,6 @@ public class ResponseGetAuctionBoardDto {
         // 경매 정보
     public void addAuction(AuctionVo auctionVo){
         this.auctionPrice = auctionVo.auctionPrice();
-        this.auctionBidder = auctionVo.auctionBidder();
         this.auctionBuyer = auctionVo.auctionBuyer();
         this.auctionDeadline = auctionVo.auctionDeadline();
         this.auctionStatus = auctionVo.auctionStatus();

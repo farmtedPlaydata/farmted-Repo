@@ -27,4 +27,14 @@ public record ProductVo (
                 true
         );
     }
+    // 값이 하나도 없을 경우(통신 이상) 대비
+    public boolean isFilled() {
+        return productName != null ||
+                productStock != 0 ||
+                productPrice != 0 ||
+                productSource != null ||
+                productImage != null ||
+                boardUuid != null ||
+                productStatus;
+    }
 }

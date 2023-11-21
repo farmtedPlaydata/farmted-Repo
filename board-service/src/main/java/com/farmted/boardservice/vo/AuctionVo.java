@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
     // 게시글UUID를 통해 데이터 요청만 할 예정이므로 게시글UUID를 넣지 않음
 public record AuctionVo(
      int auctionPrice,
-     String auctionBidder,
      String auctionBuyer,
      LocalDateTime auctionDeadline,
      Boolean auctionStatus
@@ -18,7 +17,6 @@ public record AuctionVo(
         return new AuctionVo(
                 1_000,
                 "Dummy Bidder",
-                "Dummy Buyer",
                 LocalDateTime.now().plusDays(7),
                 true
         );
