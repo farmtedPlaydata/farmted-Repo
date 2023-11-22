@@ -1,7 +1,7 @@
 package com.farmted.passservice.config;
 
 import com.farmted.passservice.util.jwt.JwtFilter;
-import com.farmted.passservice.util.jwt.JwtProdiver;
+import com.farmted.passservice.util.jwt.JwtProvider;
 import com.farmted.passservice.util.oauth2.handler.OAuth2LoginFailureHandler;
 import com.farmted.passservice.util.oauth2.handler.OAuth2LoginSuccessHandler;
 import com.farmted.passservice.util.oauth2.service.CustomOAuth2UserService;
@@ -26,7 +26,7 @@ public class SecurityConfig {
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final JwtProdiver jwtProdiver;
+    private final JwtProvider jwtProvider;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -52,7 +52,7 @@ public class SecurityConfig {
                 // customOAuth2UserService를 통해 사용자 정보를 가져옴
                 .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                         .userService(customOAuth2UserService)))
-        .addFilterBefore(new JwtFilter(jwtProdiver), UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 

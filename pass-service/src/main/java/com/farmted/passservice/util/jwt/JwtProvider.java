@@ -14,9 +14,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -24,6 +27,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
@@ -33,7 +37,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class JwtProdiver {
+public class JwtProvider {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final RedisRepository redisRepository;
@@ -117,4 +121,35 @@ public class JwtProdiver {
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
+    public void setToken(String token, TokenType tokenType, HttpServletResponse response) {
+        long time = tokenType == TokenType.ACCESS ? JwtProvider.ACCESS_TOKEN_TIME : JwtProvider.REFRESH_TOKEN_TIME;
+
+        ResponseCookie cookie = ResponseCookie.from(
+                        JwtProvider.AUTH_HEADER,    // 쿠키의 이름
+                        URLEncoder.encode(token, StandardCharsets.UTF_8))
+                .path("/")
+                .httpOnly(true)
+                .sameSite("None")
+                .secure(true)
+                .maxAge(time)
+                .build();
+        // 응답 헤더에 쿠키 추가
+        response.addHeader("Set-Cookie", cookie.toString());
+    }
+
+    public void deleteCookie(HttpServletResponse response, HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                ResponseCookie responseCookie = ResponseCookie.from(cookie.getName(), null).
+                        path("/").
+                        httpOnly(true).
+                        sameSite("None").
+                        secure(true).
+                        maxAge(1).
+                        build();
+                response.addHeader("Set-Cookie", responseCookie.toString());
+            }
+        }
+    }
 }

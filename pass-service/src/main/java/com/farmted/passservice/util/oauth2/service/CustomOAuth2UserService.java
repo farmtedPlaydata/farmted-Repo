@@ -2,7 +2,7 @@ package com.farmted.passservice.util.oauth2.service;
 
 import com.farmted.passservice.domain.Pass;
 import com.farmted.passservice.enums.SocialType;
-import com.farmted.passservice.util.jwt.JwtProdiver;
+import com.farmted.passservice.util.jwt.JwtProvider;
 import com.farmted.passservice.util.oauth2.CustomOAuth2User;
 import com.farmted.passservice.util.oauth2.OAuthAttributes;
 import com.farmted.passservice.repository.PassRepository;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final PassRepository passRepository;
-    private final JwtProdiver jwtProdiver;
+    private final JwtProvider jwtProvider;
     private final RedisRepository redisRepository;
 
 

@@ -4,7 +4,7 @@ import com.farmted.passservice.domain.Pass;
 import com.farmted.passservice.dto.request.RequestCreatePassDto;
 import com.farmted.passservice.dto.request.RequestLoginDto;
 import com.farmted.passservice.repository.PassRepository;
-import com.farmted.passservice.util.jwt.JwtProdiver;
+import com.farmted.passservice.util.jwt.JwtProvider;
 import com.farmted.passservice.util.redis.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +22,6 @@ public class PassServiceImpl implements PassService {
 
     private final PassRepository passRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtProdiver jwtProdiver;
-    private final RedisRepository redisRepository;
     private final TokenService tokenService;
 
     @Override

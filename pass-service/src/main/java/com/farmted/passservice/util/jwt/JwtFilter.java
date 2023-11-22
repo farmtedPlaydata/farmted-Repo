@@ -23,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtProdiver jwtProdiver;
+    private final JwtProvider jwtProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -39,32 +39,32 @@ public class JwtFilter extends OncePerRequestFilter {
                 }
 
                 // AccessToken과 RefreshToken을 쿠키에서 추출
-                if (cookie.getName().equals(JwtProdiver.AUTH_HEADER)) {
-                    accessToken = jwtProdiver.resolveToken(cookie);
+                if (cookie.getName().equals(JwtProvider.AUTH_HEADER)) {
+                    accessToken = jwtProvider.resolveToken(cookie);
                 }
             }
         }
 
         if (accessToken != null) {
-            TokenState state = jwtProdiver.validateToken(accessToken);
+            TokenState state = jwtProvider.validateToken(accessToken);
             if (TokenState.VALID.equals(state)) {
                 // 유효한 AccessToken인 경우, 사용자 인증
-                setAuthentication(jwtProdiver.getUserInfoFromToken(accessToken).getSubject());
+                setAuthentication(jwtProvider.getUserInfoFromToken(accessToken).getSubject());
             } else if (TokenState.EXPIRED.equals(state)) {
-                if (jwtProdiver.validateRefreshToken(accessToken)) {
+                if (jwtProvider.validateRefreshToken(accessToken)) {
                     // 만료된 AccessToken인 경우, RefreshToken을 검증하고 새로운 AccessToken 생성
-                    Claims passInfo = jwtProdiver.getUserInfoFromToken(accessToken);
+                    Claims passInfo = jwtProvider.getUserInfoFromToken(accessToken);
                     String uuid = passInfo.getSubject();
-                    String createdAccessToken = jwtProdiver.createToken(uuid, RoleEnums.GUEST, TokenType.ACCESS);
+                    String createdAccessToken = jwtProvider.createToken(uuid, RoleEnums.GUEST, TokenType.ACCESS);
                     
                     // 생성된 AccessToken을 응답에 추가
                     ResponseCookie cookie = ResponseCookie.from(
-                                JwtProdiver.AUTH_HEADER, URLEncoder.encode(createdAccessToken, StandardCharsets.UTF_8))
+                                JwtProvider.AUTH_HEADER, URLEncoder.encode(createdAccessToken, StandardCharsets.UTF_8))
                             .path("/")
                             .httpOnly(true)
                             .sameSite("None")
                             .secure(true)
-                            .maxAge(JwtProdiver.ACCESS_TOKEN_TIME)
+                            .maxAge(JwtProvider.ACCESS_TOKEN_TIME)
                             .build();
                     response.addHeader("Set-Cookie", cookie.toString());
                     setAuthentication(uuid);
@@ -79,7 +79,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // 빈 SecurityContext 생성
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         // JwtProvider의 createAuth를 사용하여 Authentication 객체 생성
-        Authentication authentication = jwtProdiver.createAuth(uuid);
+        Authentication authentication = jwtProvider.createAuth(uuid);
         context.setAuthentication(authentication);
 
         SecurityContextHolder.setContext(context);

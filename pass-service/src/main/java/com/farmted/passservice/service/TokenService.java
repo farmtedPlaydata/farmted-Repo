@@ -9,6 +9,4 @@ public interface TokenService {
     String createAccessToken(String uuid, RoleEnums role);
     String createRefreshToken(String uuid, RoleEnums role);
     void saveRefreshToken(String uuid, String refreshToken);
-    void setToken(String token, TokenType tokenType, HttpServletResponse response);
-    void deleteCookie(HttpServletResponse response, HttpServletRequest request);
 }

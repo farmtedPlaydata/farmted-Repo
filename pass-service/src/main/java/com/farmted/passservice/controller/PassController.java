@@ -5,7 +5,7 @@ import com.farmted.passservice.dto.request.RequestCreatePassDto;
 import com.farmted.passservice.dto.request.RequestLoginDto;
 import com.farmted.passservice.enums.TokenType;
 import com.farmted.passservice.service.PassService;
-import com.farmted.passservice.service.TokenService;
+import com.farmted.passservice.util.jwt.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class PassController {
 
     private final PassService passService;
-    private final TokenService tokenService;
+    private final JwtProvider jwtProvider;
 
     @PostMapping("/passes")
     public ResponseEntity<?> createPass(@RequestBody RequestCreatePassDto dto) {
@@ -31,7 +31,7 @@ public class PassController {
     @PostMapping("/login")
     public ResponseEntity<?> loginPass(@RequestBody RequestLoginDto dto, HttpServletResponse response) {
         String token = passService.login(dto);
-        tokenService.setToken(token, TokenType.ACCESS, response);
+        jwtProvider.setToken(token, TokenType.ACCESS, response);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -39,7 +39,7 @@ public class PassController {
     public ResponseEntity<?> logout(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response,
                                     HttpServletRequest request) {
         String uuid = userDetails.getPassword();
-        tokenService.deleteCookie(response, request);
+        jwtProvider.deleteCookie(response, request);
         passService.logout(uuid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
