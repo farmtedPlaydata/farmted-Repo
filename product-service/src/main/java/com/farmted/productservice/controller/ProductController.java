@@ -42,7 +42,7 @@ public class ProductController {
             @RequestBody ProductModifyRequestDto productModifyRequestDto
     )
     {
-        productService.modifyProduct(boardUuid, memberUuid, productModifyRequestDto);
+        productService.modifyProduct(boardUuid, productModifyRequestDto,memberUuid);
         return ResponseEntity.ok().build();
     }
 

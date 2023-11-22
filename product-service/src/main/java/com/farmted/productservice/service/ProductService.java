@@ -28,14 +28,18 @@ public class ProductService {
     }
 
     // 상품 DB  가격 수정
-    public void modifyProduct(String boardUuid, String memberUuId,ProductModifyRequestDto productModifyRequestDto){
+    public void modifyProduct(String boardUuid,ProductModifyRequestDto productModifyRequestDto,String memberUuid){
         // 상품 판매자만 가격 수정 가능
-        Product product = productRepository.findProductByBoardUuidAndMemberUuid(boardUuid,memberUuId)
-                .orElseThrow(()-> new SellerException());
+        Product product = productRepository.findProductByBoardUuid(boardUuid)
+                .orElseThrow(()-> new ProductException());
+
+        if(!product.getMemberUuid().equals(memberUuid))
+           throw new SellerException();
+
         if(!product.isAuctionStatus()){ // 경매 중이 아닌(상태값이 false) 경우만 가격 수정 가능
             product.modifyPrice(productModifyRequestDto.getMoney());
         }else{
-            new ProductException(product.isAuctionStatus());
+           throw  new ProductException(product.isAuctionStatus());
         }
 
     }
