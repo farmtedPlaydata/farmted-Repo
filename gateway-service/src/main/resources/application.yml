@@ -1,0 +1,31 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: gateway-server
+  cloud:
+    gateway:
+      default-filters:
+        - name: GlobalFilter  # 추후에 사용할 전역 필터 틀
+          args:
+            message: Global Filter Default Message Test
+            pre: true
+            post: true
+      routes: # 개별 마이크로서비스 정보를 routes에 기입함
+        - id: board-service
+          uri: lb://board-service
+          predicates:
+            - Path=/board-service/**
+          filters:
+            - CustomFilter  # 일단 강제로 헤더에 uuid, role값 집어넣는 필터
+            #- LogFilter #필요할 때 커스텀해서 사용할 로그 필터
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      default-zone: http://127.0.0.1:8761/eureka
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
