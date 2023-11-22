@@ -122,7 +122,9 @@ public class JwtProvider {
     }
 
     public void setToken(String token, TokenType tokenType, HttpServletResponse response) {
-        long time = tokenType == TokenType.ACCESS ? JwtProvider.ACCESS_TOKEN_TIME : JwtProvider.REFRESH_TOKEN_TIME;
+        long time = (tokenType == TokenType.ACCESS)
+                        ? JwtProvider.ACCESS_TOKEN_TIME
+                        : JwtProvider.REFRESH_TOKEN_TIME;
 
         ResponseCookie cookie = ResponseCookie.from(
                         JwtProvider.AUTH_HEADER,    // 쿠키의 이름

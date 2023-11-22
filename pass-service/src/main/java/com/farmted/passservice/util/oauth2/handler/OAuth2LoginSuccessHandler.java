@@ -34,14 +34,14 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             String token = jwtProvider.createToken(uuid, role, TokenType.ACCESS);
 
             // Pass의 Role이 GUEST일 경우 회원가입이 완료되지 않은 회원이므로 회원 상세정보 적기 페이지로 리다이렉트
-            if (oAuth2User.getRole() == RoleEnums.GUEST) {
+            if (role == RoleEnums.GUEST) {
                 jwtProvider.setToken(token, TokenType.ACCESS, response);
                 String refreshToken = tokenService.createRefreshToken(uuid, role);
                 tokenService.saveRefreshToken(uuid, refreshToken);
                 response.sendRedirect("/home");
             } else {
                 jwtProvider.setToken(token, TokenType.ACCESS, response);
-                tokenService.saveRefreshToken(oAuth2User.getUuid(), token);
+                tokenService.saveRefreshToken(uuid, token);
                 response.sendRedirect("/home");
             }
         } catch (Exception e) {

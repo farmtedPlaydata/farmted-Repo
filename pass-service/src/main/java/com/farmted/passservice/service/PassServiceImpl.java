@@ -35,21 +35,20 @@ public class PassServiceImpl implements PassService {
 
     @Override
     public String login(RequestLoginDto dto) {
-        Optional<Pass> pass = passRepository.findByEmail(dto.getEmail());
+        Pass pass = passRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-        if (pass.isPresent()) {
-            checkPass(dto);
-            String accessTokenInfo = tokenService.createAccessToken(pass.get().getUuid(), pass.get().getRole());
-            String refreshTokenInfo = tokenService.createRefreshToken(pass.get().getUuid(), pass.get().getRole());
+        if (!passwordEncoder.matches(dto.getPassword(), pass.getPassword()))
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
 
-            tokenService.saveRefreshToken(pass.get().getUuid(), refreshTokenInfo);
+        String accessTokenInfo = tokenService.createAccessToken(pass.getUuid(), pass.getRole());
+        String refreshTokenInfo = tokenService.createRefreshToken(pass.getUuid(), pass.getRole());
 
-            log.info("로그인 성공");
+        tokenService.saveRefreshToken(pass.getUuid(), refreshTokenInfo);
 
-            return accessTokenInfo;
-        } else {
-            throw new RuntimeException("사용자를 찾을 수 없습니다.");
-        }
+        log.info("로그인 성공");
+
+        return accessTokenInfo;
     }
 
     @Override
@@ -63,17 +62,6 @@ public class PassServiceImpl implements PassService {
         Optional<Pass> pass = passRepository.findByEmail(dto.getEmail());
 
         if(pass.isPresent()) throw new RuntimeException("이미 존재하는 회원입니다.");
-    }
-
-    // 로그인 검증
-    private void checkPass(RequestLoginDto dto) {
-        Optional<Pass> pass = passRepository.findByEmail(dto.getEmail());
-        if (pass.isPresent()) {
-            passwordEncoder.matches(dto.getPassword(), pass.get().getPassword());
-            log.info("비밀번호 체크 성공");
-        } else {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
-        }
     }
 
 }
