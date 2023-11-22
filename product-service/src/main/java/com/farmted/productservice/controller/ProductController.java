@@ -19,12 +19,12 @@ public class ProductController {
     private final ProductService productService;
 
     // 판매자 상품 등록
-    @PostMapping("/products")
+    @PostMapping("/products/boards")
     public ResponseEntity<?>  saveProduct(
             @RequestBody ProductSaveRequestDto productSaveRequestDto,
-            @RequestHeader("MemberUUID") String memberUuid // 멤버
+            @RequestHeader("UUID") String uuid // 멤버
     ) {
-        productService.saveProduct(memberUuid,productSaveRequestDto);
+        productService.saveProduct(uuid,productSaveRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -35,14 +35,14 @@ public class ProductController {
     }
 
     // 판매자 가격 수정
-    @PatchMapping("/products/{product_uuid}")
+    @PatchMapping("/products/{board_uuid}/boards")
     public ResponseEntity<?> modifyProduct(
-            @PathVariable (value = "product_uuid") String productUuid ,
-            @RequestHeader("MemberUUID") String memberUuid, // 멤버
+            @PathVariable (value = "board_uuid") String boardUuid ,
+            @RequestHeader("UUID") String memberUuid, // 멤버
             @RequestBody ProductModifyRequestDto productModifyRequestDto
     )
     {
-        productService.modifyProduct(productUuid, memberUuid, productModifyRequestDto);
+        productService.modifyProduct(boardUuid, productModifyRequestDto,memberUuid);
         return ResponseEntity.ok().build();
     }
 
@@ -56,9 +56,9 @@ public class ProductController {
     }
 
     // 상품 상세 조회
-    @GetMapping("/products/{product_uuid}")
-    public ResponseEntity<ProductResponseDto> getProductDetail(@PathVariable (value = "product_uuid") String productUuid){
-        return ResponseEntity.ok(productService.getProductDetail(productUuid));
+    @GetMapping("/products/{board_uuid}/boards")
+    public ResponseEntity<ProductResponseDto> getProductDetail(@PathVariable (value = "board_uuid") String boardUuid){
+        return ResponseEntity.ok(productService.getProductDetail(boardUuid));
 
     }
 
