@@ -28,14 +28,18 @@ public class ProductService {
     }
 
     // 상품 DB  가격 수정
-    public void modifyProduct(String productUuid, String memberUuId,ProductModifyRequestDto productModifyRequestDto){
+    public void modifyProduct(String boardUuid,ProductModifyRequestDto productModifyRequestDto,String memberUuid){
         // 상품 판매자만 가격 수정 가능
-        Product product = productRepository.findProductByUuidAndMemberUuid(productUuid,memberUuId)
-                .orElseThrow(()-> new SellerException());
+        Product product = productRepository.findProductByBoardUuid(boardUuid)
+                .orElseThrow(()-> new ProductException());
+
+        if(!product.getMemberUuid().equals(memberUuid))
+           throw new SellerException();
+
         if(!product.isAuctionStatus()){ // 경매 중이 아닌(상태값이 false) 경우만 가격 수정 가능
             product.modifyPrice(productModifyRequestDto.getMoney());
         }else{
-            new ProductException(product.isAuctionStatus());
+           throw  new ProductException(product.isAuctionStatus());
         }
 
     }
@@ -58,9 +62,10 @@ public class ProductService {
 
     // 상품 상세 조회
     @Transactional(readOnly = true)
-    public ProductResponseDto getProductDetail(String productUuid){
-      Product productDetail = productRepository.findProductByUuid(productUuid)
-              .orElseThrow(()-> new RuntimeException("일단 해당 상품 없음 .. 차후 예외처리 신명나게 진행할 예정"));
+    public ProductResponseDto getProductDetail(String boardUuid){
+        System.out.println("###########"+boardUuid);
+      Product productDetail = productRepository.findProductByBoardUuid(boardUuid)
+              .orElseThrow(()-> new ProductException());
       return new ProductResponseDto(productDetail);
     }
 

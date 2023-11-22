@@ -9,9 +9,8 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product,Long> {
 
     // 특정 상품 조회
-    public Optional<Product> findProductByUuid(String uuid);
-    // 판매자가 등록한 특정 상품 조회
-    public Optional<Product> findProductByUuidAndMemberUuid(String uuid,String memberUuid);
+    public Optional<Product> findProductByBoardUuid(String boardUuid);
+
     // 판매자가 등록한 전체 상품 조회
     public Optional<List<Product>> findProductByMemberUuid(String uuid);
     // 판매자가 등록한 상품 중 경매 진행 중이 아닌 특정 상품 조회
