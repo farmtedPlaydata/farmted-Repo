@@ -33,19 +33,19 @@ public class Member extends TimeStamp implements Serializable {
 
     private String memberAddressDetail;
 
+    @Column(nullable = false, unique = true)
     private String memberPhone;
 
     private Boolean memberStatus;
 
     private Long memberBalance;
 
-<<<<<<< Updated upstream
-=======
+
     public void updateMember(String memberName, String memberAddress, String memberAddressDetail, String memberPhone) {
         this.memberName = memberName;
         this.memberAddress = memberAddress;
         this.memberAddressDetail = memberAddressDetail;
         this.memberPhone = memberPhone;
     }
->>>>>>> Stashed changes
+
 }

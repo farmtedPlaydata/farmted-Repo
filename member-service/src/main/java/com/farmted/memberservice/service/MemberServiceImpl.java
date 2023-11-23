@@ -7,6 +7,7 @@ import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
 import com.farmted.memberservice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -29,7 +30,6 @@ public class MemberServiceImpl implements MemberService {
         Member upMember = memberRepository.getMemberByMemberUuid(member.getMemberUuid());
         upMember.updateMember(dto.getMemberName(), dto.getMemberAddress(), dto.getMemberAddressDetail(), dto.getMemberPhone());
         memberRepository.save(upMember);
-        log.info("회원 정보 수정 완료");
     }
 
 }

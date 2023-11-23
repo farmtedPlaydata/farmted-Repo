@@ -1,5 +1,6 @@
 package com.farmted.memberservice.controller;
 
+import com.farmted.memberservice.config.security.UserDetailsImpl;
 import com.farmted.memberservice.dto.request.RequestCreateMemberDto;
 import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
 import com.farmted.memberservice.service.MemberService;
@@ -24,8 +25,8 @@ public class MemberController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateMember(@RequestBody RequestUpdateMemberDto dto, @AuthenticationPrincipal UserDetails userDetails) {
-
+    public ResponseEntity<?> updateMember(@RequestBody RequestUpdateMemberDto dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        memberService.updateMember(dto, userDetails.getMember());
+        return ResponseEntity.ok(HttpStatus.OK);
     }
-
 }
