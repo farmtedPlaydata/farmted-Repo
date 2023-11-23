@@ -11,6 +11,7 @@ import java.util.UUID;
 public class RequestCreateMemberDto {
     private RoleEnums memberRole;
     private Boolean memberStatus;
+    private String memberName;
     private String memberAddress;
     private String memberAddressDetail;
     private String memberPhone;
@@ -19,9 +20,10 @@ public class RequestCreateMemberDto {
         return Member.builder()
                 .memberUuid(UUID.randomUUID().toString())
                 .memberAddress(this.memberAddress)
+                .memberName(this.memberName)
                 .memberAddressDetail(this.memberAddressDetail)
                 .memberPhone(this.memberPhone)
-                .memberRole(this.memberRole)
+                .memberRole(RoleEnums.USER)
                 .memberStatus(true)
                 .build();
     }

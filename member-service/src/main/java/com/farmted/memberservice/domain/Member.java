@@ -22,6 +22,8 @@ public class Member extends TimeStamp implements Serializable {
     @Column(nullable = false)
     private String memberUuid;
 
+    private String memberName;
+
     @Enumerated(value = EnumType.STRING)
     private RoleEnums memberRole;
 
@@ -37,4 +39,13 @@ public class Member extends TimeStamp implements Serializable {
 
     private Long memberBalance;
 
+<<<<<<< Updated upstream
+=======
+    public void updateMember(String memberName, String memberAddress, String memberAddressDetail, String memberPhone) {
+        this.memberName = memberName;
+        this.memberAddress = memberAddress;
+        this.memberAddressDetail = memberAddressDetail;
+        this.memberPhone = memberPhone;
+    }
+>>>>>>> Stashed changes
 }
