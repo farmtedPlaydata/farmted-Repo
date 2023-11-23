@@ -55,7 +55,7 @@ public class ProductController {
     public ResponseEntity<?> getProductList(
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ){
-        Slice<ProductResponseDto> listProduct = productService.getListProduct(pageNo);
+        List<ProductResponseDto> listProduct = productService.getListProduct(pageNo);
         return ResponseEntity.ok(listProduct);
     }
 

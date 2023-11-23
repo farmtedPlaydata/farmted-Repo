@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -74,9 +75,13 @@ public class ProductService {
 
     // 전체 상품 조회
     @Transactional(readOnly = true)
-    public Slice<ProductResponseDto> getListProduct(int pageNo) {
-        Slice<Product> productList = productRepository.findAllBy(PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
+    public List<ProductResponseDto> getListProduct(int pageNo) {
+        Slice<Product> productList = productRepository.findAll(PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
 
-        return productList.map(ProductResponseDto::new);
+//        return productList.map(ProductResponseDto::new);
+
+        return productList.stream()
+                .map(ProductResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
