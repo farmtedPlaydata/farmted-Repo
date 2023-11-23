@@ -16,7 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
 
 @Service
 @RequiredArgsConstructor
@@ -52,16 +55,14 @@ public class ProductService {
 
     // 판매자 등록한 전체 상품 조회
     @Transactional(readOnly = true)
-    public List<ProductResponseDto> getListProductSeller(String memberUuid){
+    public List<ProductResponseDto> getListProductSeller(String memberUuid,int pageNo){
         // 해당 판매자가 존재하는 지 확인
-        List<Product> productList= productRepository.findProductByMemberUuid(memberUuid)
-               .orElseThrow(() -> new SellerException());
+        Slice<Product> productList = productRepository.findProductByMemberUuid(memberUuid, PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createAt")));
 
-        List<ProductResponseDto> productListSeller = new ArrayList<>();
-        for(Product product: productList){
-            productListSeller.add(new ProductResponseDto(product));
-        }
-        return  productListSeller;
+        return productList.stream()
+                .map(ProductResponseDto::new)
+                .collect(Collectors.toList());
+
     }
 
 
@@ -78,7 +79,6 @@ public class ProductService {
     public List<ProductResponseDto> getListProduct(int pageNo) {
         Slice<Product> productList = productRepository.findAll(PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
 
-//        return productList.map(ProductResponseDto::new);
 
         return productList.stream()
                 .map(ProductResponseDto::new)

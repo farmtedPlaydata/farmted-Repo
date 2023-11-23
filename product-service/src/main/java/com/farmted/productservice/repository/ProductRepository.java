@@ -14,7 +14,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     public Optional<Product> findProductByBoardUuid(String boardUuid);
 
     // 판매자가 등록한 전체 상품 조회
-    public Optional<List<Product>> findProductByMemberUuid(String memberUuid);
+    public Slice<Product> findProductByMemberUuid(String memberUuid, Pageable pageable);
 
     // 판매자가 등록한 상품 중 경매 진행 중이 아닌 특정 상품 조회
     public Optional<Product> findProductByBoardUuidAndAuctionStatusTrue(String boardUuid);

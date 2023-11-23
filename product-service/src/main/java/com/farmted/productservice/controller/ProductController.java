@@ -5,7 +5,6 @@ import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +29,11 @@ public class ProductController {
 
     // 판매자 등록 전체 상품 조회
     @GetMapping("/products/seller/{member_uuid}")
-    public ResponseEntity<?> getProductListSeller(@PathVariable (value = "member_uuid") String memberUuid) {
-        List<ProductResponseDto> listProductSeller = productService.getListProductSeller(memberUuid);
+    public ResponseEntity<?> getProductListSeller(
+            @PathVariable (value = "member_uuid") String memberUuid,
+            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
+    ) {
+        List<ProductResponseDto> listProductSeller = productService.getListProductSeller(memberUuid,pageNo);
         return  ResponseEntity.ok(listProductSeller);
     }
 
