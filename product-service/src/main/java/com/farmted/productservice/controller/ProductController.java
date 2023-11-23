@@ -4,6 +4,7 @@ import com.farmted.productservice.dto.request.ProductModifyRequestDto;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.service.ProductService;
+import com.farmted.productservice.util.GlobalResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class ProductController {
             @RequestHeader("UUID") String uuid // 멤버
     ) {
         productService.saveProduct(uuid,productSaveRequestDto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
     // 판매자 등록 전체 상품 조회
@@ -34,7 +35,7 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ) {
         List<ProductResponseDto> listProductSeller = productService.getListProductSeller(memberUuid,pageNo);
-        return  ResponseEntity.ok(listProductSeller);
+        return  ResponseEntity.ok(GlobalResponseDto.of(listProductSeller));
     }
 
     // 판매자 가격 수정
@@ -46,7 +47,7 @@ public class ProductController {
     )
     {
         productService.modifyProduct(boardUuid, productModifyRequestDto,memberUuid);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
     // 판매자 전체 수정
@@ -58,13 +59,14 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ){
         List<ProductResponseDto> listProduct = productService.getListProduct(pageNo);
-        return ResponseEntity.ok(listProduct);
+        return ResponseEntity.ok(GlobalResponseDto.of(listProduct));
     }
 
     // 상품 상세 조회
     @GetMapping("/products/{board_uuid}/boards")
-    public ResponseEntity<ProductResponseDto> getProductDetail(@PathVariable (value = "board_uuid") String boardUuid){
-        return ResponseEntity.ok(productService.getProductDetail(boardUuid));
+    public ResponseEntity<?> getProductDetail(@PathVariable (value = "board_uuid") String boardUuid){
+        ProductResponseDto productDetail = productService.getProductDetail(boardUuid);
+        return ResponseEntity.ok(GlobalResponseDto.of(productDetail));
 
     }
 
