@@ -19,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Member member = memberRepository.findByMemberUuid(uuid)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
-        return new UserDetailsImpl(member, member.getMemberUuid())
+        return new UserDetailsImpl(member, member.getMemberUuid());
 
     }
 }
