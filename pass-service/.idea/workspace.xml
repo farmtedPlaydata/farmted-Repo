@@ -5,14 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bac8a982-aa23-4432-9ddc-2afe218785c4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../member-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
   </component>
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
@@ -51,9 +57,20 @@
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.21494253&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RunManager">
+    <configuration name="PassServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="pass-service.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.farmted.passservice.PassServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -65,6 +82,8 @@
       <workItem from="1700721381600" duration="311000" />
       <workItem from="1700722250199" duration="291000" />
       <workItem from="1700723495470" duration="50000" />
+      <workItem from="1700723825091" duration="304000" />
+      <workItem from="1700724176445" duration="60000" />
     </task>
     <servers />
   </component>
