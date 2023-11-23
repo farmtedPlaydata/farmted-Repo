@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum RoleEnums {
-<<<<<<< Updated upstream
     GUEST("ROLE_GUEST"),
-=======
->>>>>>> Stashed changes
     USER("ROLE_USER"),
     ADMIN("ROLE_ADMIN");
 
