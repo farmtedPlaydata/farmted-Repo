@@ -25,6 +25,7 @@ public class ProductService {
     public void saveProduct(String memberUuid,ProductSaveRequestDto productSaveRequestDto){
         Product saveProduct = productSaveRequestDto.toEntity(memberUuid);
         productRepository.save(saveProduct);
+
     }
 
     // 상품 DB  가격 수정
@@ -39,7 +40,7 @@ public class ProductService {
         if(!product.isAuctionStatus()){ // 경매 중이 아닌(상태값이 false) 경우만 가격 수정 가능
             product.modifyPrice(productModifyRequestDto.getMoney());
         }else{
-           throw  new ProductException(product.isAuctionStatus());
+           throw new ProductException(product.isAuctionStatus());
         }
 
     }
