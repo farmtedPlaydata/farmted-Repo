@@ -5,6 +5,7 @@ import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,8 +52,10 @@ public class ProductController {
 
     // 전체 상품 조회
     @GetMapping("/products")
-    public ResponseEntity<?> getProductList(){
-        List<ProductResponseDto> listProduct = productService.getListProduct();
+    public ResponseEntity<?> getProductList(
+            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
+    ){
+        Slice<ProductResponseDto> listProduct = productService.getListProduct(pageNo);
         return ResponseEntity.ok(listProduct);
     }
 

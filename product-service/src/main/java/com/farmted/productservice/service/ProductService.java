@@ -8,6 +8,9 @@ import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.exception.SellerException;
 import com.farmted.productservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +34,7 @@ public class ProductService {
     // 상품 DB  가격 수정
     public void modifyProduct(String boardUuid,ProductModifyRequestDto productModifyRequestDto,String memberUuid){
         // 상품 판매자만 가격 수정 가능
-        Product product = productRepository.findProductByBoardUuid(boardUuid)
+        Product product = productRepository.findProductByBoardUuidAndAuctionStatusTrue(boardUuid)
                 .orElseThrow(()-> new ProductException());
 
         if(!product.getMemberUuid().equals(memberUuid))
@@ -64,7 +67,6 @@ public class ProductService {
     // 상품 상세 조회
     @Transactional(readOnly = true)
     public ProductResponseDto getProductDetail(String boardUuid){
-        System.out.println("###########"+boardUuid);
       Product productDetail = productRepository.findProductByBoardUuid(boardUuid)
               .orElseThrow(()-> new ProductException());
       return new ProductResponseDto(productDetail);
@@ -72,15 +74,9 @@ public class ProductService {
 
     // 전체 상품 조회
     @Transactional(readOnly = true)
-    public List<ProductResponseDto> getListProduct() {
-        List<Product> productList = productRepository.findAll();
-        List<ProductResponseDto> productAllList = new ArrayList<>();
-        // TODO: 페이징 처리 진행 예정
+    public Slice<ProductResponseDto> getListProduct(int pageNo) {
+        Slice<Product> productList = productRepository.findAllBy(PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
 
-        for (Product product : productList) {
-            productAllList.add(new ProductResponseDto(product));
-        }
-        
-        return productAllList;
+        return productList.map(ProductResponseDto::new);
     }
 }
