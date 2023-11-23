@@ -4,12 +4,17 @@ import com.farmted.memberservice.config.security.UserDetailsImpl;
 import com.farmted.memberservice.dto.request.RequestCreateMemberDto;
 import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
 import com.farmted.memberservice.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api/member-service")
@@ -18,15 +23,33 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    // 회원 상세 정보
     @PostMapping("/members")
     public ResponseEntity<?> createMember(@RequestBody RequestCreateMemberDto dto) {
         memberService.createMember(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    // 회원 정보 수정
     @PutMapping("/update")
     public ResponseEntity<?> updateMember(@RequestBody RequestUpdateMemberDto dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         memberService.updateMember(dto, userDetails.getMember());
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    // 회원 탈퇴(본인)
+    @DeleteMapping("/mypage/delete")
+    public ResponseEntity<?> deleteMember(UserDetailsImpl userDetails) {
+        String memberUuid = userDetails.getUsername();
+        memberService.deleteMember(memberUuid);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    // 회원 강퇴
+    @DeleteMapping("/expel/{uuid}")
+    public ResponseEntity<?> expelMember(@PathVariable String uuid) {
+        memberService.deleteMember(uuid);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
 }

@@ -6,7 +6,10 @@ import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
 import org.springframework.http.ResponseEntity;
 
 public interface MemberService {
+    // 회원 상세 정보
     void createMember(RequestCreateMemberDto dto);
-
+    // 회원 정보 수정
     void updateMember(RequestUpdateMemberDto dto, Member member);
+    // 회원 삭제
+    void deleteMember(String uuid);
 }

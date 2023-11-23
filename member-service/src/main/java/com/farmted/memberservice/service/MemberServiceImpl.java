@@ -31,4 +31,10 @@ public class MemberServiceImpl implements MemberService {
         upMember.updateMember(dto.getMemberName(), dto.getMemberAddress(), dto.getMemberAddressDetail(), dto.getMemberPhone());
         memberRepository.save(upMember);
     }
+
+    @Override
+    public void deleteMember(String uuid) {
+        memberRepository.deleteByMemberUuid(uuid);
+    }
+
 }
