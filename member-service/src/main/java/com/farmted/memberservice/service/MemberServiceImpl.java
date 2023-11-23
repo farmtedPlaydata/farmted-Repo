@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Slf4j
 @Service
@@ -35,6 +37,17 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void deleteMember(String uuid) {
         memberRepository.deleteByMemberUuid(uuid);
+    }
+
+    @Override
+    public void grantRole(String uuid, RoleEnums role) {
+        Member member = memberRepository.findByMemberUuid(uuid)
+                .orElseThrow(() -> new RuntimeException("ERROR: memberservice - grantRole"));
+
+        RoleEnums currentRole = member.getMemberRole();
+        RoleEnums newRole = (currentRole == RoleEnums.USER)
+                ? RoleEnums.ADMIN       // 현재 role이 USER이면 ADMIN으로 변경
+                : RoleEnums.USER;       // ADMIN일 경우 USER로 변경
     }
 
 }

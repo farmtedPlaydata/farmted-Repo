@@ -52,4 +52,11 @@ public class MemberController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    // 권한 변경
+    @PutMapping("/masterpage/{uuid}")
+    public ResponseEntity<?> grantRole(@PathVariable String uuid,
+                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        memberService.grantRole(uuid, userDetails.getMember().getMemberRole());
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }
