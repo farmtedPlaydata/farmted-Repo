@@ -1,6 +1,6 @@
 package com.farmted.memberservice.domain;
 
-import com.farmted.memberservice.enums.MemberRoleEnums;
+import com.farmted.memberservice.enums.RoleEnums;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +23,7 @@ public class Member extends TimeStamp implements Serializable {
     private String memberUuid;
 
     @Enumerated(value = EnumType.STRING)
-    private MemberRoleEnums memberRole;
+    private RoleEnums memberRole;
 
     private String memberImage;
 
@@ -36,4 +36,5 @@ public class Member extends TimeStamp implements Serializable {
     private Boolean memberStatus;
 
     private Long memberBalance;
+
 }
