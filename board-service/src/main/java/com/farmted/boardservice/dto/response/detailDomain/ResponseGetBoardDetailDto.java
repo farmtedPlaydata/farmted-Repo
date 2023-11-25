@@ -1,4 +1,4 @@
-package com.farmted.boardservice.dto.response;
+package com.farmted.boardservice.dto.response.detailDomain;
 
 import com.farmted.boardservice.domain.Board;
 import com.farmted.boardservice.enums.BoardType;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @NoArgsConstructor
-public class ResponseGetAuctionBoardDto {
+public class ResponseGetBoardDetailDto {
     // 게시글용 정보
     private String boardUuid;
     private BoardType boardType;
@@ -57,7 +57,6 @@ public class ResponseGetAuctionBoardDto {
         this.productStock = productVo.productStock();
         this.productImage = productVo.productImage();
         this.productSource = productVo.productSource();
-        this.productStatus = productVo.productStatus();
     }
         // 경매 정보
     public void addAuction(AuctionVo auctionVo){

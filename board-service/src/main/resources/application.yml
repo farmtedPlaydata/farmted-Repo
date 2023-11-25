@@ -2,6 +2,10 @@ server:
   port: 8080
 
 spring:
+  #swagger
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   application:
     name: board-service
   datasource:
@@ -29,3 +33,4 @@ eureka:
 ## 스케줄러 세팅
 schedules:
   cron: "* * * * * *"  # 1초마다 스케줄러 실행
+

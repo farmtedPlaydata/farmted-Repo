@@ -1,6 +1,6 @@
 package com.farmted.boardservice.util;
 
-import com.farmted.boardservice.dto.response.ResponseGetAuctionBoardListDto;
+import com.farmted.boardservice.dto.response.listDomain.ResponseGetBoardDto;
 import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class Auction1PageCache {
-    private Page<ResponseGetAuctionBoardListDto> page1;
+    private Page<ResponseGetBoardDto> page1;
     private final BoardRepository boardRepository;
 
     // yml에 cron 설정 저장
@@ -21,10 +21,10 @@ public class Auction1PageCache {
     private void updateCache(){
         page1 = boardRepository.findByBoardTypeAndBoardStatus(BoardType.AUCTION, true,
                 PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createAt")))
-                .map(ResponseGetAuctionBoardListDto::new);
+                .map(ResponseGetBoardDto::new);
         System.out.println("@@@@ 페이징 캐싱 완료! : 콘텐츠 갯수 - "+page1.getContent().size());
     }
-    public Page<ResponseGetAuctionBoardListDto> getPage1(){
+    public Page<ResponseGetBoardDto> getPage1(){
         return page1;
     }
 }
