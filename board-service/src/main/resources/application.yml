@@ -1,11 +1,6 @@
 server:
   port: 8080
-
 spring:
-  #swagger
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
   application:
     name: board-service
   datasource:
@@ -21,6 +16,10 @@ spring:
         format_sql: true
         physical_naming_strategy: com.farmted.boardservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
     show-sql: true
+  #swagger
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 ## Discovery Client 세팅
 eureka:
   client:

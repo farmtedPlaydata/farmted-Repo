@@ -186,7 +186,7 @@ public class ServiceTest {
         // when
         // then
             // 1초 단위 스케줄러 실행을 위해 2초 대기
-        System.out.println("@@@ + "+ boardRepository.findByBoardTypeAndBoardStatus(BoardType.AUCTION, true,
+        System.out.println("@@@ + "+ boardRepository.findByBoardTypeAndBoardStatusTrue(BoardType.AUCTION, true,
                         PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createAt")))
                 .map(ResponseGetBoardDto::new).getContent());
         Awaitility.await().atMost(5000, TimeUnit.MILLISECONDS)
@@ -236,8 +236,8 @@ public class ServiceTest {
         boardService.deleteAuctionBoard(boardUuid, uuid);
         // then
             // 해당 uuid를 가진 활성화된 게시글은 없지만, 비활성화된 게시글은 있어야 함
-        assertThat(boardRepository.findByBoardUuIDAndBoardStatus(boardUuid, true)).isEqualTo(Optional.empty());
-        assertThat(boardRepository.findByBoardUuIDAndBoardStatus(boardUuid, false).get()).isNotNull();
+        assertThat(boardRepository.findByBoardUuIDAndBoardStatusTrue(boardUuid, true)).isEqualTo(Optional.empty());
+        assertThat(boardRepository.findByBoardUuIDAndBoardStatusTrue(boardUuid, false).get()).isNotNull();
     }
 
     @Test
@@ -273,7 +273,7 @@ public class ServiceTest {
         boardService.updateAuctionBoard(dummyData, boardUuid, uuid);
         // then
             // 업데이트가 정상적으로 진행되었는지
-        assertThat(boardRepository.findByBoardUuIDAndBoardStatus(boardUuid,true).get().getBoardTitle())
+        assertThat(boardRepository.findByBoardUuIDAndBoardStatusTrue(boardUuid,true).get().getBoardTitle())
                 .isEqualTo(dummyData.boardTitle());
     }
 }
