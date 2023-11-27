@@ -35,7 +35,7 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ) {
         List<ProductResponseDto> listProductSeller = productService.getListProductSeller(memberUuid,pageNo);
-        return  ResponseEntity.ok(GlobalResponseDto.of(listProductSeller));
+        return  ResponseEntity.ok(GlobalResponseDto.listOf(listProductSeller));
     }
 
     // 판매자 가격 수정
@@ -59,7 +59,7 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ){
         List<ProductResponseDto> listProduct = productService.getListProduct(pageNo);
-        return ResponseEntity.ok(GlobalResponseDto.of(listProduct));
+        return ResponseEntity.ok(GlobalResponseDto.listOf(listProduct));
     }
 
     // 상품 상세 조회

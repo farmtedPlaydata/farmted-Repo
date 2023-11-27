@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL) // 필드가 null 값일 경우 그 필드 제외하고 보냄.
 public class GlobalResponseDto<T> {
@@ -34,6 +36,8 @@ public class GlobalResponseDto<T> {
     public static <T> GlobalResponseDto<T> of(T data){
         return new GlobalResponseDto<>(data);
     }
+
+    public static  <T> GlobalResponseDto<List<T>>  listOf(List<T> data){return new GlobalResponseDto<>(data);}
 
 
 }
