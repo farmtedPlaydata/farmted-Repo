@@ -3,13 +3,10 @@ package com.farmted.memberservice.controller;
 import com.farmted.memberservice.config.security.UserDetailsImpl;
 import com.farmted.memberservice.dto.request.RequestCreateMemberDto;
 import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
-import com.farmted.memberservice.dto.request.SearchMemberDto;
 import com.farmted.memberservice.dto.request.SearchMemberParam;
 import com.farmted.memberservice.dto.response.MemberResponseDto;
 import com.farmted.memberservice.repository.MemberRepository;
 import com.farmted.memberservice.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberRepository memberRepository;
 
     // 회원 상세 정보
     @PostMapping("/members")
@@ -65,6 +61,6 @@ public class MemberController {
 
     @GetMapping("/all-members")
     public ResponseEntity<Page<MemberResponseDto>> getAllMember(SearchMemberParam param, Pageable pageable) {
-        return ResponseEntity.ok(memberRepository.findAll(param, pageable));
+        return ResponseEntity.ok(memberService.getAllMember(param, pageable));
     }
 }

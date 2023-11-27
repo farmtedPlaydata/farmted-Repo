@@ -1,5 +1,6 @@
 package com.farmted.memberservice.domain;
 
+import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
 import com.farmted.memberservice.enums.RoleEnums;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -49,11 +50,16 @@ public class Member extends TimeStamp implements Serializable {
         this.memberStatus = memberStatus;
     }
 
-    public void updateMember(String memberName, String memberAddress, String memberAddressDetail, String memberPhone) {
-        this.memberName = memberName;
-        this.memberAddress = memberAddress;
-        this.memberAddressDetail = memberAddressDetail;
-        this.memberPhone = memberPhone;
+    public void updateMember(RequestUpdateMemberDto dto) {
+        this.memberName = dto.getMemberName();
+        this.memberAddress = dto.getMemberAddress();
+        this.memberAddressDetail = dto.getMemberAddressDetail();
+        this.memberPhone = dto.getMemberPhone();
+    }
+
+    public void changeRole(RoleEnums roles) {
+        // 부여하는 권한을 가지고 있는 경우, 권한을 취소할 수 있음
+        this.memberRole = this.memberRole == roles ? RoleEnums.USER : roles;
     }
 
 }
