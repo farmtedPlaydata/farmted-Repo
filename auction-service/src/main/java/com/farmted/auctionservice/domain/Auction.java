@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -20,19 +21,17 @@ public class Auction extends TimeStamp{
     @Column(unique = true)
     private String auctionUuid;
 
-    private int auctionPrice;
+    private int auctionPrice; // 가격
 
-    private String auctionBidder;
+    private String auctionBuyer;  // 낙찰자
 
-    private String auctionBuyer;
-
-    private String auctionDeadline;
+    private LocalDate auctionDeadline; // 경매 종료 시간
 
     private Boolean auctionStatus; // 0: 경매중, 1:  경매 종료
 
-    private String member_uuid;
+    private String memberUuid;
 
-    private String board_uuid;
+    private String boardUuid;
 
     @PrePersist
     public void createUuid(){

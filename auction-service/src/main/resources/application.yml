@@ -1,6 +1,8 @@
+
 spring:
   application:
     name: auction-service
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/farmted
@@ -15,3 +17,6 @@ spring:
         physical_naming_strategy: com.farmted.auctionservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
     hibernate:
       ddl-auto: create
+
+server:
+  port: 8082
