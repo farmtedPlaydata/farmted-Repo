@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Entity(name = "members")
 @Getter @Builder
@@ -40,6 +41,13 @@ public class Member extends TimeStamp implements Serializable {
 
     private Long memberBalance;
 
+    public Member(String memberUuid, String memberName, RoleEnums memberRole, String memberPhone, Boolean memberStatus) {
+        this.memberUuid = memberUuid;
+        this.memberName = memberName;
+        this.memberRole = memberRole;
+        this.memberPhone = memberPhone;
+        this.memberStatus = memberStatus;
+    }
 
     public void updateMember(String memberName, String memberAddress, String memberAddressDetail, String memberPhone) {
         this.memberName = memberName;

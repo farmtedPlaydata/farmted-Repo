@@ -3,18 +3,20 @@ package com.farmted.memberservice.controller;
 import com.farmted.memberservice.config.security.UserDetailsImpl;
 import com.farmted.memberservice.dto.request.RequestCreateMemberDto;
 import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
+import com.farmted.memberservice.dto.request.SearchMemberDto;
+import com.farmted.memberservice.dto.request.SearchMemberParam;
+import com.farmted.memberservice.dto.response.MemberResponseDto;
+import com.farmted.memberservice.repository.MemberRepository;
 import com.farmted.memberservice.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api/member-service")
@@ -22,6 +24,7 @@ import java.net.URISyntaxException;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     // 회원 상세 정보
     @PostMapping("/members")
@@ -38,7 +41,7 @@ public class MemberController {
     }
 
     // 회원 탈퇴(본인)
-    @DeleteMapping("/mypage/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<?> deleteMember(UserDetailsImpl userDetails) {
         String memberUuid = userDetails.getUsername();
         memberService.deleteMember(memberUuid);
@@ -53,10 +56,15 @@ public class MemberController {
     }
 
     // 권한 변경
-    @PutMapping("/masterpage/{uuid}")
+    @PutMapping("/master/{uuid}")
     public ResponseEntity<?> grantRole(@PathVariable String uuid,
                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         memberService.grantRole(uuid, userDetails.getMember().getMemberRole());
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/all-members")
+    public ResponseEntity<Page<MemberResponseDto>> getAllMember(SearchMemberParam param, Pageable pageable) {
+        return ResponseEntity.ok(memberRepository.findAll(param, pageable));
     }
 }

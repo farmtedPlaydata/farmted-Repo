@@ -3,7 +3,9 @@ package com.farmted.memberservice.service;
 import com.farmted.memberservice.domain.Member;
 import com.farmted.memberservice.dto.request.RequestCreateMemberDto;
 import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
+import com.farmted.memberservice.dto.response.MemberResponseDto;
 import com.farmted.memberservice.enums.RoleEnums;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 public interface MemberService {
@@ -14,4 +16,5 @@ public interface MemberService {
     // 회원 삭제
     void deleteMember(String uuid);
     void grantRole(String uuid, RoleEnums role);
+
 }
