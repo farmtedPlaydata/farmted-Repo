@@ -17,6 +17,9 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     // 판매자가 등록한 상품 중 경매 진행 중이 아닌 특정 상품 조회
     public Optional<Product> findProductByUuidAndMemberUuidAndAuctionStatusFalse(String uuid,String memberUuid);
 
+    // 패인을 위한 BoardUuid를 기반으로 경매 생성?
+    public Optional<Product> findProductByBoardUuid(String BoardUuid);
+
 
 
 }

@@ -1,5 +1,6 @@
 package com.farmted.productservice.service;
 
+import com.farmted.productservice.FeignClient.ProductToAuctionFeignClient;
 import com.farmted.productservice.domain.Product;
 import com.farmted.productservice.dto.request.ProductModifyRequestDto;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
@@ -7,6 +8,7 @@ import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.exception.SellerException;
 import com.farmted.productservice.repository.ProductRepository;
+import com.farmted.productservice.vo.RequestAuctionCreateVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductToAuctionFeignClient productToAuctionFeignClient;
 
     // 상품 DB 등록
     public void saveProduct(String memberUuid,ProductSaveRequestDto productSaveRequestDto){
@@ -77,4 +80,19 @@ public class ProductService {
         
         return productAllList;
     }
+
+    // feign 통신
+    public void createProductToAuction(String productUuid){
+        // 상품DB에서 가격과 생성시간을 가져옵니다.
+        Product product = productRepository.findProductByUuid(productUuid)
+                // 해당 상품이 있는지 확인
+                .orElseThrow(ProductException::new);
+        // 엔티티를 VO로 변환줍니다.
+        RequestAuctionCreateVo auctionCreateVo = new RequestAuctionCreateVo(product);
+        // 페인 통신 진행
+        productToAuctionFeignClient.createProductToAuction(auctionCreateVo);
+        // 결과 확인 로직?
+
+    }
+
 }
