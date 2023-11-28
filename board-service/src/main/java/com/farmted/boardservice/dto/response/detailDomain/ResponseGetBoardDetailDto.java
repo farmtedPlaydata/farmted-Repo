@@ -27,7 +27,7 @@ public class ResponseGetBoardDetailDto {
         this.boardTitle = board.getBoardTitle();
         this.boardContent = board.getBoardContent();
         this.viewCount = board.getViewCount();
-        this.createAt = board.getCreateAt();
-        this.updateAt = board.getUpdateAt();
+        this.createAt = board.getCreatedAt();
+        this.updateAt = board.getModifiedAt();
     }
 }
