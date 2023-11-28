@@ -5,26 +5,31 @@ import com.farmted.passservice.dto.request.RequestCreatePassDto;
 import com.farmted.passservice.dto.request.RequestLoginDto;
 import com.farmted.passservice.repository.PassRepository;
 import com.farmted.passservice.util.jwt.JwtProvider;
-import com.farmted.passservice.util.redis.RedisRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class PassServiceImpl implements PassService {
 
     private final PassRepository passRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+    private final JwtProvider jwtProvider;
 
     @Override
+    @Transactional
     public void createPass(RequestCreatePassDto dto) {
         duplicateUserCheck(dto);
         String password = dto.getPassword();
@@ -34,6 +39,7 @@ public class PassServiceImpl implements PassService {
     }
 
     @Override
+    @Transactional
     public String login(RequestLoginDto dto) {
         Pass pass = passRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
@@ -52,8 +58,8 @@ public class PassServiceImpl implements PassService {
     }
 
     @Override
-    public void logout(String uuid) {
-        
+    public void logout(HttpServletRequest request) throws UnsupportedEncodingException {
+
     }
 
 

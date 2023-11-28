@@ -7,6 +7,7 @@ import com.farmted.passservice.config.security.UserDetailsImpl;
 import com.farmted.passservice.config.security.UserDetailsServiceImpl;
 import com.farmted.passservice.util.redis.RedisRepository;
 import com.farmted.passservice.util.redis.RefreshToken;
+import com.nimbusds.openid.connect.sdk.federation.policy.operations.ValueOperation;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -19,6 +20,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,6 +37,7 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
@@ -41,6 +46,7 @@ public class JwtProvider {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final RedisRepository redisRepository;
+    private final StringRedisTemplate stringRedisTemplate;
 
     public static final String AUTH_HEADER = "Authorization";
     public static final String REFRESH_HEADER = "Refresh";
@@ -153,5 +159,10 @@ public class JwtProvider {
                 response.addHeader("Set-Cookie", responseCookie.toString());
             }
         }
+    }
+
+    public void logoutAccessTokenByRedis(String accessToken, String logout, Long expiretime, TimeUnit milliseconds) {
+        ValueOperations<String, String> stringValueOperation = stringRedisTemplate.opsForValue();
+        stringValueOperation.set(accessToken, logout, expiretime, milliseconds);
     }
 }

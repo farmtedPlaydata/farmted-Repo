@@ -6,6 +6,7 @@ import com.farmted.passservice.dto.request.RequestLoginDto;
 import com.farmted.passservice.enums.TokenType;
 import com.farmted.passservice.service.PassService;
 import com.farmted.passservice.util.jwt.JwtProvider;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequestMapping("/pass-service")
@@ -36,11 +39,10 @@ public class PassController {
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<?> logout(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response,
-                                    HttpServletRequest request) {
-        String uuid = userDetails.getPassword();
+    public ResponseEntity<?> logout(HttpServletResponse response,
+                                    HttpServletRequest request) throws UnsupportedEncodingException {
+        passService.logout(request);
         jwtProvider.deleteCookie(response, request);
-        passService.logout(uuid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
