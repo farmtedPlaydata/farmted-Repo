@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Component
 public class LogFilter extends AbstractGatewayFilterFactory<LogFilter.Config> {
-
+    // 로그파일
     public LogFilter(){
         super(Config.class);
     }

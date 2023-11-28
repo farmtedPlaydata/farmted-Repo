@@ -15,7 +15,7 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
     public GlobalFilter(){
         super(Config.class);
     }
-
+    // 글로벌
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
