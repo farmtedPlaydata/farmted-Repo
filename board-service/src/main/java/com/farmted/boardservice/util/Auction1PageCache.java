@@ -20,7 +20,7 @@ public class Auction1PageCache {
     @Scheduled(cron = "${schedules.cron}")
     private void updateCache(){
         page1 = boardRepository.findByBoardTypeAndBoardStatusTrue(BoardType.AUCTION,
-                PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createAt")))
+                PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createdAt")))
                 .map(ResponseGetBoardDto::new);
         System.out.println("@@@@ 페이징 캐싱 완료! : 콘텐츠 갯수 - "+page1.getContent().size());
     }
