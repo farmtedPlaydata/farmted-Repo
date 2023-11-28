@@ -13,3 +13,11 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
+eureka:
+  client:
+    register-with-eureka: true  # 유레카 서버에 등록
+    fetch-registry: true  # 유레카 서버에서 서버 상태 지속적 감시 허락
+    service-url:
+      defaultZone: http://192.168.67.1:8761/eureka # 유레카 서버의 주소
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
