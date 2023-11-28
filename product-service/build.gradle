@@ -34,9 +34,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // spring-boot-starter-validation
     implementation 'org.springframework.boot:spring-boot-starter-validation:3.1.5'
+    // openfeign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
-    // eureka-client
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
 }
 
