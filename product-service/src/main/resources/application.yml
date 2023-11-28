@@ -4,7 +4,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/farmted
+    url: jdbc:mysql://localhost:3306/msa_db
     username: root
     password: 1234
 
@@ -29,3 +29,4 @@ eureka:
   # 인스턴스별로 유레카에 보여지는 표기를 다르게 설정함
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
