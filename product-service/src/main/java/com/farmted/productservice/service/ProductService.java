@@ -8,11 +8,18 @@ import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.exception.SellerException;
 import com.farmted.productservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
 
 @Service
 @RequiredArgsConstructor
@@ -25,17 +32,22 @@ public class ProductService {
     public void saveProduct(String memberUuid,ProductSaveRequestDto productSaveRequestDto){
         Product saveProduct = productSaveRequestDto.toEntity(memberUuid);
         productRepository.save(saveProduct);
+
     }
 
     // 상품 DB  가격 수정
-    public void modifyProduct(String productUuid, String memberUuId,ProductModifyRequestDto productModifyRequestDto){
+    public void modifyProduct(String boardUuid,ProductModifyRequestDto productModifyRequestDto,String memberUuid){
         // 상품 판매자만 가격 수정 가능
-        Product product = productRepository.findProductByUuidAndMemberUuid(productUuid,memberUuId)
-                .orElseThrow(()-> new SellerException());
+        Product product = productRepository.findProductByBoardUuidAndAuctionStatusTrue(boardUuid)
+                .orElseThrow(()-> new ProductException());
+
+        if(!product.getMemberUuid().equals(memberUuid))
+           throw new SellerException();
+
         if(!product.isAuctionStatus()){ // 경매 중이 아닌(상태값이 false) 경우만 가격 수정 가능
             product.modifyPrice(productModifyRequestDto.getMoney());
         }else{
-            new ProductException(product.isAuctionStatus());
+           throw new ProductException(product.isAuctionStatus());
         }
 
     }
@@ -43,38 +55,33 @@ public class ProductService {
 
     // 판매자 등록한 전체 상품 조회
     @Transactional(readOnly = true)
-    public List<ProductResponseDto> getListProductSeller(String memberUuid){
+    public List<ProductResponseDto> getListProductSeller(String memberUuid,int pageNo){
         // 해당 판매자가 존재하는 지 확인
-        List<Product> productList= productRepository.findProductByMemberUuid(memberUuid)
-               .orElseThrow(() -> new SellerException());
+        Slice<Product> productList = productRepository.findProductByMemberUuid(memberUuid, PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createAt")));
 
-        List<ProductResponseDto> productListSeller = new ArrayList<>();
-        for(Product product: productList){
-            productListSeller.add(new ProductResponseDto(product));
-        }
-        return  productListSeller;
+        return productList.stream()
+                .map(ProductResponseDto::new)
+                .collect(Collectors.toList());
+
     }
 
 
     // 상품 상세 조회
     @Transactional(readOnly = true)
-    public ProductResponseDto getProductDetail(String productUuid){
-      Product productDetail = productRepository.findProductByUuid(productUuid)
-              .orElseThrow(()-> new RuntimeException("일단 해당 상품 없음 .. 차후 예외처리 신명나게 진행할 예정"));
+    public ProductResponseDto getProductDetail(String boardUuid){
+      Product productDetail = productRepository.findProductByBoardUuid(boardUuid)
+              .orElseThrow(()-> new ProductException());
       return new ProductResponseDto(productDetail);
     }
 
     // 전체 상품 조회
     @Transactional(readOnly = true)
-    public List<ProductResponseDto> getListProduct() {
-        List<Product> productList = productRepository.findAll();
-        List<ProductResponseDto> productAllList = new ArrayList<>();
-        // TODO: 페이징 처리 진행 예정
+    public List<ProductResponseDto> getListProduct(int pageNo) {
+        Slice<Product> productList = productRepository.findAll(PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
 
-        for (Product product : productList) {
-            productAllList.add(new ProductResponseDto(product));
-        }
-        
-        return productAllList;
+
+        return productList.stream()
+                .map(ProductResponseDto::new)
+                .collect(Collectors.toList());
     }
 }

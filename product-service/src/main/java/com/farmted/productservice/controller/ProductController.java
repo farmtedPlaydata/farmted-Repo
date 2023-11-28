@@ -4,8 +4,8 @@ import com.farmted.productservice.dto.request.ProductModifyRequestDto;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.service.ProductService;
+import com.farmted.productservice.util.GlobalResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,31 +19,35 @@ public class ProductController {
     private final ProductService productService;
 
     // 판매자 상품 등록
-    @PostMapping("/products")
+    @PostMapping("/products/boards")
     public ResponseEntity<?>  saveProduct(
             @RequestBody ProductSaveRequestDto productSaveRequestDto,
-            @RequestHeader("MemberUUID") String memberUuid // 멤버
+            @RequestHeader("UUID") String uuid // 멤버
     ) {
-        productService.saveProduct(memberUuid,productSaveRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        productService.saveProduct(uuid,productSaveRequestDto);
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
     // 판매자 등록 전체 상품 조회
     @GetMapping("/products/seller/{member_uuid}")
-    public ResponseEntity<List<ProductResponseDto>> getProductListSeller(@PathVariable (value = "member_uuid") String memberUuid) {
-        return  ResponseEntity.ok(productService.getListProductSeller(memberUuid));
+    public ResponseEntity<?> getProductListSeller(
+            @PathVariable (value = "member_uuid") String memberUuid,
+            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
+    ) {
+        List<ProductResponseDto> listProductSeller = productService.getListProductSeller(memberUuid,pageNo);
+        return  ResponseEntity.ok(GlobalResponseDto.listOf(listProductSeller));
     }
 
     // 판매자 가격 수정
-    @PatchMapping("/products/{product_uuid}")
+    @PatchMapping("/products/{board_uuid}/boards")
     public ResponseEntity<?> modifyProduct(
-            @PathVariable (value = "product_uuid") String productUuid ,
-            @RequestHeader("MemberUUID") String memberUuid, // 멤버
+            @PathVariable (value = "board_uuid") String boardUuid ,
+            @RequestHeader("UUID") String memberUuid, // 멤버
             @RequestBody ProductModifyRequestDto productModifyRequestDto
     )
     {
-        productService.modifyProduct(productUuid, memberUuid, productModifyRequestDto);
-        return ResponseEntity.ok().build();
+        productService.modifyProduct(boardUuid, productModifyRequestDto,memberUuid);
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
     // 판매자 전체 수정
@@ -51,14 +55,18 @@ public class ProductController {
 
     // 전체 상품 조회
     @GetMapping("/products")
-    public ResponseEntity<List<ProductResponseDto>> getProductList(){
-       return ResponseEntity.ok(productService.getListProduct());
+    public ResponseEntity<?> getProductList(
+            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
+    ){
+        List<ProductResponseDto> listProduct = productService.getListProduct(pageNo);
+        return ResponseEntity.ok(GlobalResponseDto.listOf(listProduct));
     }
 
     // 상품 상세 조회
-    @GetMapping("/products/{product_uuid}")
-    public ResponseEntity<ProductResponseDto> getProductDetail(@PathVariable (value = "product_uuid") String productUuid){
-        return ResponseEntity.ok(productService.getProductDetail(productUuid));
+    @GetMapping("/products/{board_uuid}/boards")
+    public ResponseEntity<?> getProductDetail(@PathVariable (value = "board_uuid") String boardUuid){
+        ProductResponseDto productDetail = productService.getProductDetail(boardUuid);
+        return ResponseEntity.ok(GlobalResponseDto.of(productDetail));
 
     }
 

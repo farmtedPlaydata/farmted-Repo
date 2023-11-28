@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: private
+    active: private, local
   datasource:
     url: ${url}
     username: ${username_}
@@ -15,4 +15,3 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create
-
