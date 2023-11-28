@@ -22,7 +22,7 @@ public record RequestUpdateProductBoardDto(
         @JsonProperty("productSource") @NotBlank String productSource,
         @JsonProperty("productImage") @NotBlank String productImage
 ){
-    // 상품 전용 데이터 - 전송용 VO
+    // 상품 전용 데이터 생성 - 전송용 VO
     public ProductVo toProduct(String boardUuid){
         return ProductVo.builder()
                 .productName(this.productName)
@@ -30,6 +30,7 @@ public record RequestUpdateProductBoardDto(
                 .productPrice(this.productPrice)
                 .productSource(this.productSource)
                 .productImage(this.productImage)
+                .boardType(this.boardType)
                 .boardUuid(boardUuid)
                 .build();
     }

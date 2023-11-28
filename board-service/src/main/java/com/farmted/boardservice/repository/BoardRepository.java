@@ -19,4 +19,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             (String memberUuid, BoardType boardType, Pageable pageable);
     // 게시글 상세 조회
     Optional<Board> findByBoardUuIDAndBoardStatusTrue(String boardUuid);
+    Board getByBoardUuIDAndBoardStatusTrue(String boardUuid);
 }

@@ -55,5 +55,4 @@ public class FeignConverter<T> {
                     .map(HttpEntity::getBody)
                     .orElseThrow(() -> new FeignException(domainType, exceptionType)).getData();
     }
-
 }

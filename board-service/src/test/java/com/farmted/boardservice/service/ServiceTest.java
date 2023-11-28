@@ -1,7 +1,7 @@
 package com.farmted.boardservice.service;
 
 import com.farmted.boardservice.domain.Board;
-import com.farmted.boardservice.dto.request.RequestCreateProductBoardDto;
+import com.farmted.boardservice.dto.request.RequestCreateBoardDto;
 import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDto;
 import com.farmted.boardservice.dto.response.detailDomain.ResponseGetBoardDetailDto;
 import com.farmted.boardservice.dto.response.listDomain.ResponseGetBoardDto;
@@ -82,7 +82,7 @@ public class ServiceTest {
     public void beforeEach(){
         boardRepository.deleteAll();
         IntStream.rangeClosed(1, 5).forEach( (i)->{
-                boardService.createActionBoard(new RequestCreateProductBoardDto(
+                boardService.createBoard(new RequestCreateBoardDto(
                     BoardType.AUCTION,             // BoardType 값
                     "게시글 내용"+i,                  // 게시글 내용
                     "게시글 제목"+i,                  // 게시글 제목
@@ -107,7 +107,7 @@ public class ServiceTest {
         String uuid = "userUUID";
         RoleEnums role = RoleEnums.USER;
             // 더미데이터 생성
-        RequestCreateProductBoardDto dummyData = new RequestCreateProductBoardDto(
+        RequestCreateBoardDto dummyData = new RequestCreateBoardDto(
                 BoardType.AUCTION,             // BoardType 값
                 "게시글 내용",                  // 게시글 내용
                 "Example",                  // 게시글 제목
@@ -120,7 +120,7 @@ public class ServiceTest {
 
 
         // when
-        boardService.createActionBoard(dummyData, uuid, role.toString());
+        boardService.createBoard(dummyData, uuid, role.toString());
 
         // then
             // wireMock에게 예상대로 요청이 왔는지 확인
@@ -134,7 +134,7 @@ public class ServiceTest {
     public void createBoardWhenWeirdRole(){
         // given
         // 더미데이터 생성
-        RequestCreateProductBoardDto dummyData = new RequestCreateProductBoardDto(
+        RequestCreateBoardDto dummyData = new RequestCreateBoardDto(
                 BoardType.AUCTION,             // BoardType 값
                 "게시글 내용",                  // 게시글 내용
                 "Example",                  // 게시글 제목
@@ -148,7 +148,7 @@ public class ServiceTest {
         // when
         // then
         // 주어진 Role이 유효하지 않은 ROLE값인 경우 예외처리
-        Assertions.assertThrows(RoleTypeException.class, ()->boardService.createActionBoard(dummyData, "userUUID", "ROLE_ROLE"));
+        Assertions.assertThrows(RoleTypeException.class, ()->boardService.createBoard(dummyData, "userUUID", "ROLE_ROLE"));
     }
         // 유저가 게스트인 경우
     @Test
@@ -156,7 +156,7 @@ public class ServiceTest {
     public void createBoardWhenGuest(){
         // given
         // 더미데이터 생성
-        RequestCreateProductBoardDto dummyData = new RequestCreateProductBoardDto(
+        RequestCreateBoardDto dummyData = new RequestCreateBoardDto(
                 BoardType.AUCTION,             // BoardType 값
                 "게시글 내용",                  // 게시글 내용
                 "Example",                  // 게시글 제목
@@ -170,7 +170,7 @@ public class ServiceTest {
         // when
         // then
             // 주어진 Role이 GUEST인 경우 실패해야함
-        Assertions.assertThrows(RoleTypeException.class, ()->boardService.createActionBoard(dummyData, "userUUID", "ROLE_GUEST"));
+        Assertions.assertThrows(RoleTypeException.class, ()->boardService.createBoard(dummyData, "userUUID", "ROLE_GUEST"));
     }
 
 

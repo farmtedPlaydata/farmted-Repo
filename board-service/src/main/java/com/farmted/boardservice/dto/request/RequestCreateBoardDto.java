@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
-public record RequestCreateProductBoardDto(
+public record RequestCreateBoardDto(
         // 게시글용 정보
         @JsonProperty("boardType") BoardType boardType,
         @JsonProperty("boardContent") @NotBlank String boardContent,

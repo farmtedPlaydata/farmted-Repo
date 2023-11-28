@@ -1,7 +1,8 @@
 package com.farmted.boardservice.controller;
 
-import com.farmted.boardservice.dto.request.RequestCreateProductBoardDto;
+import com.farmted.boardservice.dto.request.RequestCreateBoardDto;
 import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDto;
+import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.service.BoardService;
 import com.farmted.boardservice.util.GlobalResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,10 +23,10 @@ public class BoardController {
     @PostMapping(value = "/boards/auctions")
     @Operation(summary = "경매 게시글 작성", description = "카테고리가 경매인 게시글의 등록 요청")
     public ResponseEntity<GlobalResponseDto<?>> createAuctionBoard(
-            @Valid @RequestBody RequestCreateProductBoardDto productBoardDto,
+            @Valid @RequestBody RequestCreateBoardDto productBoardDto,
             @RequestHeader("UUID") String uuid,
             @RequestHeader("ROLE") String role){
-        boardService.createActionBoard(productBoardDto, uuid, role);
+        boardService.createBoard(productBoardDto, uuid, role);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
@@ -56,11 +57,12 @@ public class BoardController {
     @Operation(summary = "특정 이용자 게시글 전체 조회", description = "특정 사용자의 게시글 전체 조회")
     public ResponseEntity<GlobalResponseDto<?>> getBoardListWriter(
             @PathVariable (value = "seller_uuid") String uuid,
+            @RequestParam(defaultValue = "Product", value = "boardType") String boardType,
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ){
         return ResponseEntity.ok(
                 GlobalResponseDto.of(
-                        boardService.getWriterBoardList(pageNo-1, uuid)
+                        boardService.getWriterBoardList(pageNo-1, uuid, BoardType.valueOf(boardType))
         ));
     }
 
