@@ -20,7 +20,6 @@ public class CustomFilter extends AbstractGatewayFilterFactory<CustomFilter.Conf
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
             ServerHttpResponse response = exchange.getResponse();
-            // ㅎㅇㅇ
             // 헤더에 uuid, role값 강제로 넣기
             request.mutate().header("UUID", request.getHeaders().get("UUID").get(0))
                             .header("ROLE", request.getHeaders().get("ROLE").get(0))
