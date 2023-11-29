@@ -1,5 +1,6 @@
 package com.farmted.commentservice.domain;
 
+import com.farmted.commentservice.dto.request.CommentUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,4 +39,9 @@ public class Comment extends TimeStamp {
 
     @Column(name = "member_name")
     private String commentMemberName;
+
+    public void updateComment(CommentUpdateRequestDto dto) {
+        this.commentContent = dto.getContent();
+        this.commentUuid = dto.getCommentUuid();
+    }
 }

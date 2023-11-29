@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     Optional<Comment> findCommentByCommentUuid(String commentUuid);
+    void deleteCommentByCommentUuid(String uuid);
+
 }

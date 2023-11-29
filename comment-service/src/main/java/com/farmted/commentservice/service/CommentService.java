@@ -32,17 +32,18 @@ public class CommentService {
 
     }
 
-    public Comment updateComment(CommentUpdateRequestDto updateRequestDto) {
+    public void updateComment(String uuid, CommentUpdateRequestDto updateRequestDto) {
         Comment comment = commentRepository.findCommentByCommentUuid(updateRequestDto.getCommentUuid())
                 .orElseThrow(() -> new RuntimeException("댓글이 없습니다."));
 
-        comment.setCommentUpdateDto(updatedComment.getCommentContent());
-        commentRepository.save(existingComment);
-        }
-        return null;
-    }
+        comment.updateComment(updateRequestDto);
+        commentRepository.save(comment);
 
-    public void deleteComment(Long id) {
-        commentRepository.deleteById(id);
+        }
+
+
+
+    public void deleteComment(String uuid) {
+        commentRepository.deleteCommentByCommentUuid(uuid);
     }
 }

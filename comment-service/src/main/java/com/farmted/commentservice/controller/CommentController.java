@@ -2,6 +2,7 @@ package com.farmted.commentservice.controller;
 
 import com.farmted.commentservice.domain.Comment;
 import com.farmted.commentservice.dto.request.CommentCreateRequestDto;
+import com.farmted.commentservice.dto.request.CommentUpdateRequestDto;
 import com.farmted.commentservice.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,22 +12,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/comment_service")
+@RequestMapping("/comment-service")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping
-    public List<Comment> getAllComments() {
-        return commentService.getALlComments();
+    @GetMapping("/comments")
+    public ResponseEntity<List<Comment>> getAllComments() {
+        return ResponseEntity.ok(commentService.getALlComments());
     }
 
-    @GetMapping
-    public Comment getCommentById(@PathVariable Long id) {
-        return commentService.getCommentById(id);
+    @GetMapping("/comments/{id}")
+    public ResponseEntity<?> getCommentById(@PathVariable Long id) {
+
+        commentService.getCommentById(id);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping("/comments/{board_uuid}")
@@ -39,13 +43,14 @@ public class CommentController {
             return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public Comment updateComment(@PathVariable Long id, @RequestBody Comment updatedComment) {
-        return commentService.updateComment(id, updatedComment);
+    @PutMapping("/{uuid}")
+    public ResponseEntity<?> updateComment(@PathVariable String uuid, @RequestBody CommentUpdateRequestDto updateRequestDto) {
+        commentService.updateComment(uuid, updateRequestDto);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteComment(@PathVariable Long id) {
-        commentService.deleteComment(id);
+    @DeleteMapping("/{uuid}")
+    public void deleteComment(@PathVariable String uuid) {
+        commentService.deleteComment(uuid);
     }
 }
