@@ -1,10 +1,13 @@
 package com.farmted.productservice.dto.request;
 
+
 import com.farmted.productservice.domain.Product;
 import lombok.*;
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class ProductSaveRequestDto {
 
@@ -33,3 +36,4 @@ public class ProductSaveRequestDto {
     }
 
 }
+

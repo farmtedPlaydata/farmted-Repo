@@ -1,5 +1,6 @@
 package com.farmted.productservice.domain;
 
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -60,3 +61,4 @@ public class Product extends TimeStamp{
 
 
 }
+

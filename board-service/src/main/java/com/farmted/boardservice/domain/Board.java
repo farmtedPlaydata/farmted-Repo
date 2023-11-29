@@ -1,7 +1,7 @@
 package com.farmted.boardservice.domain;
 
 
-import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDTO;
+import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDto;
 import com.farmted.boardservice.enums.BoardType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -50,7 +50,7 @@ public class Board extends TimeStamp {
 
     ////////////////////////////////////////////////
     // 엔티티 최초 생성 시 자동 초기화할 값
-        // UUID, Status, viewCount
+    // UUID, Status, viewCount
     @PrePersist
     public void createUuid(){
         boardUuID = UUID.randomUUID().toString();
@@ -63,7 +63,7 @@ public class Board extends TimeStamp {
         boardStatus = false;
     }
     // 게시글 업데이트 로직
-    public void updateBoardInfo(RequestUpdateProductBoardDTO updateDTO){
+    public void updateBoardInfo(RequestUpdateProductBoardDto updateDTO){
         boardType = updateDTO.boardType();
         boardTitle = updateDTO.boardTitle();
         boardContent = updateDTO.boardContent();

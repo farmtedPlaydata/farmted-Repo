@@ -10,14 +10,17 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)  // Entity 생성일자
 @Getter
 public class TimeStamp {
+
     @CreatedDate
-    @Column(updatable = false)
-    LocalDateTime createAt;
+    @Column(name = "createdAt", nullable = false)
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    LocalDateTime updateAt;
+    @Column(name = "modifiedAt", nullable = false)
+    private LocalDateTime modifiedAt;
+
 }
