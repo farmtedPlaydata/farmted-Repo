@@ -27,8 +27,7 @@ public class CommentService {
     }
     public  void createComment(String memberUuid, String boardUuid ,CommentCreateRequestDto commentCreateRequestDto) {
         Comment comment = commentCreateRequestDto.toEntity();
-
-
+        commentRepository.save(comment);
 
     }
 

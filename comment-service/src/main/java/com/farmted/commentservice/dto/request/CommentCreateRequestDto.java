@@ -27,7 +27,7 @@ public class CommentCreateRequestDto {
         .commentContent(this.content)
         .commentMemberName(this.name)
         .commentUuid(UUID.randomUUID().toString())
-        .memberUuid(this.commentUUID)
+        .memberUuid(this.userUUID)
         .boardUuid(this.boardUUID)
                 .build();
     }
