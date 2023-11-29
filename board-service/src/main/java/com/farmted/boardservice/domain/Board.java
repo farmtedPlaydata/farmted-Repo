@@ -50,7 +50,7 @@ public class Board extends TimeStamp {
 
     ////////////////////////////////////////////////
     // 엔티티 최초 생성 시 자동 초기화할 값
-        // UUID, Status, viewCount
+    // UUID, Status, viewCount
     @PrePersist
     public void createUuid(){
         boardUuID = UUID.randomUUID().toString();

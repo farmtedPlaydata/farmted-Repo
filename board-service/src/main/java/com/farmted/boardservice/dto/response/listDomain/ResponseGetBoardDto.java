@@ -24,6 +24,6 @@ public class ResponseGetBoardDto {
         this.boardType = board.getBoardType();
         this.boardTitle = board.getBoardTitle();
         this.viewCount = board.getViewCount();
-        this.createAt = board.getCreateAt();
+        this.createAt = board.getCreatedAt();
     }
 }
