@@ -30,17 +30,16 @@ public class MemberController {
     }
 
     // 회원 정보 수정
-    @PutMapping("/update")
-    public ResponseEntity<?> updateMember(@RequestBody RequestUpdateMemberDto dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        memberService.updateMember(dto, userDetails.getMember());
+    @PutMapping("/update/{uuid}")
+    public ResponseEntity<?> updateMember(@PathVariable String uuid, @RequestBody RequestUpdateMemberDto dto) {
+        memberService.updateMember(dto, uuid);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     // 회원 탈퇴(본인)
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteMember(UserDetailsImpl userDetails) {
-        String memberUuid = userDetails.getUsername();
-        memberService.deleteMember(memberUuid);
+    @DeleteMapping("/delete/{uuid}")
+    public ResponseEntity<?> deleteMember(@PathVariable String uuid) {
+        memberService.deleteMember(uuid);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

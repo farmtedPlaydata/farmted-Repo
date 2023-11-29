@@ -37,8 +37,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void updateMember(RequestUpdateMemberDto dto, Member member) {
-        Member upMember = memberRepository.getMemberByMemberUuid(member.getMemberUuid());
+    public void updateMember(RequestUpdateMemberDto dto, String uuid) {
+        Member upMember = memberRepository.getMemberByMemberUuid(uuid);
         upMember.updateMember(dto);
         memberRepository.save(upMember);
     }
@@ -46,7 +46,16 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void deleteMember(String uuid) {
-        memberRepository.deleteByMemberUuid(uuid);
+        Optional<Member> member = memberRepository.findByMemberUuid(uuid);
+        if (member.isPresent()) {
+            memberRepository.deleteMemberByMemberUuid(uuid);
+        } else {
+            throw new RuntimeException("ERROR : member-service - deleteMember");
+        }
+//        memberRepository.findByMemberUuid(uuid)
+//                .ifPresentOrElse(
+//                        member -> memberRepository.deleteMemberByMemberUuid(uuid),
+//                        () -> new RuntimeException("ERROR : member-service - deleteMember"));
     }
 
     @Transactional
