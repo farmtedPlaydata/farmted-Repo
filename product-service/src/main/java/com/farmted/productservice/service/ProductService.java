@@ -16,12 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static java.util.Arrays.stream;
 
 @Service
 @RequiredArgsConstructor
@@ -41,14 +37,14 @@ public class ProductService {
     // 상품 DB  가격 수정
     public void modifyProduct(String boardUuid,ProductModifyRequestDto productModifyRequestDto,String memberUuid){
         // 상품 판매자만 가격 수정 가능
-        Product product = productRepository.findProductByBoardUuidAndAuctionStatusTrue(boardUuid)
+        Product product = productRepository.findProductByBoardUuidAndAuctionStatusFalse(boardUuid)
                 .orElseThrow(()-> new ProductException());
 
         if(!product.getMemberUuid().equals(memberUuid))
            throw new SellerException();
 
         if(!product.isAuctionStatus()){ // 경매 중이 아닌(상태값이 false) 경우만 가격 수정 가능
-            product.modifyPrice(productModifyRequestDto.getMoney());
+            product.modifyPrice(productModifyRequestDto.getPrice());
         }else{
            throw new ProductException(product.isAuctionStatus());
         }

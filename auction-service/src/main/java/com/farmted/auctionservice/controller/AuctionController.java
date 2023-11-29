@@ -20,7 +20,7 @@ public class AuctionController {
     private final AuctionService auctionService;
 
     // 경매 정보 생성 및 시작
-    @PostMapping(value = "/Auctions")
+    @PostMapping(value = "/auctions/products")
     public ResponseEntity<?> createAuction(
             @RequestHeader String memberUuid,
             @RequestHeader String boardUuid,
