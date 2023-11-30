@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface ProductToAuctionFeignClient {
     @PostMapping("/product/auctions")
     public void createProductToAuctionFeign(
-            @RequestHeader String productUuid,
             @RequestHeader("UUID") String memberUuid,
             @RequestBody RequestAuctionCreateVo auctionCreateVo);
 }

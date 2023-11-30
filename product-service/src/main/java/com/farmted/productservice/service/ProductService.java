@@ -10,6 +10,7 @@ import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.exception.SellerException;
 import com.farmted.productservice.repository.ProductRepository;
 import com.farmted.productservice.vo.RequestAuctionCreateVo;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -56,7 +57,7 @@ public class ProductService {
 
     // 상품 DB 전체 수정
     public void modifyProduct(String boardUuid, ProductUpdateRequestDto productUpdateRequestDto, String memberUuid){
-        // 상품 판매자만 가격 수정 가능
+        // 상품 판매자만  수정 가능
         Product product = productRepository.findProductByBoardUuidAndAuctionStatusFalse(boardUuid)
                 .orElseThrow(()-> new ProductException());
 
@@ -111,7 +112,7 @@ public class ProductService {
         // 엔티티를 VO로 변환줍니다.
         RequestAuctionCreateVo auctionCreateVo = new RequestAuctionCreateVo(product);
         // 페인 통신 진행
-        productToAuctionFeignClient.createProductToAuctionFeign(productUuid,product.getMemberUuid(),auctionCreateVo);
+        productToAuctionFeignClient.createProductToAuctionFeign(product.getMemberUuid(),auctionCreateVo);
         // 결과 확인 로직?
     }
 

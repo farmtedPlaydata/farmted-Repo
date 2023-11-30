@@ -5,7 +5,6 @@ import com.farmted.auctionservice.dto.responseDto.AuctionBuyerResponseDto;
 import com.farmted.auctionservice.dto.responseDto.AuctionSellerResponseDto;
 import com.farmted.auctionservice.service.AuctionService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +22,8 @@ public class AuctionController {
     @PostMapping(value = "/product/auctions")
     public ResponseEntity<?> createAuction(
             @RequestHeader ("UUID") String memberUuid,
-            @RequestHeader String productUuid,
             @RequestBody AuctionCreateRequestDto auctionCreateRequestDto){
-        auctionService.createAuction(auctionCreateRequestDto, memberUuid,productUuid);
+        auctionService.createAuction(auctionCreateRequestDto,memberUuid);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

@@ -52,7 +52,7 @@ public class Product extends TimeStamp{
     public void createUuid(){
         uuid = UUID.randomUUID().toString();
         status = true;
-        auctionStatus = true;
+        auctionStatus = false;
     }
 
     // 가격 수정
