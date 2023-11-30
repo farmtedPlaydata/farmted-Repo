@@ -35,13 +35,15 @@ public class PassController {
     public ResponseEntity<?> loginPass(@RequestBody RequestLoginDto dto, HttpServletResponse response) {
         String token = passService.login(dto);
         jwtProvider.setToken(token, TokenType.ACCESS, response);
+        jwtProvider.setToken(token, TokenType.REFRESH, response);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletResponse response,
-                                    HttpServletRequest request) throws UnsupportedEncodingException {
-        passService.logout(request);
+    @GetMapping("/logout/{uuid}")
+    public ResponseEntity<?> logout(@PathVariable String uuid,
+                                    HttpServletResponse response,
+                                    HttpServletRequest request) {
+        passService.logout(uuid);
         jwtProvider.deleteCookie(response, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }

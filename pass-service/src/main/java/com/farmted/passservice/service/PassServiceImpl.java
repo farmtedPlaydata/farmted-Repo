@@ -3,18 +3,16 @@ package com.farmted.passservice.service;
 import com.farmted.passservice.domain.Pass;
 import com.farmted.passservice.dto.request.RequestCreatePassDto;
 import com.farmted.passservice.dto.request.RequestLoginDto;
+import com.farmted.passservice.enums.TokenType;
 import com.farmted.passservice.repository.PassRepository;
-import com.farmted.passservice.util.jwt.JwtProvider;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
+import com.farmted.passservice.util.redis.RedisRepository;
+import com.farmted.passservice.util.redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Slf4j
@@ -26,7 +24,8 @@ public class PassServiceImpl implements PassService {
     private final PassRepository passRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
-    private final JwtProvider jwtProvider;
+    private final RedisRepository redisRepository;
+    private final RedisUtil redisUtil;
 
     @Override
     @Transactional
@@ -47,8 +46,8 @@ public class PassServiceImpl implements PassService {
         if (!passwordEncoder.matches(dto.getPassword(), pass.getPassword()))
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
 
-        String accessTokenInfo = tokenService.createAccessToken(pass.getUuid(), pass.getRole());
-        String refreshTokenInfo = tokenService.createRefreshToken(pass.getUuid(), pass.getRole());
+        String accessTokenInfo = tokenService.createToken(pass.getUuid(), pass.getRole(), TokenType.ACCESS);
+        String refreshTokenInfo = tokenService.createToken(pass.getUuid(), pass.getRole(), TokenType.REFRESH);
 
         tokenService.saveRefreshToken(pass.getUuid(), refreshTokenInfo);
 
@@ -58,8 +57,15 @@ public class PassServiceImpl implements PassService {
     }
 
     @Override
-    public void logout(HttpServletRequest request) throws UnsupportedEncodingException {
-
+    @Transactional
+    public void logout(String uuid) {
+        try {
+            String findToken = String.valueOf(redisRepository.findById(uuid));
+            if (findToken != null) redisUtil.updateToken(uuid, findToken, 10L);
+            log.info("uuid : " + uuid);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 

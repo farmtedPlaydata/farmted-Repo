@@ -15,13 +15,8 @@ public class TokenServiceImpl implements TokenService {
     private final JwtProvider jwtProvider;
     private final RedisRepository redisRepository;
 
-    public String createAccessToken(String uuid, RoleEnums role) {
-        return jwtProvider.createToken(uuid, role, TokenType.ACCESS);
-    }
-
-    @Override
-    public String createRefreshToken(String uuid, RoleEnums role) {
-        return jwtProvider.createToken(uuid, role, TokenType.REFRESH);
+    public String createToken(String uuid, RoleEnums role, TokenType tokenType) {
+        return jwtProvider.createToken(uuid, role, tokenType);
     }
 
     @Override
@@ -29,7 +24,7 @@ public class TokenServiceImpl implements TokenService {
         redisRepository.findById(uuid)
                 .ifPresentOrElse(
                         refreshTokenEntity -> {
-                            refreshTokenEntity.updateToken(refreshToken, JwtProvider.REFRESH_TOKEN_TIME);
+                            refreshTokenEntity.updateToken(uuid, refreshToken, JwtProvider.REFRESH_TOKEN_TIME);
                             redisRepository.save(refreshTokenEntity);
                         },
                         () -> {
@@ -41,5 +36,15 @@ public class TokenServiceImpl implements TokenService {
                             redisRepository.save(refreshToSave);
                         }
                 );
+    }
+
+    @Override
+    public void logoutRefreshToken(String uuid, String refreshToken) {
+        redisRepository.findById(uuid)
+                .ifPresent(
+                        refreshTokenEntity -> {
+                            refreshTokenEntity.updateToken(uuid, refreshToken, 10L);
+                            redisRepository.save(refreshTokenEntity);
+                        });
     }
 }

@@ -11,5 +11,5 @@ public interface PassService {
 
     void createPass(RequestCreatePassDto dto);
     String login(RequestLoginDto dto);
-    void logout(HttpServletRequest request) throws UnsupportedEncodingException;
+    void logout(String uuid);
 }

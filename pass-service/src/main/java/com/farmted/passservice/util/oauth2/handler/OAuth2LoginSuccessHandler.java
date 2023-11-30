@@ -36,7 +36,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             // Pass의 Role이 GUEST일 경우 회원가입이 완료되지 않은 회원이므로 회원 상세정보 적기 페이지로 리다이렉트
             if (role == RoleEnums.GUEST) {
                 jwtProvider.setToken(token, TokenType.ACCESS, response);
-                String refreshToken = tokenService.createRefreshToken(uuid, role);
+                String refreshToken = tokenService.createToken(uuid, role, TokenType.REFRESH);
                 tokenService.saveRefreshToken(uuid, refreshToken);
                 response.sendRedirect("/home");
             } else {
