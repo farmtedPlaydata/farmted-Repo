@@ -7,6 +7,7 @@ import com.farmted.passservice.enums.TokenType;
 import com.farmted.passservice.repository.PassRepository;
 import com.farmted.passservice.util.redis.RedisRepository;
 import com.farmted.passservice.util.redis.RedisUtil;
+import com.farmted.passservice.util.redis.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -60,8 +61,9 @@ public class PassServiceImpl implements PassService {
     @Transactional
     public void logout(String uuid) {
         try {
-            String findToken = String.valueOf(redisRepository.findById(uuid));
-            if (findToken != null) redisUtil.updateToken(uuid, findToken, 10L);
+            Optional<RefreshToken> token = redisRepository.findRefreshTokenByUuid(uuid);
+            String findToken = token.get().getUuid();
+            redisUtil.updateToken(uuid, findToken, 10L);
             log.info("uuid : " + uuid);
         } catch (Exception e){
             e.printStackTrace();
