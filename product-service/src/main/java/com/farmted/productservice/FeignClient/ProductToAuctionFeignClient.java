@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "AUCTION-SERVICE", path = "auction-service")
 public interface ProductToAuctionFeignClient {
-    @PostMapping("/auctions/products")
-    public void createProductToAuction(@RequestBody RequestAuctionCreateVo auctionCreateVo);
+    @PostMapping("/productUuid/auctions")
+    public void createProductToAuctionFeign(@RequestBody RequestAuctionCreateVo auctionCreateVo);
 }

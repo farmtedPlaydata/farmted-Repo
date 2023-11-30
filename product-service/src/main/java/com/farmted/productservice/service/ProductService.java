@@ -4,6 +4,7 @@ import com.farmted.productservice.FeignClient.ProductToAuctionFeignClient;
 import com.farmted.productservice.domain.Product;
 import com.farmted.productservice.dto.request.ProductModifyRequestDto;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
+import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.exception.SellerException;
@@ -35,7 +36,7 @@ public class ProductService {
     }
 
     // 상품 DB  가격 수정
-    public void modifyProduct(String boardUuid,ProductModifyRequestDto productModifyRequestDto,String memberUuid){
+    public void modifyProductPrice(String boardUuid,ProductModifyRequestDto productModifyRequestDto,String memberUuid){
         // 상품 판매자만 가격 수정 가능
         Product product = productRepository.findProductByBoardUuidAndAuctionStatusFalse(boardUuid)
                 .orElseThrow(()-> new ProductException());
@@ -51,6 +52,22 @@ public class ProductService {
 
     }
 
+    // 상품 DB 전체 수정
+    public void modifyProduct(String boardUuid, ProductUpdateRequestDto productUpdateRequestDto, String memberUuid){
+        // 상품 판매자만 가격 수정 가능
+        Product product = productRepository.findProductByBoardUuidAndAuctionStatusFalse(boardUuid)
+                .orElseThrow(()-> new ProductException());
+
+        if(!product.getMemberUuid().equals(memberUuid))
+            throw new SellerException();
+
+        if(!product.isAuctionStatus()){ // 경매 중이 아닌(상태값이 false) 경우만 가격 수정 가능
+            product.modifyProduct(productUpdateRequestDto);
+        }else{
+            throw new ProductException(product.isAuctionStatus());
+        }
+    }
+
 
     // 판매자 등록한 전체 상품 조회
     @Transactional(readOnly = true)
@@ -63,7 +80,6 @@ public class ProductService {
                 .collect(Collectors.toList());
 
     }
-
 
     // 상품 상세 조회
     @Transactional(readOnly = true)
@@ -84,7 +100,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    // feign 통신
+    // feign 통신: 경매 생성
     public void createProductToAuction(String productUuid){
         // 상품DB에서 가격과 생성시간을 가져옵니다.
         Product product = productRepository.findProductByUuid(productUuid)
@@ -93,9 +109,10 @@ public class ProductService {
         // 엔티티를 VO로 변환줍니다.
         RequestAuctionCreateVo auctionCreateVo = new RequestAuctionCreateVo(product);
         // 페인 통신 진행
-        productToAuctionFeignClient.createProductToAuction(auctionCreateVo);
+        productToAuctionFeignClient.createProductToAuctionFeign(auctionCreateVo);
         // 결과 확인 로직?
-
     }
+
+    // fegin 통신: 경매 종료
 
 }

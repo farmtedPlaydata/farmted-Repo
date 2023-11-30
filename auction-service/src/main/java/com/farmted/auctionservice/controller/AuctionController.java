@@ -20,14 +20,17 @@ public class AuctionController {
     private final AuctionService auctionService;
 
     // 경매 정보 생성 및 시작
-    @PostMapping(value = "/auctions/products")
+    @PostMapping(value = "/productUuid/auctions")
     public ResponseEntity<?> createAuction(
-            @RequestHeader String memberUuid,
+            @RequestHeader ("UUID") String memberUuid,
             @RequestHeader String boardUuid,
             AuctionCreateRequestDto auctionCreateRequestDto){
         auctionService.createAuction(auctionCreateRequestDto, memberUuid,boardUuid);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    // 경매 중인 내역 조회
+
 
     // 판매자 낙찰 내역 조회
     @GetMapping("/seller/{memberUuid}/board")

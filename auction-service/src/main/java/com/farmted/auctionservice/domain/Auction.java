@@ -33,6 +33,8 @@ public class Auction extends TimeStamp{
 
     private String boardUuid;
 
+    private String productUuid;
+
     @PrePersist
     public void createUuid(){
         auctionUuid = UUID.randomUUID().toString();

@@ -2,6 +2,7 @@ package com.farmted.productservice.controller;
 
 import com.farmted.productservice.dto.request.ProductModifyRequestDto;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
+import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.service.ProductService;
 import com.farmted.productservice.util.GlobalResponseDto;
@@ -39,19 +40,28 @@ public class ProductController {
     }
 
     // 판매자 가격 수정
-    @PatchMapping("/products/{board_uuid}/boards")
+//    @PutMapping("/products/{board_uuid}/boards")
+//    public ResponseEntity<?> modifyProductPrice(
+//            @PathVariable (value = "board_uuid") String boardUuid ,
+//            @RequestHeader("UUID") String memberUuid, // 멤버
+//            @RequestBody ProductModifyRequestDto productModifyRequestDto
+//    )
+//    {
+//        productService.modifyProductPrice(boardUuid, productModifyRequestDto,memberUuid);
+//        return ResponseEntity.ok(GlobalResponseDto.of(true));
+//    }
+
+    // 판매자 전체 수정
+    @PutMapping("/products/{board_uuid}/boards")
     public ResponseEntity<?> modifyProduct(
             @PathVariable (value = "board_uuid") String boardUuid ,
             @RequestHeader("UUID") String memberUuid, // 멤버
-            @RequestBody ProductModifyRequestDto productModifyRequestDto
-    )
+            @RequestBody ProductUpdateRequestDto productUpdateRequestDto
+            )
     {
-        productService.modifyProduct(boardUuid, productModifyRequestDto,memberUuid);
+        productService.modifyProduct(boardUuid, productUpdateRequestDto,memberUuid);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
-
-    // 판매자 전체 수정
-
 
     // 전체 상품 조회
     @GetMapping("/products")
