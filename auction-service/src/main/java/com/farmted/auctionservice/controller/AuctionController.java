@@ -18,19 +18,11 @@ public class AuctionController {
 
     private final AuctionService auctionService;
 
-    // 경매 정보 생성 및 시작
-    @PostMapping(value = "/product/auctions")
-    public ResponseEntity<?> createAuction(
-            @RequestHeader ("UUID") String memberUuid,
-            @RequestBody AuctionCreateRequestDto auctionCreateRequestDto){
-        auctionService.createAuction(auctionCreateRequestDto,memberUuid);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+    // 경매 상세 내역 조회
 
-    // 경매 중인 내역 조회
+    // 경매 중인 내역 조회 -> 경매 진행 상태
 
-
-    // 판매자 낙찰 내역 조회
+    // 판매자 -> 낙찰 내역 조회
     @GetMapping("/seller/{memberUuid}/board")
     public ResponseEntity<?> findAuctionToSeller(
             @PathVariable String memberUuid
@@ -39,7 +31,7 @@ public class AuctionController {
         return ResponseEntity.ok(auctionBuyerList);
     }
 
-    // 구매자 낙찰 내역 조회
+    // 구매자  ->  낙찰 내역 조회
     @GetMapping("/{memberUuid}/board")
         public ResponseEntity<?> findAuctionTrue(
                 @PathVariable String memberUuid

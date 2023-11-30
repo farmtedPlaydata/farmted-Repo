@@ -37,7 +37,8 @@ public class AuctionService {
         }
     }
 
-    // 판매자 낙찰 내역 조회
+
+    // 판매자 -> 낙찰 목록 조회 -> 경매 종료 상태
     public List<AuctionBuyerResponseDto> auctionBuyerList(String memberUuid){
         List<Auction> auctionByMemberList = auctionRepository.findAuctionByMemberUuid(memberUuid);
         return auctionByMemberList
@@ -46,7 +47,7 @@ public class AuctionService {
                 .collect(Collectors.toList());
     }
 
-    // 구매자 낙찰 내역 조회
+    // 구매자 -> 낙찰 목록 조회 -> 경매 종료 상태
     public List<AuctionSellerResponseDto> auctionTrueList(String auctionBuyer){
         List<Auction> auctionSellerList = auctionRepository.findAuctionByAuctionBuyer(auctionBuyer);
         return auctionSellerList.stream()
