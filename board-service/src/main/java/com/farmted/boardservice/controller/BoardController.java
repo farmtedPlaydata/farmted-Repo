@@ -20,9 +20,9 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    @PostMapping(value = "/boards/auctions")
-    @Operation(summary = "경매 게시글 작성", description = "카테고리가 경매인 게시글의 등록 요청")
-    public ResponseEntity<GlobalResponseDto<?>> createAuctionBoard(
+    @PostMapping(value = "/boards")
+    @Operation(summary = "게시글 작성", description = "카테고리별 게시글의 등록 요청")
+    public ResponseEntity<GlobalResponseDto<?>> createBoard(
             @Valid @RequestBody RequestCreateBoardDto productBoardDto,
             @RequestHeader("UUID") String uuid,
             @RequestHeader("ROLE") String role){
@@ -31,14 +31,16 @@ public class BoardController {
     }
 
 // 전체 조회
-    @GetMapping(value = "/boards/auctions")
-    @Operation(summary = "N 페이지의 경매 게시글 조회", description = "N 페이지에 대한 경매 게시글 조회 요청")
-    public ResponseEntity<GlobalResponseDto<?>> getAuctionBoardList(@RequestParam(required = false,
+    @GetMapping(value = "/boards")
+    @Operation(summary = "카테고리 게시글 리스트 조회", description = "N 페이지에 대한 경매 게시글 조회 요청")
+    public ResponseEntity<GlobalResponseDto<?>> getBoardList(
+                                            @RequestParam(value="category") BoardType category,
+                                            @RequestParam(required = false,
                                                          defaultValue = "0",
                                                                 value = "page") int pageNo){
         return ResponseEntity.ok(
                 GlobalResponseDto.of(
-                    boardService.getAuctionBoardList(pageNo-1)
+                    boardService.getAuctionBoardList(category,pageNo-1)
         ));
     }
 
@@ -58,11 +60,12 @@ public class BoardController {
     public ResponseEntity<GlobalResponseDto<?>> getBoardListWriter(
             @PathVariable (value = "seller_uuid") String uuid,
             @RequestParam(defaultValue = "Product", value = "boardType") String boardType,
+            @RequestParam(value="category") BoardType category,
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ){
         return ResponseEntity.ok(
                 GlobalResponseDto.of(
-                        boardService.getWriterBoardList(pageNo-1, uuid, BoardType.valueOf(boardType))
+                        boardService.getWriterBoardList(category,pageNo-1, uuid, BoardType.valueOf(boardType))
         ));
     }
 

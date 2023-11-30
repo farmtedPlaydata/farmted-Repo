@@ -1,5 +1,6 @@
 package com.farmted.boardservice.feignClient;
 
+import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.util.GlobalResponseDto;
 import com.farmted.boardservice.vo.ProductVo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -21,6 +22,7 @@ public interface ProductFeignClient {
     @GetMapping("/products/seller/{member_uuid}")
     ResponseEntity<GlobalResponseDto<List<ProductVo>>> getProductListSeller(
             @PathVariable (value = "member_uuid") String memberUuid,
+            @RequestParam(value="category") BoardType category,
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo);
 
 
@@ -35,7 +37,9 @@ public interface ProductFeignClient {
         // 반환 List<ProductResponseDto>
     @GetMapping("/products")
     ResponseEntity<GlobalResponseDto<List<ProductVo>>> getProductList(
-            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo);
+            @RequestParam(value="category") BoardType category,
+            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
+            );
 
     // 상품 상세 조회
         // 단일 DTO

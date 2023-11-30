@@ -22,7 +22,7 @@ public class ResponseGetBoardDetailDto {
     private LocalDateTime updateAt;
 
     public ResponseGetBoardDetailDto(Board board){
-        this.boardUuid = board.getBoardUuID();
+        this.boardUuid = board.getBoardUuid();
         this.boardType = board.getBoardType();
         this.boardTitle = board.getBoardTitle();
         this.boardContent = board.getBoardContent();

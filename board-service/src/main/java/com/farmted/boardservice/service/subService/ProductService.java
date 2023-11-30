@@ -1,6 +1,7 @@
 package com.farmted.boardservice.service.subService;
 
 import com.farmted.boardservice.dto.response.listDomain.ResponseGetProductDto;
+import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.enums.ExceptionType;
 import com.farmted.boardservice.enums.FeignDomainType;
 import com.farmted.boardservice.feignClient.ProductFeignClient;
@@ -28,8 +29,8 @@ public class ProductService {
     }
 
     // 특정 유저가 작성한 게시글 리스트 조회
-    public List<ResponseGetProductDto> productList(String uuid, int pageNo){
-        return productConverter.convertListVo(productFeignClient.getProductListSeller(uuid, pageNo),
+    public List<ResponseGetProductDto> productList(String uuid, BoardType boardType, int pageNo){
+        return productConverter.convertListVo(productFeignClient.getProductListSeller(uuid, boardType, pageNo),
                         FeignDomainType.PRODUCT,
                         ExceptionType.GETLIST)
                 .stream()

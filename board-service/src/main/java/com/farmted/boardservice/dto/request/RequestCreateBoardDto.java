@@ -3,6 +3,7 @@ package com.farmted.boardservice.dto.request;
 import com.farmted.boardservice.domain.Board;
 import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.vo.ProductVo;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -13,10 +14,15 @@ public record RequestCreateBoardDto(
         @JsonProperty("boardContent") @NotBlank String boardContent,
         @JsonProperty("boardTitle") @NotBlank String boardTitle,
         // 아이템용 정보
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         @JsonProperty("productName") @NotBlank String productName,
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         @JsonProperty("productStock") @Min(value = 1) int productStock,
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         @JsonProperty("productPrice") @Min(value = 1) long productPrice,
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         @JsonProperty("productSource") @NotBlank String productSource,
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         @JsonProperty("productImage") @NotBlank String productImage) {
 
     // 게시글 전용 데이터 - 저장용 Entity
@@ -37,6 +43,7 @@ public record RequestCreateBoardDto(
                 .productPrice(this.productPrice)
                 .productSource(this.productSource)
                 .productImage(this.productImage)
+                .boardType(this.boardType)
                 .boardUuid(boardUuid)
                 .build();
     }

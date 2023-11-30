@@ -20,7 +20,7 @@ public class ResponseGetBoardDto {
     private LocalDateTime createAt;
 
     public ResponseGetBoardDto(Board board) {
-        this.boardUuid = board.getBoardUuID();
+        this.boardUuid = board.getBoardUuid();
         this.boardType = board.getBoardType();
         this.boardTitle = board.getBoardTitle();
         this.viewCount = board.getViewCount();
