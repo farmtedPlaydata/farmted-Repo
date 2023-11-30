@@ -37,14 +37,4 @@ public class TokenServiceImpl implements TokenService {
                         }
                 );
     }
-
-    @Override
-    public void logoutRefreshToken(String uuid, String refreshToken) {
-        redisRepository.findById(uuid)
-                .ifPresent(
-                        refreshTokenEntity -> {
-                            refreshTokenEntity.updateToken(uuid, refreshToken, 10L);
-                            redisRepository.save(refreshTokenEntity);
-                        });
-    }
 }

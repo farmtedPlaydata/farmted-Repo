@@ -13,18 +13,11 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+#        dialect: org.hibernate.dialect.MySQLDialect
         physical_naming_strategy: com.farmted.passservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
     show-sql: true
     hibernate:
       ddl-auto: create
-
-  #Redis
-  data:
-    redis:
-      host: 127.0.0.1
-      port: 6379
-      password: 5986
 
   security:
     oauth2:
@@ -42,3 +35,13 @@ spring:
       suffix: .html
 server:
   port: 5986
+
+---
+
+#Redis
+spring:
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: 5986

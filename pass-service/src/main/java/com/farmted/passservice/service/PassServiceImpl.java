@@ -6,7 +6,6 @@ import com.farmted.passservice.dto.request.RequestLoginDto;
 import com.farmted.passservice.enums.TokenType;
 import com.farmted.passservice.repository.PassRepository;
 import com.farmted.passservice.util.redis.RedisRepository;
-import com.farmted.passservice.util.redis.RedisUtil;
 import com.farmted.passservice.util.redis.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,6 @@ public class PassServiceImpl implements PassService {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
     private final RedisRepository redisRepository;
-    private final RedisUtil redisUtil;
 
     @Override
     @Transactional
@@ -61,10 +59,10 @@ public class PassServiceImpl implements PassService {
     @Transactional
     public void logout(String uuid) {
         try {
-            Optional<RefreshToken> token = redisRepository.findRefreshTokenByUuid(uuid);
-            String findToken = token.get().getUuid();
-            redisUtil.updateToken(uuid, findToken, 10L);
-            log.info("uuid : " + uuid);
+            Optional<RefreshToken> token = redisRepository.findById(uuid);
+            if (token.isPresent()) {
+                redisRepository.deleteById(uuid);
+            }
         } catch (Exception e){
             e.printStackTrace();
         }
