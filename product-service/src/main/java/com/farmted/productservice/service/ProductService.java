@@ -33,6 +33,8 @@ public class ProductService {
         Product saveProduct = productSaveRequestDto.toEntity(memberUuid);
         productRepository.save(saveProduct);
 
+        // 패인 통신 호출? controller의 필요성?
+        createProductToAuction(saveProduct.getUuid());
     }
 
     // 상품 DB  가격 수정
@@ -109,7 +111,7 @@ public class ProductService {
         // 엔티티를 VO로 변환줍니다.
         RequestAuctionCreateVo auctionCreateVo = new RequestAuctionCreateVo(product);
         // 페인 통신 진행
-        productToAuctionFeignClient.createProductToAuctionFeign(auctionCreateVo);
+        productToAuctionFeignClient.createProductToAuctionFeign(productUuid,product.getMemberUuid(),auctionCreateVo);
         // 결과 확인 로직?
     }
 

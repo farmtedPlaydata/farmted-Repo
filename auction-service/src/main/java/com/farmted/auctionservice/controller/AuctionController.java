@@ -20,12 +20,12 @@ public class AuctionController {
     private final AuctionService auctionService;
 
     // 경매 정보 생성 및 시작
-    @PostMapping(value = "/productUuid/auctions")
+    @PostMapping(value = "/product/auctions")
     public ResponseEntity<?> createAuction(
             @RequestHeader ("UUID") String memberUuid,
-            @RequestHeader String boardUuid,
-            AuctionCreateRequestDto auctionCreateRequestDto){
-        auctionService.createAuction(auctionCreateRequestDto, memberUuid,boardUuid);
+            @RequestHeader String productUuid,
+            @RequestBody AuctionCreateRequestDto auctionCreateRequestDto){
+        auctionService.createAuction(auctionCreateRequestDto, memberUuid,productUuid);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

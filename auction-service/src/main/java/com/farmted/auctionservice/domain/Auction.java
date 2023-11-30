@@ -41,4 +41,8 @@ public class Auction extends TimeStamp{
         auctionStatus =true;
     }
 
+    public void setAuctionDeadlineForStatus(){
+        auctionStatus = false;
+    }
+
 }
