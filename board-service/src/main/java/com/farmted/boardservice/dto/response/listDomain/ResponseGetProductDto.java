@@ -14,7 +14,7 @@ public class ResponseGetProductDto {
     @JsonProperty("productImage")
     String productImage;
 
-    // 경매용 정보 (null이면 직렬화 대상에서 제외)
+    // 경매용 정보 (null 이면 직렬화 대상에서 제외)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("auctionPrice")
     private Integer auctionPrice;

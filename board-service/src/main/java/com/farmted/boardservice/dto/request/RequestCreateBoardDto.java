@@ -26,9 +26,10 @@ public record RequestCreateBoardDto(
         @JsonProperty("productImage") @NotBlank String productImage) {
 
     // 게시글 전용 데이터 - 저장용 Entity
-    public Board toBoard(String memberUuid){
+    public Board toBoard(String memberUuid, String memberName){
         return Board.builder()
                 .memberUuid(memberUuid)
+                .memberName(memberName)
                 .boardType(this.boardType)
                 .boardTitle(this.boardTitle)
                 .boardContent(this.boardContent)

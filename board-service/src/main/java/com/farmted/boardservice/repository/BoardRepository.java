@@ -33,10 +33,11 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 // 게시글 상세 조회
     @Query("SELECT new com.farmted.boardservice.dto.response.detailDomain.ResponseGetBoardDetailDto(b) " +
             "FROM Board b " +
-            "WHERE b.boardUuid = :boardUuid")
+            "WHERE b.boardUuid = :boardUuid AND b.boardStatus = true")
     Optional<ResponseGetBoardDetailDto> findDetailByBoardUuid(String boardUuid);
 
-    // 업데이트/삭제용 엔티티 불러오기 (영속성때문에)
-    Optional<Board> findByBoardUuid(String boardUuid);
-    Board getByBoardUuIDAndBoardStatusTrue(String boardUuid);
+// 업데이트/삭제용 엔티티 불러오기 (영속성때문에)
+    Optional<Board> findByBoardUuidAndBoardStatusTrue(String boardUuid);
+
+    Board getByBoardUuidAndBoardStatusTrue(String boardUuid);
 }

@@ -59,13 +59,12 @@ public class BoardController {
     @Operation(summary = "특정 이용자 게시글 전체 조회", description = "특정 사용자의 게시글 전체 조회")
     public ResponseEntity<GlobalResponseDto<?>> getBoardListWriter(
             @PathVariable (value = "seller_uuid") String uuid,
-            @RequestParam(defaultValue = "Product", value = "boardType") String boardType,
             @RequestParam(value="category") BoardType category,
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ){
         return ResponseEntity.ok(
                 GlobalResponseDto.of(
-                        boardService.getWriterBoardList(category,pageNo-1, uuid, BoardType.valueOf(boardType))
+                        boardService.getWriterBoardList(category,pageNo-1, uuid)
         ));
     }
 

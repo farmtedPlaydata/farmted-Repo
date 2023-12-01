@@ -5,21 +5,15 @@ import com.farmted.boardservice.dto.request.RequestCreateBoardDto;
 import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDto;
 import com.farmted.boardservice.dto.response.ResponseGetCombinationDetailDto;
 import com.farmted.boardservice.dto.response.ResponseGetCombinationListDto;
-import com.farmted.boardservice.dto.response.detailDomain.ResponseGetProductDetailDto;
-import com.farmted.boardservice.dto.response.listDomain.ResponseGetProductDto;
 import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.enums.ExceptionType;
-import com.farmted.boardservice.enums.FeignDomainType;
 import com.farmted.boardservice.enums.RoleEnums;
 import com.farmted.boardservice.exception.BoardException;
 import com.farmted.boardservice.exception.RoleTypeException;
-import com.farmted.boardservice.feignClient.ProductFeignClient;
 import com.farmted.boardservice.repository.BoardRepository;
 import com.farmted.boardservice.service.subService.NoticeService;
 import com.farmted.boardservice.service.subService.ProductService;
 import com.farmted.boardservice.util.Board1PageCache;
-import com.farmted.boardservice.util.feignConverter.FeignConverter;
-import com.farmted.boardservice.vo.ProductVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -35,20 +29,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardService {
     // 레포지토리
     private final BoardRepository boardRepository;
-    // 1페이징 캐시
+    // 1페이징 캐시 (카테고리가 PRODUCT(SALE+AUCTION)인 경우의 1페이지
     private final Board1PageCache board1PageCache;
 
-    // Feign 통신
-    private final ProductFeignClient productFeignClient;
-//    private final AuctionFeignClient auctionFeignClient;
-
-    // 서브 서비스
+    // 서브 서비스 (Feign 통신의 결과, 예외처리 담당)
     private final NoticeService noticeService;
     private final ProductService productService;
-
-    // Feign 통신 반환값 컨버터
-    private final FeignConverter<ProductVo> productConverter;
-//    private final FeignConverter<AuctionVo> auctionConverter;
 
 // 게시글 카테고리별 등록
     @Transactional
@@ -60,16 +46,17 @@ public class BoardService {
         if (RoleEnums.GUEST.equals(roleEnums)) {
             throw new RoleTypeException(roleEnums, boardDto.boardType());
         }
-
+    // 회원 UUID를 통해 회원명 받기
+        String memberName = "멤버";
     // 게시글 Entity 생성 - 저장
-        Board board = boardDto.toBoard(uuid);
+        Board board = boardDto.toBoard(uuid, memberName);
         boardRepository.save(board);
     // 게시글 타입에 따른 하위 도메인 서비스 세팅
         switch(boardDto.boardType()){
             // 상품 서비스에 요청이 필요한 경우 : Feign 요청 및 예외처리
             case SALE, AUCTION -> productService.postProduct(boardDto.toProduct(board.getBoardUuid()), uuid);
             // 일반 게시글은 추가 처리 필요없음.
-            case CUSTOMER_SERVICE, COMMISSION -> {return;}
+            case CUSTOMER_SERVICE, COMMISSION -> {}
             // 공지사항 : 권한 체크 및 예외처리
             case NOTICE -> noticeService.isAdmin(roleEnums);
             // 상품 : 조회용이기 때문에 게시글이 생성되선 안됨.
@@ -93,13 +80,10 @@ public class BoardService {
         );
     // 상품 리스트 담기
         switch (category) {
-            case PRODUCT, SALE, AUCTION -> combinationListDto.setProductList(
-                    productConverter.convertListVo(productFeignClient.getProductList(category, pageNo)
-                            , FeignDomainType.PRODUCT, ExceptionType.GETLIST
-                    ).stream().map(ResponseGetProductDto::new).toList()
-            );
+            case PRODUCT, SALE, AUCTION
+                    -> combinationListDto.setProductList(
+                            productService.getProductList(category, pageNo));
         }
-
     // 경매 리스트 담기 - 경매 전용 카테고리일 따로 조회
         if(BoardType.AUCTION.equals(category))
             combinationListDto.setAuctionList(null);
@@ -108,7 +92,7 @@ public class BoardService {
     }
 
 // 작성자 글 카테고리별 리스트 조회
-    public ResponseGetCombinationListDto getWriterBoardList(BoardType category, int pageNo, String uuid, BoardType boardType) {
+    public ResponseGetCombinationListDto getWriterBoardList(BoardType category, int pageNo, String uuid) {
         if (pageNo < 1) pageNo = 0;
         ResponseGetCombinationListDto combinationListDto = new ResponseGetCombinationListDto();
         // 게시글 리스트 담기
@@ -119,13 +103,11 @@ public class BoardService {
         );
     //  상품 리스트 담기
         switch (category) {
-            case PRODUCT, SALE, AUCTION -> combinationListDto.setProductList(
-                    productConverter.convertListVo(productFeignClient.getProductListSeller(uuid, category, pageNo)
-                            , FeignDomainType.PRODUCT, ExceptionType.GETLIST
-                    ).stream().map(ResponseGetProductDto::new).toList()
-            );
+            case PRODUCT, SALE, AUCTION
+                    -> combinationListDto.setProductList(
+                            productService.getProductListByMember(uuid, category, pageNo));
         }
-    // 경매 전용 카테고리일 따로 조회
+    // 경매 전용 카테고리인 경우엔 따로 조회
         if(BoardType.AUCTION.equals(category))
             combinationListDto.setAuctionList(null);
         return combinationListDto;
@@ -141,13 +123,7 @@ public class BoardService {
                 .orElseThrow(() -> new BoardException(ExceptionType.GET)));
 
         // 해당하는 상품 가져오기
-        combinationDetailDto.setProductDetail(
-                new ResponseGetProductDetailDto(
-                        productConverter.convertSingleVo(
-                                productFeignClient.getProductDetail(boardUuid),
-                                FeignDomainType.PRODUCT, ExceptionType.GET)
-                )
-        );
+        combinationDetailDto.setProductDetail(productService.getProductByBoardUuid(boardUuid));
         // 해당하는 경매 가져오기
 //        combinationDetailDto.setAuctionDetail(
 //                new ResponseGetAuctionDetailDto(
@@ -164,25 +140,19 @@ public class BoardService {
     @Transactional
     public void updateAuctionBoard(RequestUpdateProductBoardDto updateDTO, String boardUuid, String uuid) {
         // 게시글 수정
-        boardRepository.findByBoardUuid(boardUuid)
+        boardRepository.findByBoardUuidAndBoardStatusTrue(boardUuid)
             .orElseThrow(()->new BoardException(ExceptionType.UPDATE)).updateBoardInfo(updateDTO);
         // 상품에 수정 요청
-        productConverter.convertSingleVo(
-                productFeignClient.updateProductData(boardUuid, updateDTO.toProduct(boardUuid), uuid),
-                FeignDomainType.PRODUCT, ExceptionType.UPDATE
-        );
+        productService.checkUpdateProduct(boardUuid, updateDTO, uuid);
     }
 
     // 경매 게시글 삭제, 성공하면 1페이지로 리다이렉트
     @Transactional
     public void deleteAuctionBoard(String boardUuid, String uuid) {
         // 게시글 삭제
-        boardRepository.findByBoardUuid(boardUuid)
-                .orElseThrow(()->new BoardException(ExceptionType.UPDATE)).deactiveStatus();
+        boardRepository.findByBoardUuidAndBoardStatusTrue(boardUuid)
+                .orElseThrow(()->new BoardException(ExceptionType.DELETE)).deactiveStatus();
         // ** 상품도 비활성화되도록 Feign 통신
-        productConverter.convertSingleVo(
-                productFeignClient.deactiveProductStatus(boardUuid, uuid),
-                FeignDomainType.PRODUCT, ExceptionType.UPDATE
-        );
+        productService.checkDeleteProduct(boardUuid, uuid);
     }
 }
