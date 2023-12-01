@@ -61,11 +61,11 @@ public class Product extends TimeStamp{
     }
 
     public void modifyProduct(ProductUpdateRequestDto productUpdateRequestDto){
-        this.name = productUpdateRequestDto.getName();
-        this.stock= productUpdateRequestDto.getStock();
-        this.price= productUpdateRequestDto.getPrice();
-        this.source= productUpdateRequestDto.getSource();
-        this.image = productUpdateRequestDto.getImage();
+        this.name = productUpdateRequestDto.name();
+        this.stock= productUpdateRequestDto.stock();
+        this.price= productUpdateRequestDto.price();
+        this.source= productUpdateRequestDto.source();
+        this.image = productUpdateRequestDto.image();
     }
 
 
