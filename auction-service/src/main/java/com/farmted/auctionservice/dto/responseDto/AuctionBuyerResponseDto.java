@@ -2,10 +2,14 @@ package com.farmted.auctionservice.dto.responseDto;
 
 
 import com.farmted.auctionservice.domain.Auction;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AuctionBuyerResponseDto {
     private int auctionPrice; // 가격
 

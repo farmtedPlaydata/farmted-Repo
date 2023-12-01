@@ -38,7 +38,7 @@ public class Auction extends TimeStamp{
     @PrePersist
     public void createUuid(){
         auctionUuid = UUID.randomUUID().toString();
-        auctionStatus =true;
+        auctionStatus =false;
     }
 
     public void setAuctionDeadlineForStatus(){

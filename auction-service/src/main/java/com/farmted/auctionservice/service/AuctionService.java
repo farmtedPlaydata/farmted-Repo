@@ -22,27 +22,50 @@ public class AuctionService {
 
     // 경매 정보 생성 및 시작
     public void createAuction(AuctionCreateRequestDto auctionCreateRequestDto, String memberUuid){
-        // 시강 처리 로직
-        LocalDate auctionDeadline = auctionCreateRequestDto.getAuctionDeadline().plusDays(31);
+        // 시간 처리 로직
+        LocalDate auctionDeadline = auctionCreateRequestDto.getAuctionDeadline().plusMonths(1);
+        System.out.println(auctionDeadline+"########");
         Auction createAuctionDto = auctionCreateRequestDto.toEntity(memberUuid,auctionDeadline);
         auctionRepository.save(createAuctionDto);
 
     }
 
+    // 방안1
     // 경매 종료 스케쥴링
-    public List<AuctionStatusResponseDto> finishAuction(){
+//    @Scheduled(cron ="*/60 * * * * *")
+//    public void changeAuction(){
+//        // 경매 종료 로직
+//        LocalDate current = LocalDate.now();
+//        List<Auction> auctionDeadline = auctionRepository.findAuctionByAuctionDeadline(current);
+//         System.out.println("경매 상태 확인 중");
+//        for (Auction auction : auctionDeadline) {
+//            auction.setAuctionDeadlineForStatus();
+//        }
+//
+//    }
+//
+//    public List<AuctionStatusResponseDto> endAuctions(){
+//        List<Auction> auctionStatusTrue = auctionRepository.findAuctionByAuctionStatusTrue();
+//        return auctionStatusTrue.stream()
+//                .map(AuctionStatusResponseDto::new)
+//                .collect(Collectors.toList());
+//    }
+
+
+    // 방안 2
+    @Scheduled(cron ="*/60 * * * * *")
+    public List<AuctionStatusResponseDto> changeAuction(){
         // 경매 종료 로직
         LocalDate current = LocalDate.now();
         List<Auction> auctionDeadline = auctionRepository.findAuctionByAuctionDeadline(current);
+        System.out.println("경매 상태 확인 중");
         for (Auction auction : auctionDeadline) {
             auction.setAuctionDeadlineForStatus();
         }
-        // 종료되 경매 패인 통신 로직
         return auctionDeadline.stream()
                 .map(AuctionStatusResponseDto::new)
                 .collect(Collectors.toList());
     }
-
 
 
     // 판매자 -> 낙찰 목록 조회 -> 경매 종료 상태

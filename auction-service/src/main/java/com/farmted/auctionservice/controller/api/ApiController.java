@@ -27,11 +27,21 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    // 방안 1
     // 경매 종료 상태 값 전달
-    @Scheduled(cron = "* 1 * * * *") // 매분 진행
+//    @GetMapping(value = "/product/auctions")
+//    public ResponseEntity<?> endAuction(){
+//        System.out.println("스케쥴러 진행 중");
+//        List<AuctionStatusResponseDto> auctionStatusResponseDtoList = auctionService.endAuctions();
+//        return ResponseEntity.ok(auctionStatusResponseDtoList);
+//    }
+
+    //방안2
+    @Scheduled(cron ="*/60 * * * * *") // (cron ="*/60 * * * * *") 매분 진행
     @GetMapping(value = "/product/auctions")
-    public ResponseEntity<?> EndAuctionStatus(){
-        List<AuctionStatusResponseDto> auctionStatusResponseDtoList = auctionService.finishAuction();
+    public ResponseEntity<?> endAuction(){
+        System.out.println("스케쥴러 진행 중");
+        List<AuctionStatusResponseDto> auctionStatusResponseDtoList = auctionService.changeAuction();
         return ResponseEntity.ok(auctionStatusResponseDtoList);
     }
 }

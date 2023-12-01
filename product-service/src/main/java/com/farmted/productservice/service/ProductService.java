@@ -113,7 +113,7 @@ public class ProductService {
         RequestAuctionCreateVo auctionCreateVo = new RequestAuctionCreateVo(product);
         // 페인 통신 진행
         productToAuctionFeignClient.createProductToAuctionFeign(product.getMemberUuid(),auctionCreateVo);
-        // 결과 확인 로직?
+
     }
 
     // fegin 통신: 경매 종료
