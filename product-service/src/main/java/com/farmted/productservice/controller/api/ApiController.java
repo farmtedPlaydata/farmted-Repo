@@ -13,11 +13,11 @@ public class ApiController {
 
     private final ProductService productService;
 
-    // controller의 필요성?
-    @PostMapping("/products/{productUuid}/auction")
-    public ResponseEntity<?> createProductToAuction(@PathVariable String productUuid){
-        productService.createProductToAuction(productUuid);
-        return ResponseEntity.ok("통신 완료");
-    }
+    // controller의 필요성? X
+//    @PostMapping("/products/{productUuid}/auction")
+//    public ResponseEntity<?> createProductToAuction(@PathVariable String productUuid){
+//        productService.createProductToAuction(productUuid);
+//        return ResponseEntity.ok("통신 완료");
+//    }
 
 }

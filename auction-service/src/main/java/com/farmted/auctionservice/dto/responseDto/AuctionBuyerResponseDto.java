@@ -15,7 +15,7 @@ public class AuctionBuyerResponseDto {
 
     private Boolean auctionStatus; // 0: 경매중, 1:  경매 종료
 
-    private String memberUuid;
+    private String memberUuid; // 판매자
 
     public AuctionBuyerResponseDto(Auction auction){
         this.auctionPrice=auction.getAuctionPrice();
