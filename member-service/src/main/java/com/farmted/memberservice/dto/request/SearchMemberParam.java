@@ -1,7 +1,11 @@
 package com.farmted.memberservice.dto.request;
 
 import com.farmted.memberservice.enums.RoleEnums;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor

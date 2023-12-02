@@ -1,10 +1,10 @@
 package com.farmted.passservice.util.jwt;
 
+import com.farmted.passservice.config.security.UserDetailsImpl;
+import com.farmted.passservice.config.security.UserDetailsServiceImpl;
 import com.farmted.passservice.enums.RoleEnums;
 import com.farmted.passservice.enums.TokenState;
 import com.farmted.passservice.enums.TokenType;
-import com.farmted.passservice.config.security.UserDetailsImpl;
-import com.farmted.passservice.config.security.UserDetailsServiceImpl;
 import com.farmted.passservice.util.redis.RedisRepository;
 import com.farmted.passservice.util.redis.RefreshToken;
 import io.jsonwebtoken.Claims;

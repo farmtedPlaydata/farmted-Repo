@@ -2,10 +2,10 @@ package com.farmted.passservice.util.oauth2.service;
 
 import com.farmted.passservice.domain.Pass;
 import com.farmted.passservice.enums.SocialType;
+import com.farmted.passservice.repository.PassRepository;
 import com.farmted.passservice.util.jwt.JwtProvider;
 import com.farmted.passservice.util.oauth2.CustomOAuth2User;
 import com.farmted.passservice.util.oauth2.OAuthAttributes;
-import com.farmted.passservice.repository.PassRepository;
 import com.farmted.passservice.util.redis.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

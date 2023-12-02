@@ -4,8 +4,6 @@ import com.farmted.passservice.domain.Pass;
 import com.farmted.passservice.dto.request.RequestCreatePassDto;
 import com.farmted.passservice.dto.request.RequestLoginDto;
 import com.farmted.passservice.repository.PassRepository;
-import com.farmted.passservice.util.jwt.JwtProvider;
-import com.farmted.passservice.util.redis.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

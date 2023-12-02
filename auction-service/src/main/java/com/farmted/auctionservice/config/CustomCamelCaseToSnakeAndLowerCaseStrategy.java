@@ -4,7 +4,6 @@ import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 
-
 import java.util.Locale;
 
 public class CustomCamelCaseToSnakeAndLowerCaseStrategy extends CamelCaseToUnderscoresNamingStrategy {

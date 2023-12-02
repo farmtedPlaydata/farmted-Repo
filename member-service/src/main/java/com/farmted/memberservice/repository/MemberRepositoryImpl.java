@@ -4,19 +4,16 @@ import com.farmted.memberservice.domain.Member;
 import com.farmted.memberservice.dto.request.SearchMemberParam;
 import com.farmted.memberservice.dto.response.MemberResponseDto;
 import com.farmted.memberservice.dto.response.QMemberResponseDto;
-import com.farmted.memberservice.enums.RoleEnums;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
-import java.util.function.LongSupplier;
 
 import static com.farmted.memberservice.domain.QMember.member;
 import static org.springframework.util.StringUtils.hasText;

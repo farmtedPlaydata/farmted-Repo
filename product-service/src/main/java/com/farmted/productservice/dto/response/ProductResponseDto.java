@@ -1,7 +1,11 @@
 package com.farmted.productservice.dto.response;
 
 import com.farmted.productservice.domain.Product;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Getter @Setter @Builder
 @RequiredArgsConstructor

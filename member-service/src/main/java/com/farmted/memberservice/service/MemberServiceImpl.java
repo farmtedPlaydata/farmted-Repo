@@ -2,21 +2,17 @@ package com.farmted.memberservice.service;
 
 import com.farmted.memberservice.domain.Member;
 import com.farmted.memberservice.dto.request.RequestCreateMemberDto;
+import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
 import com.farmted.memberservice.dto.request.SearchMemberParam;
 import com.farmted.memberservice.dto.response.MemberResponseDto;
 import com.farmted.memberservice.enums.RoleEnums;
-import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
 import com.farmted.memberservice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 
 @Slf4j

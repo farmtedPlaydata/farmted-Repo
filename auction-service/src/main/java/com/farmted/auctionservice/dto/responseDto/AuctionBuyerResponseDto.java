@@ -4,7 +4,6 @@ package com.farmted.auctionservice.dto.responseDto;
 import com.farmted.auctionservice.domain.Auction;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class AuctionBuyerResponseDto {
     private int auctionPrice; // 가격

@@ -2,7 +2,6 @@ package com.farmted.passservice.service;
 
 import com.farmted.passservice.dto.request.RequestCreatePassDto;
 import com.farmted.passservice.dto.request.RequestLoginDto;
-import jakarta.servlet.http.HttpServletRequest;
 
 public interface PassService {
 

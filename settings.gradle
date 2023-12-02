@@ -1,0 +1,10 @@
+rootProject.name = 'farmted-Repo'
+
+include ":auction-service"
+include ":board-service"
+include ":member-service"
+include ":pass-service"
+include ":product-service"
+include ":eureka-service"
+include ":gateway-service"
+

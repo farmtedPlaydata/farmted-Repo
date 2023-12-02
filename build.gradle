@@ -1,0 +1,35 @@
+ext {
+    set('springCloudVersion', "2022.0.4")
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+
+    group = 'com.farmted'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '17'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation platform("org.springframework.boot:spring-boot-dependencies:3.1.5")
+    }
+
+    test {
+        testLogging {
+            events "passed", "skipped", "failed"
+            exceptionFormat = 'full'
+        }
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
+    }
+}
+
+
+task clean(type: Delete) {
+    delete "build"
+}
+
+defaultTasks "clean", "build"
