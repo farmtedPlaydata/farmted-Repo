@@ -19,6 +19,20 @@ spring:
           filters:
             - CustomFilter  # 일단 강제로 헤더에 uuid, role값 집어넣는 필터
             #- LogFilter #필요할 때 커스텀해서 사용할 로그 필터
+        - id: pass-service
+          uri: lb://pass-service
+          predicates:
+            - Path=/pass-service/passes
+        - id: pass-service
+          uri: lb://pass-service
+          predicates:
+            - Path=/pass-service/login
+        - id: pass-service
+          uri: lb://pass-service
+          predicates:
+            - Path=/pass-service/**
+          filters:
+            - AuthorizationFilter
 
 eureka:
   client:
@@ -28,3 +42,5 @@ eureka:
       default-zone: http://127.0.0.1:8761/eureka
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+
+jwt-secret-key: "qkslffkfkEpajrrhtlvdmsepdlrjfdjEjrgkqslRkehfkdpahddmldjelfhemswl2414"

@@ -34,7 +34,7 @@ spring:
       prefix: /resources/static/**
       suffix: .html
 server:
-  port: 5986
+  port: 0
 
 ---
 
