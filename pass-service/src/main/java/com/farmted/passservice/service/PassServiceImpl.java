@@ -5,6 +5,7 @@ import com.farmted.passservice.dto.request.RequestCreatePassDto;
 import com.farmted.passservice.dto.request.RequestLoginDto;
 import com.farmted.passservice.enums.TokenType;
 import com.farmted.passservice.repository.PassRepository;
+import com.farmted.passservice.util.jwt.JwtProvider;
 import com.farmted.passservice.util.redis.RedisRepository;
 import com.farmted.passservice.util.redis.RefreshToken;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ public class PassServiceImpl implements PassService {
 
     private final PassRepository passRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenService tokenService;
     private final RedisRepository redisRepository;
+    private final JwtProvider jwtProvider;
 
     @Override
     @Transactional
@@ -45,10 +46,10 @@ public class PassServiceImpl implements PassService {
         if (!passwordEncoder.matches(dto.getPassword(), pass.getPassword()))
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
 
-        String accessTokenInfo = tokenService.createToken(pass.getUuid(), pass.getRole(), TokenType.ACCESS);
-        String refreshTokenInfo = tokenService.createToken(pass.getUuid(), pass.getRole(), TokenType.REFRESH);
+        String accessTokenInfo = jwtProvider.createToken(pass.getUuid(), pass.getRole(), TokenType.ACCESS);
+        String refreshTokenInfo = jwtProvider.createToken(pass.getUuid(), pass.getRole(), TokenType.REFRESH);
 
-        tokenService.saveRefreshToken(pass.getUuid(), refreshTokenInfo);
+        jwtProvider.saveRefreshToken(pass.getUuid(), refreshTokenInfo);
 
         log.info("로그인 성공");
 

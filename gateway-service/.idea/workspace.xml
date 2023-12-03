@@ -6,13 +6,23 @@
   <component name="ChangeListManager">
     <list default="true" id="ef9efffa-6854-43fa-853a-8a50f38aca78" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/dto/request/RequestCreatePassDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/dto/request/RequestCreatePassDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/dto/request/RequestTokenDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/dto/request/RequestTokenDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/TokenService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/TokenServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/jwt/JwtFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/jwt/JwtFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/jwt/JwtProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/jwt/JwtProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/oauth2/handler/OAuth2LoginSuccessHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/oauth2/handler/OAuth2LoginSuccessHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/redis/RedisConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/redis/RedisConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
   </component>
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
@@ -22,35 +32,7 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="gateway-service" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="gateway-service" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="gateway-service" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="gateway-service" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build setup" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="gateway-service" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="documentation" type="c8890929:TasksNode$1" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -60,9 +42,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2YnAONELyhBOwbfI2OiSvDGngZo" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
@@ -73,7 +55,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "feature/#35",
-    "last_opened_file_path": "C:/codes/Final_Project/farmted-Repo/farmted-Repo/gateway-service",
+    "last_opened_file_path": "E:/playdata/farmted-Repo/gateway-service",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -84,6 +66,15 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="GatewayServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="gateway-service.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.farmted.gatewayservice.GatewayServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -95,6 +86,7 @@
       <workItem from="1701150939099" duration="13000" />
       <workItem from="1701151088341" duration="1753000" />
       <workItem from="1701236873038" duration="630000" />
+      <workItem from="1701606936627" duration="55000" />
     </task>
     <servers />
   </component>

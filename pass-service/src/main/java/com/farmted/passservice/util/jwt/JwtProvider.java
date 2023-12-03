@@ -95,6 +95,23 @@ public class JwtProvider {
         }
     }
 
+    public void saveRefreshToken(String uuid, String refreshToken) {
+        redisRepository.findById(uuid)
+                .ifPresentOrElse(
+                        refreshTokenEntity -> {
+                            refreshTokenEntity.updateToken(uuid, refreshToken, JwtProvider.REFRESH_TOKEN_TIME);
+                            redisRepository.save(refreshTokenEntity);
+                        },
+                        () -> {
+                            RefreshToken refreshToSave = RefreshToken.builder()
+                                    .uuid(uuid)
+                                    .refreshToken(refreshToken)
+                                    .expiration(JwtProvider.REFRESH_TOKEN_TIME)
+                                    .build();
+                            redisRepository.save(refreshToSave);
+                        }
+                );
+    }
     
     
     // refreshToken 검증

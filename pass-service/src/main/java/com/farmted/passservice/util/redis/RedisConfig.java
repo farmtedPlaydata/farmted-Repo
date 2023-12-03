@@ -23,21 +23,13 @@ public class RedisConfig {
         return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
     }
 
-//    @Bean
-//    public StringRedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-//        StringRedisTemplate redisTemplate = new StringRedisTemplate();
-//        redisTemplate.setConnectionFactory(redisConnectionFactory);
-//        redisTemplate.setKeySerializer(new StringRedisSerializer());
-//        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-//
-//        return redisTemplate;
-//    }
-
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
+        // StringRedisSerializer를 사용하여 키를 문자열로 직렬화
         redisTemplate.setKeySerializer(new StringRedisSerializer());
+        // value는 GenericJackson2JsonRedisSerializer를 사용하여 JSON형식으로 직렬화
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return redisTemplate;
     }
