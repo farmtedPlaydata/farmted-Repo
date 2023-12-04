@@ -1,10 +1,12 @@
 package com.farmted.productservice.repository;
 
 import com.farmted.productservice.domain.Product;
+import com.farmted.productservice.enums.ProductType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product,Long> {
@@ -20,6 +22,8 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     // 패인을 위한 ProductUuid를 기반으로 경매 생성
     public Optional<Product> findProductByUuid(String uuid);
+
+    public List<Product> findProductByProductType(ProductType type);
 
 
 }

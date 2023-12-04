@@ -21,7 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.farmted.productservice.enums.ProductType.PRODUCT;
 
 @Service
 @RequiredArgsConstructor
@@ -36,10 +39,11 @@ public class ProductService {
         Product saveProduct = productSaveRequestDto.toEntity(memberUuid);
         productRepository.save(saveProduct);
 
-        // TODO: 상품만 생성
-
         //TODO: 상품 생성 시 경매 생성
-        createProductToAuction(saveProduct.getUuid());
+        if((productSaveRequestDto.getProductType().getTypeEn()).equals("Product")){
+            createProductToAuction(saveProduct.getUuid());
+        }
+
     }
 
 
@@ -95,7 +99,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<ProductAuctionResponseDto> getListProductAuction() {
         List<ProductAuctionResponseDto> productAuctionResponseDtoList= new ArrayList<>();
-        List<Product> productList = productRepository.findAll();
+        List<Product> productList = productRepository.findProductByProductType(PRODUCT);
         for (Product product : productList) {
             ResponseAuctionGetVo auctionIng = productToAuctionFeignClient.getAuctionIng(product.getUuid());
             ProductAuctionResponseDto productAuctionResponseDto = new ProductAuctionResponseDto(product, auctionIng);

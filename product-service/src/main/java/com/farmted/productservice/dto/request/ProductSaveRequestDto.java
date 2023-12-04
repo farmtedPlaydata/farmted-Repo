@@ -2,6 +2,7 @@ package com.farmted.productservice.dto.request;
 
 
 import com.farmted.productservice.domain.Product;
+import com.farmted.productservice.enums.ProductType;
 import lombok.*;
 
 @Getter
@@ -22,6 +23,8 @@ public class ProductSaveRequestDto {
     private String image;
 
     private String boardUuid;
+
+    private ProductType productType;
 
     public Product toEntity(String memberUuid){
         return Product.builder()
