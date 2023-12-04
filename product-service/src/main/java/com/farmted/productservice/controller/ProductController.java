@@ -19,6 +19,7 @@ public class ProductController {
     private final ProductService productService;
 
     // 판매자 상품 등록
+    // TODO: 단순 상품, 경매 상품 구분
     @PostMapping("/products/boards")
     public ResponseEntity<?>  saveProduct(
             @RequestBody ProductSaveRequestDto productSaveRequestDto,

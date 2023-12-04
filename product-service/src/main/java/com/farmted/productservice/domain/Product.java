@@ -39,7 +39,6 @@ public class Product extends TimeStamp{
     @NotNull
     private boolean status;
 
-    @NotNull
     private boolean auctionStatus;
 
     @NotNull

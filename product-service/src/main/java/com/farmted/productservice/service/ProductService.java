@@ -4,12 +4,14 @@ import com.farmted.productservice.FeignClient.ProductToAuctionFeignClient;
 import com.farmted.productservice.domain.Product;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
+import com.farmted.productservice.dto.response.ProductAuctionResponseDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.exception.SellerException;
 import com.farmted.productservice.repository.ProductRepository;
 import com.farmted.productservice.vo.RequestAuctionCreateVo;
 import com.farmted.productservice.vo.ResponseAuctionEndVo;
+import com.farmted.productservice.vo.ResponseAuctionGetVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +36,9 @@ public class ProductService {
         Product saveProduct = productSaveRequestDto.toEntity(memberUuid);
         productRepository.save(saveProduct);
 
-        // 패인 통신 호출? controller의 필요성?
+        // TODO: 상품만 생성
+
+        //TODO: 상품 생성 시 경매 생성
         createProductToAuction(saveProduct.getUuid());
     }
 
@@ -81,11 +86,24 @@ public class ProductService {
     public List<ProductResponseDto> getListProduct(int pageNo) {
         Slice<Product> productList = productRepository.findAll(PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
 
-
         return productList.stream()
                 .map(ProductResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    //TODO: 게시글 요청에 따라 경매 정보를 조합해서 목록 반환
+    @Transactional(readOnly = true)
+    public List<ProductAuctionResponseDto> getListProductAuction() {
+        List<ProductAuctionResponseDto> productAuctionResponseDtoList= new ArrayList<>();
+        List<Product> productList = productRepository.findAll();
+        for (Product product : productList) {
+            ResponseAuctionGetVo auctionIng = productToAuctionFeignClient.getAuctionIng(product.getUuid());
+            ProductAuctionResponseDto productAuctionResponseDto = new ProductAuctionResponseDto(product, auctionIng);
+            productAuctionResponseDtoList.add(productAuctionResponseDto);
+        }
+        return productAuctionResponseDtoList;
+    }
+
 
     // feign 통신: 경매 생성
     public void createProductToAuction(String productUuid){
