@@ -1,10 +1,10 @@
 package com.farmted.auctionservice.service;
 
 import com.farmted.auctionservice.domain.Auction;
-import com.farmted.auctionservice.dto.requestDto.AuctionCreateRequestDto;
-import com.farmted.auctionservice.dto.responseDto.AuctionBuyerResponseDto;
-import com.farmted.auctionservice.dto.responseDto.AuctionSellerResponseDto;
-import com.farmted.auctionservice.dto.responseDto.AuctionStatusResponseDto;
+import com.farmted.auctionservice.dto.requestAuctionDto.AuctionCreateRequestDto;
+import com.farmted.auctionservice.dto.responseAuctionDto.AuctionBuyerResponseDto;
+import com.farmted.auctionservice.dto.responseAuctionDto.AuctionSellerResponseDto;
+import com.farmted.auctionservice.dto.responseAuctionDto.AuctionStatusResponseDto;
 import com.farmted.auctionservice.repository.AuctionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -1,7 +1,7 @@
 package com.farmted.auctionservice.controller.api;
 
-import com.farmted.auctionservice.dto.requestDto.AuctionCreateRequestDto;
-import com.farmted.auctionservice.dto.responseDto.AuctionStatusResponseDto;
+import com.farmted.auctionservice.dto.requestAuctionDto.AuctionCreateRequestDto;
+import com.farmted.auctionservice.dto.responseAuctionDto.AuctionStatusResponseDto;
 import com.farmted.auctionservice.service.AuctionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

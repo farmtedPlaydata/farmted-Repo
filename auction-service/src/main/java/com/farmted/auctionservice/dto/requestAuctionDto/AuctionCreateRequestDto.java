@@ -1,4 +1,4 @@
-package com.farmted.auctionservice.dto.requestDto;
+package com.farmted.auctionservice.dto.requestAuctionDto;
 
 import com.farmted.auctionservice.domain.Auction;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,8 @@ import java.time.LocalDate;
 @Getter @Builder @AllArgsConstructor @NoArgsConstructor
 public class AuctionCreateRequestDto {
 
-    private int auctionPrice; // 가격
+    private Integer auctionPrice; // 가격
+
     private LocalDate auctionDeadline; // 경매 종료 시간
     private String boardUuid;
     private String productUuid;
