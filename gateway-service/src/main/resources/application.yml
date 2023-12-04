@@ -22,15 +22,11 @@ spring:
         - id: pass-service
           uri: lb://pass-service
           predicates:
-            - Path=/pass-service/passes
-        - id: pass-service
-          uri: lb://pass-service
-          predicates:
-            - Path=/pass-service/login
-        - id: pass-service
-          uri: lb://pass-service
-          predicates:
             - Path=/pass-service/**
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/member-service/**
           filters:
             - AuthorizationFilter
 

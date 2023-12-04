@@ -25,14 +25,11 @@ import java.util.Base64;
 @Slf4j
 public class AuthorizationFilter extends AbstractGatewayFilterFactory<AuthorizationFilter.Config> {
 
-    @Value("${jwt-secret-key}")
-    private String secretkey;
-    private Key key;
+    Environment env;
 
-    @PostConstruct
-    public void init() {
-        byte[] bytes = Base64.getDecoder().decode(secretkey);
-        key = Keys.hmacShaKeyFor(bytes);
+    public AuthorizationFilter(Environment env) {
+        super(Config.class);
+        this.env = env;
     }
 
     public static class Config {
@@ -77,7 +74,7 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<Authorizat
 
         try {
         JwtParser jwtParser = Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(env.getProperty("jwt-secret-key"))
                 .build();
 
         subject = jwtParser.parseClaimsJws(jwt).getBody().getSubject();

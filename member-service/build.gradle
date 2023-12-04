@@ -11,6 +11,10 @@ java {
 	sourceCompatibility = '17'
 }
 
+ext {
+	set('springCloudVersion', "2022.0.4")
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -41,10 +45,18 @@ dependencies {
 	annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+	// eureka
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }
 
 jar {
