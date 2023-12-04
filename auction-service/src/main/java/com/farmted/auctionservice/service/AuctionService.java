@@ -32,40 +32,40 @@ public class AuctionService {
 
     // 방안1
     // 경매 종료 스케쥴링
-//    @Scheduled(cron ="*/60 * * * * *")
-//    public void changeAuction(){
-//        // 경매 종료 로직
-//        LocalDate current = LocalDate.now();
-//        List<Auction> auctionDeadline = auctionRepository.findAuctionByAuctionDeadline(current);
-//         System.out.println("경매 상태 확인 중");
-//        for (Auction auction : auctionDeadline) {
-//            auction.setAuctionDeadlineForStatus();
-//        }
-//
-//    }
-//
-//    public List<AuctionStatusResponseDto> endAuctions(){
-//        List<Auction> auctionStatusTrue = auctionRepository.findAuctionByAuctionStatusTrue();
-//        return auctionStatusTrue.stream()
-//                .map(AuctionStatusResponseDto::new)
-//                .collect(Collectors.toList());
-//    }
-
-
-    // 방안 2
     @Scheduled(cron ="*/60 * * * * *")
-    public List<AuctionStatusResponseDto> changeAuction(){
+    public void changeAuction(){
         // 경매 종료 로직
         LocalDate current = LocalDate.now();
         List<Auction> auctionDeadline = auctionRepository.findAuctionByAuctionDeadline(current);
-        System.out.println("경매 상태 확인 중");
+         System.out.println("경매 상태 확인 중");
         for (Auction auction : auctionDeadline) {
             auction.setAuctionDeadlineForStatus();
         }
-        return auctionDeadline.stream()
+
+    }
+
+    public List<AuctionStatusResponseDto> endAuctions(){
+        List<Auction> auctionStatusTrue = auctionRepository.findAuctionByAuctionStatusTrue();
+        return auctionStatusTrue.stream()
                 .map(AuctionStatusResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+
+    // 방안 2
+//    @Scheduled(cron ="*/60 * * * * *")
+//    public List<AuctionStatusResponseDto> changeAuction(){
+//        // 경매 종료 로직
+//        LocalDate current = LocalDate.now();
+//        List<Auction> auctionDeadline = auctionRepository.findAuctionByAuctionDeadline(current);
+//        System.out.println("경매 상태 확인 중");
+//        for (Auction auction : auctionDeadline) {
+//            auction.setAuctionDeadlineForStatus();
+//        }
+//        return auctionDeadline.stream()
+//                .map(AuctionStatusResponseDto::new)
+//                .collect(Collectors.toList());
+//    }
 
 
     // 판매자 -> 낙찰 목록 조회 -> 경매 종료 상태

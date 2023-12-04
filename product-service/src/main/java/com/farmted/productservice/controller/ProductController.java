@@ -1,6 +1,5 @@
 package com.farmted.productservice.controller;
 
-import com.farmted.productservice.dto.request.ProductModifyRequestDto;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
@@ -39,17 +38,6 @@ public class ProductController {
         return  ResponseEntity.ok(GlobalResponseDto.listOf(listProductSeller));
     }
 
-    // 판매자 가격 수정
-//    @PutMapping("/products/{board_uuid}/boards")
-//    public ResponseEntity<?> modifyProductPrice(
-//            @PathVariable (value = "board_uuid") String boardUuid ,
-//            @RequestHeader("UUID") String memberUuid, // 멤버
-//            @RequestBody ProductModifyRequestDto productModifyRequestDto
-//    )
-//    {
-//        productService.modifyProductPrice(boardUuid, productModifyRequestDto,memberUuid);
-//        return ResponseEntity.ok(GlobalResponseDto.of(true));
-//    }
 
     // 판매자 전체 수정
     @PutMapping("/products/{board_uuid}/boards")

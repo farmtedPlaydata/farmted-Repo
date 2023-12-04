@@ -55,10 +55,6 @@ public class Product extends TimeStamp{
         auctionStatus = false;
     }
 
-    // 가격 수정
-    public void modifyPrice(int price){
-        this.price =price;
-    }
 
     public void modifyProduct(ProductUpdateRequestDto productUpdateRequestDto){
         this.name = productUpdateRequestDto.name();
@@ -66,6 +62,10 @@ public class Product extends TimeStamp{
         this.price= productUpdateRequestDto.price();
         this.source= productUpdateRequestDto.source();
         this.image = productUpdateRequestDto.image();
+    }
+
+    public void updateStatus(boolean auctionStatus){
+        this.auctionStatus=true;
     }
 
 

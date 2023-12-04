@@ -2,7 +2,6 @@ package com.farmted.productservice.service;
 
 import com.farmted.productservice.FeignClient.ProductToAuctionFeignClient;
 import com.farmted.productservice.domain.Product;
-import com.farmted.productservice.dto.request.ProductModifyRequestDto;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
@@ -10,7 +9,7 @@ import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.exception.SellerException;
 import com.farmted.productservice.repository.ProductRepository;
 import com.farmted.productservice.vo.RequestAuctionCreateVo;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.farmted.productservice.vo.ResponseAuctionEndVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -38,22 +37,7 @@ public class ProductService {
         createProductToAuction(saveProduct.getUuid());
     }
 
-    // 상품 DB  가격 수정
-    public void modifyProductPrice(String boardUuid,ProductModifyRequestDto productModifyRequestDto,String memberUuid){
-        // 상품 판매자만 가격 수정 가능
-        Product product = productRepository.findProductByBoardUuidAndAuctionStatusFalse(boardUuid)
-                .orElseThrow(()-> new ProductException());
 
-        if(!product.getMemberUuid().equals(memberUuid))
-           throw new SellerException();
-
-        if(!product.isAuctionStatus()){ // 경매 중이 아닌(상태값이 false) 경우만 가격 수정 가능
-            product.modifyPrice(productModifyRequestDto.getPrice());
-        }else{
-           throw new ProductException(product.isAuctionStatus());
-        }
-
-    }
 
     // 상품 DB 전체 수정
     public void modifyProduct(String boardUuid, ProductUpdateRequestDto productUpdateRequestDto, String memberUuid){
@@ -116,6 +100,14 @@ public class ProductService {
 
     }
 
-    // fegin 통신: 경매 종료
+    // feign 통신: 경매 종료
+    public void endAuctionFromProduct(){
+        List<ResponseAuctionEndVo> endAuctionVoList = productToAuctionFeignClient.endAuctionFromProduct();
+        for (ResponseAuctionEndVo endAuction : endAuctionVoList) {
+            Product products = productRepository.findProductByUuid(endAuction.getProductUuid())
+                    .orElseThrow(()-> new ProductException());
+            products.updateStatus(endAuction.getAuctionStatus());
+        }
+    }
 
 }
