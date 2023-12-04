@@ -3,6 +3,7 @@ package com.farmted.auctionservice.service;
 import com.farmted.auctionservice.domain.Auction;
 import com.farmted.auctionservice.dto.requestAuctionDto.AuctionCreateRequestDto;
 import com.farmted.auctionservice.dto.responseAuctionDto.AuctionBuyerResponseDto;
+import com.farmted.auctionservice.dto.responseAuctionDto.AuctionResponseDto;
 import com.farmted.auctionservice.dto.responseAuctionDto.AuctionSellerResponseDto;
 import com.farmted.auctionservice.dto.responseAuctionDto.AuctionStatusResponseDto;
 import com.farmted.auctionservice.repository.AuctionRepository;
@@ -45,7 +46,7 @@ public class AuctionService {
     }
 
     public List<AuctionStatusResponseDto> endAuctions(){
-        List<Auction> auctionStatusTrue = auctionRepository.findAuctionByAuctionStatusTrue();
+        List<Auction> auctionStatusTrue = auctionRepository.findAuctionByAuctionStatus(true);
         return auctionStatusTrue.stream()
                 .map(AuctionStatusResponseDto::new)
                 .collect(Collectors.toList());
@@ -66,6 +67,16 @@ public class AuctionService {
 //                .map(AuctionStatusResponseDto::new)
 //                .collect(Collectors.toList());
 //    }
+
+    // 경매 목록 조회
+    // TODO: 진행 종료 합쳐서 조회? 진행만 조회?
+    public List<AuctionResponseDto> getAuctionList(){
+//        List<Auction> auctionList = auctionRepository.findAll();
+        List<Auction> auctionList = auctionRepository.findAuctionByAuctionStatus(false);
+        return auctionList.stream()
+                .map(AuctionResponseDto::new)
+                .toList();
+    }
 
 
     // 판매자 -> 낙찰 목록 조회 -> 경매 종료 상태

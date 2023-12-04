@@ -20,6 +20,6 @@ public interface AuctionRepository extends JpaRepository<Auction,Long>{
     //특정 생성 시간에 대한 경매 조회
     public List<Auction> findAuctionByAuctionDeadline(LocalDate dateLine);
 
-    // 종료된 경매 조회
-    public List<Auction> findAuctionByAuctionStatusTrue();
+    // 상태값에 따른 경매 조회
+    public List<Auction> findAuctionByAuctionStatus(boolean auctionStatus);
 }

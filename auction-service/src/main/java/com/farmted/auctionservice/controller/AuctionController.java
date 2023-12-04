@@ -1,6 +1,7 @@
 package com.farmted.auctionservice.controller;
 
 import com.farmted.auctionservice.dto.responseAuctionDto.AuctionBuyerResponseDto;
+import com.farmted.auctionservice.dto.responseAuctionDto.AuctionResponseDto;
 import com.farmted.auctionservice.dto.responseAuctionDto.AuctionSellerResponseDto;
 import com.farmted.auctionservice.service.AuctionService;
 import lombok.RequiredArgsConstructor;
@@ -19,20 +20,17 @@ public class AuctionController {
 
     private final AuctionService auctionService;
 
-    // 경매 상세 내역 조회
-    @GetMapping("/{boardUuid}/board")
-    public ResponseEntity<?> getAuction(@PathVariable String boardUuid){
-
-    }
 
     // 경매 내역 조회 -> 상태값 입력 받기(진행중/ 진행+종료 경매)
-    @GetMapping("/Auctions/{AuctionStatus}")
-    public ResponseEntity<?> getAuctionIng(@PathVariable Boolean AuctionStatus){
-
+    @GetMapping("/Auctions")
+    public ResponseEntity<?> getAuctionIng(){
+        List<AuctionResponseDto> auctionList = auctionService.getAuctionList();
+        return ResponseEntity.ok(auctionList);
     }
 
 
     // 판매자 -> 낙찰 내역 조회 -> memberUuid
+    //TODO: PathVariable이 아니라 HEADER로 받는 건가?
     @GetMapping("/seller/{memberUuid}/board")
     public ResponseEntity<?> findAuctionToSeller(
             @PathVariable String memberUuid
