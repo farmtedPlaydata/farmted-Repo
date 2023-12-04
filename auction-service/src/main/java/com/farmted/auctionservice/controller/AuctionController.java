@@ -22,7 +22,7 @@ public class AuctionController {
 
     // 경매 중인 내역 조회 -> 경매 진행 상태
 
-    // 판매자 -> 낙찰 내역 조회
+    // 판매자 -> 낙찰 내역 조회 -> memberUuid
     @GetMapping("/seller/{memberUuid}/board")
     public ResponseEntity<?> findAuctionToSeller(
             @PathVariable String memberUuid
@@ -31,12 +31,12 @@ public class AuctionController {
         return ResponseEntity.ok(auctionBuyerList);
     }
 
-    // 구매자  ->  낙찰 내역 조회
-    @GetMapping("/{memberUuid}/board")
+    // 구매자  ->  낙찰 내역 조회 -> auctionBuyer
+    @GetMapping("/{auctionBuyer}/board")
         public ResponseEntity<?> findAuctionTrue(
-                @PathVariable String memberUuid
+                @PathVariable String auctionBuyer
     ){
-        List<AuctionSellerResponseDto> auctionSellerList = auctionService.auctionTrueList(memberUuid);
+        List<AuctionSellerResponseDto> auctionSellerList = auctionService.auctionTrueList(auctionBuyer);
         return ResponseEntity.ok(auctionSellerList);
     }
 
