@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,8 +32,10 @@ public class ApiController {
 
     // 경매 중인 내역 조회
     @GetMapping("/products/auctions")
-    public ResponseEntity<?> getProductAuctionList(){
-        List<ProductAuctionResponseDto> listProductAuction = productService.getListProductAuction();
+    public ResponseEntity<?> getProductAuctionList(
+            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
+    ){
+        List<ProductAuctionResponseDto> listProductAuction = productService.getListProductAuction(pageNo);
         return ResponseEntity.ok(listProductAuction);
     }
 

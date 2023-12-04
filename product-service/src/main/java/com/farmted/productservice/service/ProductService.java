@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.farmted.productservice.enums.ProductType.PRODUCT;
+import static com.farmted.productservice.enums.ProductType.SALE;
 
 @Service
 @RequiredArgsConstructor
@@ -88,7 +89,7 @@ public class ProductService {
     // 전체 상품 조회
     @Transactional(readOnly = true)
     public List<ProductResponseDto> getListProduct(int pageNo) {
-        Slice<Product> productList = productRepository.findAll(PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
+        Slice<Product> productList = productRepository.findProductByProductType(SALE,PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
 
         return productList.stream()
                 .map(ProductResponseDto::new)
@@ -97,9 +98,9 @@ public class ProductService {
 
     //TODO: 게시글 요청에 따라 경매 정보를 조합해서 목록 반환
     @Transactional(readOnly = true)
-    public List<ProductAuctionResponseDto> getListProductAuction() {
+    public List<ProductAuctionResponseDto> getListProductAuction(int pageNo) {
         List<ProductAuctionResponseDto> productAuctionResponseDtoList= new ArrayList<>();
-        List<Product> productList = productRepository.findProductByProductType(PRODUCT);
+        Slice<Product> productList = productRepository.findProductByProductType(PRODUCT,PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
         for (Product product : productList) {
             ResponseAuctionGetVo auctionIng = productToAuctionFeignClient.getAuctionIng(product.getUuid());
             ProductAuctionResponseDto productAuctionResponseDto = new ProductAuctionResponseDto(product, auctionIng);
