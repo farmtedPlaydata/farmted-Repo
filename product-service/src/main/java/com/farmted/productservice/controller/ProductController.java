@@ -53,7 +53,7 @@ public class ProductController {
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
-    // 전체 상품 조회
+    // 전체 상품 조회 -> Sale
     @GetMapping("/products")
     public ResponseEntity<?> getProductList(
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo

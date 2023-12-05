@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("product-service")
+@RequestMapping("product-api")
 public class ApiController {
 
 
@@ -30,7 +30,7 @@ public class ApiController {
        return ResponseEntity.ok().build();
     }
 
-    // 경매 중인 내역 조회
+    // 경매 중인 내역 조회 -> PRODUCT
     @GetMapping("/products/auctions")
     public ResponseEntity<?> getProductAuctionList(
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
