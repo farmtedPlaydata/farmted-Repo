@@ -4,6 +4,7 @@ import com.farmted.passservice.domain.Pass;
 import com.farmted.passservice.dto.request.RequestCreatePassDto;
 import com.farmted.passservice.dto.request.RequestLoginDto;
 import com.farmted.passservice.enums.TokenType;
+import com.farmted.passservice.global.GlobalResponseDto;
 import com.farmted.passservice.repository.PassRepository;
 import com.farmted.passservice.service.PassService;
 import com.farmted.passservice.util.jwt.JwtProvider;
@@ -29,8 +30,7 @@ public class PassController {
     public ResponseEntity<?> createPass(@RequestBody RequestCreatePassDto dto) {
         passService.createPass(dto);
         String uuid = dto.getUuid();
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(uuid);
+        return ResponseEntity.ok(GlobalResponseDto.of(uuid));
     }
 
     @PostMapping("/login")
@@ -38,7 +38,7 @@ public class PassController {
         String token = passService.login(dto);
         jwtProvider.setToken(token, TokenType.ACCESS, response);
         jwtProvider.setToken(token, TokenType.REFRESH, response);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
     @GetMapping("/logout/{uuid}")
@@ -47,12 +47,12 @@ public class PassController {
                                     HttpServletRequest request) {
         passService.logout(uuid);
         jwtProvider.deleteCookie(response, request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
     @GetMapping("/allpass")
     public ResponseEntity<?> findAll() {
         List<Pass> allPass = passRepository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(allPass);
+        return ResponseEntity.ok(GlobalResponseDto.listOf(allPass));
     }
 }
