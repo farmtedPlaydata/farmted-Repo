@@ -6,6 +6,7 @@ import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
 import com.farmted.productservice.dto.response.ProductAuctionResponseDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
+import com.farmted.productservice.enums.ProductType;
 import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.exception.SellerException;
 import com.farmted.productservice.repository.ProductRepository;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,16 +39,23 @@ public class ProductService {
 
     // 상품 DB 등록
     public void saveProduct(String memberUuid,ProductSaveRequestDto productSaveRequestDto){
-        Product saveProduct = productSaveRequestDto.toEntity(memberUuid);
+        System.out.println("productSaveRequestDto"+productSaveRequestDto.getProductType());
+
+        ProductType productType = Arrays.stream(ProductType.values())
+                .filter(c -> c.getTypeEn().equals(productSaveRequestDto.getProductType()))
+                .findAny().orElseThrow(() -> new RuntimeException("Invalid ProductType"));
+
+        Product saveProduct = productSaveRequestDto.toEntity(memberUuid,productType);
         productRepository.save(saveProduct);
 
         //TODO: 상품 생성 시 경매 생성
-        if((productSaveRequestDto.getProductType().getTypeEn()).equals("Product")){
+
+        String typeEn = saveProduct.getProductType().getTypeEn();
+        if(("Product").equals(typeEn)){
             createProductToAuction(saveProduct.getUuid());
         }
 
     }
-
 
 
     // 상품 DB 전체 수정

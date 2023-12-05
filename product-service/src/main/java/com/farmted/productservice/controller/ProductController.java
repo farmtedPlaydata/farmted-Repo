@@ -24,7 +24,6 @@ public class ProductController {
     @PostMapping("/products/boards")
     public ResponseEntity<?>  saveProduct(
             @RequestBody ProductSaveRequestDto productSaveRequestDto,
-            //@RequestParam ProductType productType,
             @RequestHeader("UUID") String uuid // 멤버
     ) {
         productService.saveProduct(uuid,productSaveRequestDto);

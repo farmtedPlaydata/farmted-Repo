@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "AUCTION-SERVICE", path = "auction-service")
+@FeignClient(name = "AUCTION-SERVICE", path = "auction-api")
 public interface ProductToAuctionFeignClient {
     @PostMapping("/product/auctions")
     public void createProductToAuctionFeign(

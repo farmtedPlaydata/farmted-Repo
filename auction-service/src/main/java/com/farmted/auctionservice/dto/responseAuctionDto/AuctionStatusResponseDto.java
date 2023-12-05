@@ -24,5 +24,6 @@ public class AuctionStatusResponseDto {
         auctionStatus =auction.getAuctionStatus();
         auctionPrice =auction.getAuctionPrice();
         auctionBuyer = auction.getAuctionBuyer();
+
     }
 }

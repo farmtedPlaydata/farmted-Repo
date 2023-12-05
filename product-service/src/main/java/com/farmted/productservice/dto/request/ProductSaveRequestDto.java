@@ -24,9 +24,9 @@ public class ProductSaveRequestDto {
 
     private String boardUuid;
 
-    private ProductType productType;
+    private String productType;
 
-    public Product toEntity(String memberUuid){
+    public Product toEntity(String memberUuid, ProductType productType){
         return Product.builder()
                 .name(this.getName())
                 .stock(this.getStock())
@@ -35,8 +35,11 @@ public class ProductSaveRequestDto {
                 .image(this.getImage())
                 .memberUuid(memberUuid)
                 .boardUuid(this.getBoardUuid())
+                .productType(productType)
                 .build();
     }
+
+
 
 }
 
