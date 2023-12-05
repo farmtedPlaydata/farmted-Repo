@@ -18,7 +18,7 @@ public class AuctionStatusResponseDto {
 
     public AuctionStatusResponseDto(Auction auction){
         this.productUuid =auction.getProductUuid();
-        auctionDeadline =auction.getAuctionDeadline();
-        auctionStatus =auction.getAuctionStatus();
+        this.auctionDeadline =auction.getAuctionDeadline();
+        this.auctionStatus =auction.getAuctionStatus();
     }
 }

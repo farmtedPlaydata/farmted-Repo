@@ -32,7 +32,7 @@ public class AuctionService {
 
     // 방안1
     // 경매 종료 스케쥴링
-    @Scheduled(cron ="*/60 * * * * *")
+    @Scheduled(cron ="${schedules.cron}")
     public void changeAuction(){
         // 경매 종료 로직
         LocalDate current = LocalDate.now();

@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("auction-service")
+@RequestMapping("auction-api")
 public class ApiController {
 
     private final AuctionService auctionService;
