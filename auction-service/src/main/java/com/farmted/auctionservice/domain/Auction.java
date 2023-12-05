@@ -33,10 +33,16 @@ public class Auction extends TimeStamp{
 
     private String boardUuid;
 
+    private String productUuid;
+
     @PrePersist
     public void createUuid(){
         auctionUuid = UUID.randomUUID().toString();
-        auctionStatus =true;
+        auctionStatus =true; // false: 경매중, true:  경매 종료
+    }
+
+    public void setAuctionDeadlineForStatus(){
+        auctionStatus = true;
     }
 
 }
