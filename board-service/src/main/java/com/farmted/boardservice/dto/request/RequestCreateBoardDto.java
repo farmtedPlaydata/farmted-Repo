@@ -2,6 +2,7 @@ package com.farmted.boardservice.dto.request;
 
 import com.farmted.boardservice.domain.Board;
 import com.farmted.boardservice.enums.BoardType;
+import com.farmted.boardservice.vo.MemberVo;
 import com.farmted.boardservice.vo.ProductVo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,10 +27,11 @@ public record RequestCreateBoardDto(
         @JsonProperty("productImage") @NotBlank String productImage) {
 
     // 게시글 전용 데이터 - 저장용 Entity
-    public Board toBoard(String memberUuid, String memberName){
+    public Board toBoard(String memberUuid, MemberVo memberVo){
         return Board.builder()
                 .memberUuid(memberUuid)
-                .memberName(memberName)
+                .memberName(memberVo.memberName())
+                .memberProfile(memberVo.memberProfile())
                 .boardType(this.boardType)
                 .boardTitle(this.boardTitle)
                 .boardContent(this.boardContent)

@@ -43,6 +43,9 @@ public class Board extends TimeStamp {
     @Column(nullable = false)
     private String memberName;
 
+    @Column
+    private String memberProfile;
+
     // member-service와 통신용 FK
     @Column(nullable = false)
     private String memberUuid;

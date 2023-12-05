@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "product-service", path= "/product-service")
+@FeignClient(name = "${service.product.name}", path= "${service.product.url}")
 public interface ProductFeignClient {
     // 판매자 상품 게시글 등록
         // 반환 boolean
@@ -38,8 +38,7 @@ public interface ProductFeignClient {
     @GetMapping("/products")
     ResponseEntity<GlobalResponseDto<List<ProductVo>>> getProductList(
             @RequestParam(value="category") BoardType category,
-            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
-            );
+            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo);
 
     // 상품 상세 조회
         // 단일 DTO

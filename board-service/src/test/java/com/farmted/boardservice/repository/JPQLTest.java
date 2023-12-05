@@ -4,6 +4,7 @@ import com.farmted.boardservice.domain.Board;
 import com.farmted.boardservice.dto.request.RequestCreateBoardDto;
 import com.farmted.boardservice.dto.response.listDomain.ResponseGetBoardDto;
 import com.farmted.boardservice.enums.BoardType;
+import com.farmted.boardservice.vo.MemberVo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ class JPQLTest {
                 100,
                 "Auction Source",
                 "Auction Image"
-        ).toBoard("uuid", "member"));
+        ).toBoard("uuid", new MemberVo("member", "memberProfile")));
         // 판매 생성
         boardRepository.save(new RequestCreateBoardDto(
                 BoardType.SALE,
@@ -54,14 +55,14 @@ class JPQLTest {
                 200,
                 "Sale Source",
                 "Sale Image"
-        ).toBoard("uuid", "member"));
+        ).toBoard("uuid", new MemberVo("member", "memberProfile")));
         // 구매요청 생성
         boardRepository.save(new RequestCreateBoardDto(
                 BoardType.COMMISSION,
                 "Commission Content",
                 "Commission Title",
                 "", 0, 0, "", ""
-        ).toBoard("uuid", "member"));
+        ).toBoard("uuid", new MemberVo("member", "memberProfile")));
         // 그 이외의 더미데이터 (고객센터로 고정)
         IntStream.rangeClosed(1, 5).forEach((i) -> {
                     boardRepository.save(new RequestCreateBoardDto(
@@ -73,7 +74,7 @@ class JPQLTest {
                             10_000L * i,                         // 상품 가격
                             "상품 출처" + i,                    // 상품 출처
                             "상품 이미지 URL" + i               // 상품 이미지 URL
-                    ).toBoard("DummuUuid" + i, "member" + i));
+                    ).toBoard("DummuUuid" + i, new MemberVo("member" +i, "memberProfile"+i)));
                 }
         );
     }
@@ -142,7 +143,7 @@ class JPQLTest {
                 "Auction Image"
         );
             // 저장
-        Board board = createBoardDto.toBoard(memberUuid, "memberDetail");
+        Board board = createBoardDto.toBoard(memberUuid, new MemberVo("memberDetail", "memberProfile"));
         boardRepository.save(board);
         String boardUuid = board.getBoardUuid();
         // 비교할 데이터 준비
@@ -173,7 +174,7 @@ class JPQLTest {
                 "Auction Image"
         );
             // 저장
-        Board board = createBoardDto.toBoard(memberUuid, "memberEntity");
+        Board board = createBoardDto.toBoard(memberUuid, new MemberVo("memberEntity", "memberProfile"));
         boardRepository.save(board);
         String boardUuid = board.getBoardUuid();
 
