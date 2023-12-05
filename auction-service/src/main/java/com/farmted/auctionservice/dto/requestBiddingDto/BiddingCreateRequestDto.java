@@ -15,6 +15,9 @@ public class BiddingCreateRequestDto {
 
     public Bidding toEntity(String boardUuid,String memberUuid){
         return Bidding.builder()
+                .biddingPrice(biddingPrice)
+                .boardUuid(boardUuid)
+                .memberUuid(memberUuid)
                 .build();
     }
 }
