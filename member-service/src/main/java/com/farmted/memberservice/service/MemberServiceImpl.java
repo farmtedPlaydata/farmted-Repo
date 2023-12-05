@@ -4,18 +4,19 @@ import com.farmted.memberservice.domain.Member;
 import com.farmted.memberservice.dto.request.RequestCreateMemberDto;
 import com.farmted.memberservice.dto.request.SearchMemberParam;
 import com.farmted.memberservice.dto.response.MemberResponseDto;
+import com.farmted.memberservice.dto.response.ResponsePagingToListDto;
 import com.farmted.memberservice.enums.RoleEnums;
 import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
+import com.farmted.memberservice.exception.MemberException;
 import com.farmted.memberservice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -29,18 +30,27 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void createMember(RequestCreateMemberDto dto) {
-        dto.setMemberRole(RoleEnums.USER);
-        Member member = dto.toEntity();
-        memberRepository.save(member);
+    public void createMember(RequestCreateMemberDto dto, String uuid) {
+        try {
+            dto.setMemberRole(RoleEnums.USER);
+            dto.setUuid(uuid);
+            Member member = dto.toEntity();
+            memberRepository.save(member);
+        } catch (MemberException e) {
+            throw new MemberException("MemberService - createMember");
+        }
     }
 
     @Transactional
     @Override
     public void updateMember(RequestUpdateMemberDto dto, String uuid) {
-        Member upMember = memberRepository.getMemberByMemberUuid(uuid);
-        upMember.updateMember(dto);
-        memberRepository.save(upMember);
+        try {
+            Member upMember = memberRepository.getMemberByMemberUuid(uuid);
+            upMember.updateMember(dto);
+            memberRepository.save(upMember);
+        } catch (MemberException e) {
+            throw new MemberException("MemberService - updateMember");
+        }
     }
 
     @Transactional
@@ -50,7 +60,7 @@ public class MemberServiceImpl implements MemberService {
         if (member.isPresent()) {
             memberRepository.deleteMemberByMemberUuid(uuid);
         } else {
-            throw new RuntimeException("ERROR : member-service - deleteMember");
+            throw new MemberException("MemberService - deleteMember");
         }
 //        memberRepository.findByMemberUuid(uuid)
 //                .ifPresentOrElse(
@@ -62,7 +72,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void grantRole(String uuid, RoleEnums role) {
         Member member = memberRepository.findByMemberUuid(uuid)
-                .orElseThrow(() -> new RuntimeException("ERROR: memberservice - grantRole"));
+                .orElseThrow(() -> new MemberException("MemberService - grantRole"));
 
         RoleEnums currentRole = member.getMemberRole();
         RoleEnums newRole = (currentRole == RoleEnums.USER)
@@ -72,7 +82,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Page<MemberResponseDto> getAllMember(SearchMemberParam param, Pageable pageable) {
-        return memberRepository.findAll(param, pageable);
+    public ResponsePagingToListDto getAllMember(SearchMemberParam param, Pageable pageable) {
+        Page<MemberResponseDto> pagingMember = memberRepository.findAll(param, pageable);
+        ResponsePagingToListDto dto = new ResponsePagingToListDto();
+        dto.setMemberList(pagingMember);
+        return dto;
     }
 }

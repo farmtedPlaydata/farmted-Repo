@@ -47,6 +47,8 @@ dependencies {
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 	// eureka
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	// openFeign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 }
 
 tasks.named('test') {
