@@ -2,13 +2,14 @@ package com.farmted.productservice.service;
 
 import com.farmted.productservice.FeignClient.ProductToAuctionFeignClient;
 import com.farmted.productservice.domain.Product;
-import com.farmted.productservice.dto.request.ProductModifyRequestDto;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
+import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.exception.SellerException;
 import com.farmted.productservice.repository.ProductRepository;
 import com.farmted.productservice.vo.RequestAuctionCreateVo;
+import com.farmted.productservice.vo.ResponseAuctionEndVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -32,23 +33,26 @@ public class ProductService {
         Product saveProduct = productSaveRequestDto.toEntity(memberUuid);
         productRepository.save(saveProduct);
 
+        // 패인 통신 호출? controller의 필요성?
+        createProductToAuction(saveProduct.getUuid());
     }
 
-    // 상품 DB  가격 수정
-    public void modifyProduct(String boardUuid,ProductModifyRequestDto productModifyRequestDto,String memberUuid){
-        // 상품 판매자만 가격 수정 가능
+
+
+    // 상품 DB 전체 수정
+    public void modifyProduct(String boardUuid, ProductUpdateRequestDto productUpdateRequestDto, String memberUuid){
+        // 상품 판매자만  수정 가능
         Product product = productRepository.findProductByBoardUuidAndAuctionStatusFalse(boardUuid)
                 .orElseThrow(()-> new ProductException());
 
         if(!product.getMemberUuid().equals(memberUuid))
-           throw new SellerException();
+            throw new SellerException();
 
         if(!product.isAuctionStatus()){ // 경매 중이 아닌(상태값이 false) 경우만 가격 수정 가능
-            product.modifyPrice(productModifyRequestDto.getPrice());
+            product.modifyProduct(productUpdateRequestDto);
         }else{
-           throw new ProductException(product.isAuctionStatus());
+            throw new ProductException(product.isAuctionStatus());
         }
-
     }
 
 
@@ -63,7 +67,6 @@ public class ProductService {
                 .collect(Collectors.toList());
 
     }
-
 
     // 상품 상세 조회
     @Transactional(readOnly = true)
@@ -84,7 +87,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    // feign 통신
+    // feign 통신: 경매 생성
     public void createProductToAuction(String productUuid){
         // 상품DB에서 가격과 생성시간을 가져옵니다.
         Product product = productRepository.findProductByUuid(productUuid)
@@ -93,9 +96,18 @@ public class ProductService {
         // 엔티티를 VO로 변환줍니다.
         RequestAuctionCreateVo auctionCreateVo = new RequestAuctionCreateVo(product);
         // 페인 통신 진행
-        productToAuctionFeignClient.createProductToAuction(auctionCreateVo);
-        // 결과 확인 로직?
+        productToAuctionFeignClient.createProductToAuctionFeign(product.getMemberUuid(),auctionCreateVo);
 
+    }
+
+    // feign 통신: 경매 종료
+    public void endAuctionFromProduct(){
+        List<ResponseAuctionEndVo> endAuctionVoList = productToAuctionFeignClient.endAuctionFromProduct();
+        for (ResponseAuctionEndVo endAuction : endAuctionVoList) {
+            Product products = productRepository.findProductByUuid(endAuction.getProductUuid())
+                    .orElseThrow(()-> new ProductException());
+            products.updateStatus(endAuction.getAuctionStatus());
+        }
     }
 
 }
