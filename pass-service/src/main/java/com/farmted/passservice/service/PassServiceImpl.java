@@ -3,6 +3,7 @@ package com.farmted.passservice.service;
 import com.farmted.passservice.domain.Pass;
 import com.farmted.passservice.dto.request.RequestCreatePassDto;
 import com.farmted.passservice.dto.request.RequestLoginDto;
+import com.farmted.passservice.dto.response.ResponseListDto;
 import com.farmted.passservice.enums.TokenType;
 import com.farmted.passservice.exception.PassException;
 import com.farmted.passservice.repository.PassRepository;
@@ -11,12 +12,16 @@ import com.farmted.passservice.util.redis.RedisRepository;
 import com.farmted.passservice.util.redis.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -72,8 +77,20 @@ public class PassServiceImpl implements PassService {
     }
 
     @Override
-    public Iterable<Pass> getPassByAll() {
-        return passRepository.findAll();
+    public List<ResponseListDto> getPassByAll(int pageNo) {
+        Slice<Pass> passList = passRepository.findAll(PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "email")));
+
+        return passList.stream()
+                .map(ResponseListDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String findUuidByEmail(String email) {
+        Pass findPass = passRepository.findByEmail(email)
+                .orElseThrow(() -> new PassException("PassService - findUuidByEmail"));
+
+        return findPass.getUuid();
     }
 
 

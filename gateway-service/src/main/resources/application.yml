@@ -28,7 +28,7 @@ spring:
           predicates:
             - Path=/member-service/**
           filters:
-            - AuthorizationFilter
+            - JwtTokenFilter
 
 eureka:
   client:

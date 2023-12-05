@@ -22,10 +22,10 @@ public class MemberController {
     private final MemberService memberService;
 
     // 회원 상세 정보
-    @PostMapping("/members/{uuid}")
-    public ResponseEntity<?> createMember(@PathVariable String uuid,
+    @PostMapping("/members/{email}")
+    public ResponseEntity<?> createMember(@PathVariable String email,
                                           @RequestBody RequestCreateMemberDto dto) {
-        memberService.createMember(dto, uuid);
+        memberService.createMember(dto, email);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 

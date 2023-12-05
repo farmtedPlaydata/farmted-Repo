@@ -3,6 +3,7 @@ package com.farmted.passservice.controller;
 import com.farmted.passservice.domain.Pass;
 import com.farmted.passservice.dto.request.RequestCreatePassDto;
 import com.farmted.passservice.dto.request.RequestLoginDto;
+import com.farmted.passservice.dto.response.ResponseListDto;
 import com.farmted.passservice.enums.TokenType;
 import com.farmted.passservice.global.GlobalResponseDto;
 import com.farmted.passservice.repository.PassRepository;
@@ -24,7 +25,6 @@ public class PassController {
 
     private final PassService passService;
     private final JwtProvider jwtProvider;
-    private final PassRepository passRepository;
 
     @PostMapping("/passes")
     public ResponseEntity<?> createPass(@RequestBody RequestCreatePassDto dto) {
@@ -51,8 +51,15 @@ public class PassController {
     }
 
     @GetMapping("/allpass")
-    public ResponseEntity<?> findAll() {
-        List<Pass> allPass = passRepository.findAll();
+    public ResponseEntity<?> findAll(@RequestParam(required = false, defaultValue = "0", value = "page")
+                                     int pageNo) {
+        List<ResponseListDto> allPass = passService.getPassByAll(pageNo);
         return ResponseEntity.ok(GlobalResponseDto.listOf(allPass));
+    }
+
+    @GetMapping("/findbyemail/{email}")
+    public ResponseEntity<?> findByEmail(@PathVariable String email) {
+        String uuid = passService.findUuidByEmail(email);
+        return ResponseEntity.ok(GlobalResponseDto.of(uuid));
     }
 }

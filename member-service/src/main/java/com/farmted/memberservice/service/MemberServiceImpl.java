@@ -8,11 +8,15 @@ import com.farmted.memberservice.dto.response.ResponsePagingToListDto;
 import com.farmted.memberservice.enums.RoleEnums;
 import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
 import com.farmted.memberservice.exception.MemberException;
+import com.farmted.memberservice.feignclient.PassFeignClient;
+import com.farmted.memberservice.global.GlobalResponseDto;
 import com.farmted.memberservice.repository.MemberRepository;
+import com.farmted.memberservice.vo.PassVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,11 +31,14 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final PassFeignClient passFeignClient;
 
     @Transactional
     @Override
-    public void createMember(RequestCreateMemberDto dto, String uuid) {
+    public void createMember(RequestCreateMemberDto dto, String email) {
         try {
+            ResponseEntity<?> re = passFeignClient.findByEmail(email);
+            String uuid =((GlobalResponseDto<?>)re.getBody()).getData().toString();
             dto.setMemberRole(RoleEnums.USER);
             dto.setUuid(uuid);
             Member member = dto.toEntity();
