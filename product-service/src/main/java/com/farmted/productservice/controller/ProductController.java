@@ -3,6 +3,7 @@ package com.farmted.productservice.controller;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
+import com.farmted.productservice.enums.ProductType;
 import com.farmted.productservice.service.ProductService;
 import com.farmted.productservice.util.GlobalResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class ProductController {
     @PostMapping("/products/boards")
     public ResponseEntity<?>  saveProduct(
             @RequestBody ProductSaveRequestDto productSaveRequestDto,
+            //@RequestParam ProductType productType,
             @RequestHeader("UUID") String uuid // 멤버
     ) {
         productService.saveProduct(uuid,productSaveRequestDto);

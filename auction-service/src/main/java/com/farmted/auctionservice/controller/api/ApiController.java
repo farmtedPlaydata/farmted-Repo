@@ -36,7 +36,7 @@ public class ApiController {
         return ResponseEntity.ok(auctionStatusResponseDtoList);
     }
 
-    // 경매 내역 조회
+    // 경매 내역 상세 조회
     @GetMapping("/{productUuid}/auctions")
     public ResponseEntity<?> getAuctionIng(@PathVariable String productUuid){
         AuctionGetResponseDto auction = auctionService.getAuctionList(productUuid);
