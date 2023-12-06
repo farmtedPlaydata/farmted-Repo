@@ -71,4 +71,10 @@ public class MemberController {
     public ResponseEntity<?> memberNameAndImage(@RequestHeader("UUID") String memberUuid) {
         return ResponseEntity.ok(GlobalResponseDto.of(memberService.memberNameAndImage(memberUuid)));
     }
+
+    @PostMapping("/member/checkin")
+    public ResponseEntity<?> memberCheckIn(@RequestHeader("UUID") String uuid) {
+        memberService.checkIn(uuid);
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
+    }
 }

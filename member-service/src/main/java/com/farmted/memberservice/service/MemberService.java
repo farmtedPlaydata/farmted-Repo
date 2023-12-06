@@ -21,4 +21,5 @@ public interface MemberService {
     void grantRole(String uuid, RoleEnums role);
     ResponsePagingToListDto getAllMember(SearchMemberParam param, Pageable pageable);
     MemberNameImageDto memberNameAndImage(String uuid);
+    void checkIn(String uuid);
 }

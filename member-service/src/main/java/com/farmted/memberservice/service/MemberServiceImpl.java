@@ -100,7 +100,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberNameImageDto memberNameAndImage(String uuid) {
         Member member = memberRepository.findByMemberUuid(uuid)
-                .orElseThrow(() -> new MemberException("MemberService - memberInfo"));
+                .orElseThrow(() -> new MemberException("MemberService - memberNameAndImage"));
         return new MemberNameImageDto(member.getMemberName(), member.getMemberImage());
+    }
+
+    @Override
+    @Transactional
+    public void checkIn(String uuid) {
+        Member member = memberRepository.findByMemberUuid(uuid)
+                .orElseThrow(() -> new MemberException("MemberService - checkIn"));
+        member.checkIn(member);
     }
 }

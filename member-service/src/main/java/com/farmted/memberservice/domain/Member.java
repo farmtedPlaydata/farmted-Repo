@@ -42,6 +42,8 @@ public class Member extends TimeStamp implements Serializable {
 
     private Long memberBalance;
 
+    private boolean checkIn;
+
     public Member(String memberUuid, String memberName, RoleEnums memberRole, String memberPhone, Boolean memberStatus) {
         this.memberUuid = memberUuid;
         this.memberName = memberName;
@@ -62,4 +64,11 @@ public class Member extends TimeStamp implements Serializable {
         this.memberRole = this.memberRole == roles ? RoleEnums.USER : roles;
     }
 
+    public void checkIn(Member member) {
+        this.checkIn = true;
+    }
+
+    public void checkInRefresh() {
+        this.checkIn = false;
+    }
 }

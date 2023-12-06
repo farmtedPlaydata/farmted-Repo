@@ -21,6 +21,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final QTimeStamp _super = new QTimeStamp(this);
 
+    public final BooleanPath checkIn = createBoolean("checkIn");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
