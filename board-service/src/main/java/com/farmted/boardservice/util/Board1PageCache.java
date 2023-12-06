@@ -10,8 +10,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 @RequiredArgsConstructor
 // 메인 페이지인 상품(판매+경매)의 1페이지를 가지는 캐싱 코드

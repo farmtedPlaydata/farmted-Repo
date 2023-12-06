@@ -30,8 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@DisplayName("Board-Service 테스트 코드")
-public class FeignSimpleTest {
+public class MockFeignTest {
     private final Board1PageCache board1PageCache;
     private final NoticeService noticeService;
     private final BoardRepository boardRepository;
@@ -47,7 +46,7 @@ public class FeignSimpleTest {
     private BoardService boardService;
 
     @Autowired
-    public FeignSimpleTest(Board1PageCache board1PageCache, NoticeService noticeService, BoardRepository boardRepository, FeignConverter<ProductVo> productConverter, FeignConverter<AuctionVo> auctionConverter, FeignConverter<MemberVo> memberConverter) {
+    public MockFeignTest(Board1PageCache board1PageCache, NoticeService noticeService, BoardRepository boardRepository, FeignConverter<ProductVo> productConverter, FeignConverter<AuctionVo> auctionConverter, FeignConverter<MemberVo> memberConverter) {
         this.board1PageCache = board1PageCache;
         this.noticeService = noticeService;
         this.boardRepository = boardRepository;
@@ -105,12 +104,12 @@ public class FeignSimpleTest {
         // Feign 값 선언
         when(memberFeignClient.getMemberInfo(any()))
                 .thenReturn(ResponseEntity.ok(GlobalResponseDto.of(new MemberVo(uuid, "유저에옹"))));
-        when(productFeignClient.createProductData(any(), any()))
+        when(productFeignClient.createProductData(any(), uuid))
                 .thenReturn(ResponseEntity.ok(GlobalResponseDto.of(null)));
     // when
         boardService.createBoard(dummyData, uuid, role);
     // then
-        verify(productFeignClient, times(1)).createProductData(any(), any());
+        verify(productFeignClient, times(1)).createProductData(any(), uuid);
         verify(memberFeignClient, times(1)).getMemberInfo(any());
         assertThat(boardRepository.findAll().size()).isEqualTo(6);
     }

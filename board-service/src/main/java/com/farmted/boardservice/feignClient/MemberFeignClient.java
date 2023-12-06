@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(name = "${service.member.name}", path= "${service.member.url}")
 public interface MemberFeignClient {
-    @GetMapping("/member/name")
+    @GetMapping("/member/info")
     ResponseEntity<GlobalResponseDto<MemberVo>> getMemberInfo(@RequestHeader("UUID") String memberUuid);
 }

@@ -14,17 +14,15 @@ import java.util.List;
 public interface AuctionFeignClient {
     // ResponseEntity<GlobalResponseDto<AuctionVo>>
     @GetMapping("/seller/{memberUuid}/board")
-    ResponseEntity<List<AuctionVo>> findAuctionToSeller(@PathVariable String memberUuid);
-
-    // 구매자  ->  낙찰 내역 조회 -> auctionBuyer
-    // ResponseEntity<GlobalResponseDto<AuctionVo>>
-    @GetMapping("/{auctionBuyer}/board")
-    ResponseEntity<List<AuctionVo>> findAuctionTrue(@PathVariable String auctionBuyer);
+    ResponseEntity<GlobalResponseDto<List<AuctionVo>>> findAuctionToSeller(@PathVariable String memberUuid, int pageNo);
 
     // AUCTION 카테고리의 경우, 해당 페이지에 맞는 경매 리스트 반환
     @GetMapping("/auctions/board")
     ResponseEntity<GlobalResponseDto<List<AuctionVo>>> findAuctionList(@RequestParam int pageNo);
 
+    // AUCTION의 상세정보 반환
+    @GetMapping("/auction/{boardUuid}/board")
+    ResponseEntity<GlobalResponseDto<AuctionVo>> findAuctionByBoardUuid(@PathVariable String boardUuid);
     // BoardUuid에 맞는 개별 경매 정보 반환
         //    private int auctionPrice;
         //    private String auctionBuyer;

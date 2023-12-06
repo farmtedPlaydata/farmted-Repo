@@ -17,7 +17,7 @@ public class FeignConverter<T> {
 
     // Exception 타입을 기준으로 단일값 추출 혹은 성공 여부만 검사
     public T convertSingleVo(ResponseEntity<GlobalResponseDto<T>> entity,  FeignDomainType domainType, ExceptionType exceptionType) {
-        GlobalResponseDto<T> responseDto = extractDto(entity, domainType);
+        GlobalResponseDto<T> responseDto = extractDto(entity, domainType, exceptionType);
         convertIsSuccess(responseDto, domainType, exceptionType);
 
         // Get 요청인 경우만 값 반환
@@ -32,10 +32,10 @@ public class FeignConverter<T> {
     }
 
     // ResponseEntity에서 GlobalDto 추출 및 null인 경우 예외처리
-    private GlobalResponseDto<T> extractDto(ResponseEntity<GlobalResponseDto<T>> entity, FeignDomainType domainType) {
+    private GlobalResponseDto<T> extractDto(ResponseEntity<GlobalResponseDto<T>> entity, FeignDomainType domainType, ExceptionType exceptionType) {
         return Optional.ofNullable(entity)
                 .map(HttpEntity::getBody)
-                .orElseThrow(() -> new FeignException(domainType));
+                .orElseThrow(() -> new FeignException(domainType, exceptionType));
     }
 
     // 성공 여부만 검사

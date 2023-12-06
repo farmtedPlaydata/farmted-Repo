@@ -1,5 +1,6 @@
 package com.farmted.boardservice.service.subService;
 
+import com.farmted.boardservice.dto.response.detailDomain.ResponseGetAuctionDetailDto;
 import com.farmted.boardservice.dto.response.listDomain.ResponseGetAuctionDto;
 import com.farmted.boardservice.enums.ExceptionType;
 import com.farmted.boardservice.enums.FeignDomainType;
@@ -25,17 +26,19 @@ public class AuctionService {
                 .toList();
     }
 
-    // 판매자의 낙찰 내역 조회
-    public List<ResponseGetAuctionDto> getSellerAuctionList(String memberUuid){
-        return auctionFeignClient.findAuctionToSeller(memberUuid)
-                .getBody().stream().map(ResponseGetAuctionDto::new)
+    // 판매자의 경매 내역 조회
+    public List<ResponseGetAuctionDto> getSellerAuctionList(String memberUuid, int pageNo){
+        return auctionConverter.convertListVo(auctionFeignClient.findAuctionToSeller(memberUuid, pageNo),
+                        FeignDomainType.AUCTION, ExceptionType.GETLIST)
+                .stream().map(ResponseGetAuctionDto::new)
                 .toList();
     }
 
-    // 구매자의 낙찰 내역 조회
-    public List<ResponseGetAuctionDto> getBuyerAuctionList(String memberUuid){
-        return auctionFeignClient.findAuctionTrue(memberUuid)
-                .getBody().stream().map(ResponseGetAuctionDto::new)
-                .toList();
+    public ResponseGetAuctionDetailDto getAuctionDetail(String boardUuid){
+        return new ResponseGetAuctionDetailDto(
+                auctionConverter.convertSingleVo(
+                        auctionFeignClient.findAuctionByBoardUuid(boardUuid),
+                            FeignDomainType.AUCTION, ExceptionType.GETLIST));
     }
+
 }

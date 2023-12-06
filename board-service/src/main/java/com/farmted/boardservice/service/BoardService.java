@@ -22,6 +22,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -93,31 +95,6 @@ public class BoardService {
         return combinationListDto;
     }
 
-// 구매자 입장 게시글 카테고리별 리스트 조회
-    // 이 경우엔 역으로 Auction에서 받아온 BoardUuid를 기반으로 Board가 Uuid를 만들어야 함
-    // 그럼 SALE의 경우는 어떻게 체크 해야하지? (Order만들어야하나?)
-//    public ResponseGetCombinationListDto getBuyerBoardList(BoardType category, int pageNo, String buyerUuid){
-//        ResponseGetCombinationListDto combinationListDto = new ResponseGetCombinationListDto();
-//        switch (category){
-//            // 당장 경매의 경우만 구현함
-//            case AUCTION -> combinationListDto.setAuctionList(auctionService.getSellerAuctionList(buyerUuid));
-//            case SALE -> {}//어캄?
-//            case PRODUCT -> {}
-//        }
-//        // 이럼 경매에서 Page 정보도 반환받아야 함
-//            // 차라리 낙찰 리스트의 경우는 상품명+낙찰가+판매자명+boardUuid만 표기하는 페이징 리스트를
-//            // Board-Service를 통하지 않고 Auction이 직접 반환하는게 나을듯
-//        List<ResponseGetBoardDto> combiBoardDto = new ArrayList<>();
-//        for(ResponseGetAuctionDto auction : combinationListDto.getAuctionList()){
-//            combiBoardDto.add(boardRepository.findBidderByBoardUuid(auction.getBoardUuid())
-//                    .orElseThrow(()->new BoardException(ExceptionType.GETLIST)));
-//        }
-//        Page<ResponseGetBoardDto> pageBoardDto =
-//        combinationListDto.setBoardList(combiBoardDto);
-//
-//        return combinationListDto;
-//    }
-
 // 작성자 글 카테고리별 리스트 조회 (판매자 입장)
     public ResponseGetCombinationListDto getWriterBoardList(BoardType category, int pageNo, String sellerUuid) {
         if (pageNo < 1) pageNo = 0;
@@ -137,7 +114,7 @@ public class BoardService {
     // 경매 전용 카테고리인 경우엔 따로 조회
         if(BoardType.AUCTION.equals(category))
             combinationListDto.setAuctionList(
-                    auctionService.getBuyerAuctionList(sellerUuid)
+                    auctionService.getSellerAuctionList(sellerUuid, pageNo)
             );
         return combinationListDto;
     }
@@ -151,17 +128,14 @@ public class BoardService {
         combinationDetailDto.setBoardDetail(boardRepository.findDetailByBoardUuid(boardUuid)
                 .orElseThrow(() -> new BoardException(ExceptionType.GET)));
 
-        // 해당하는 상품 가져오기
-        combinationDetailDto.setProductDetail(productService.getProductByBoardUuid(boardUuid));
-        // 해당하는 경매 가져오기
-//        combinationDetailDto.setAuctionDetail(
-//                new ResponseGetAuctionDetailDto(
-//                        auctionConverter.convertSingleVo(
-//                                ,
-//                                FeignDomainType.AUCTION, ExceptionType.GET
-//                        )
-//                )
-//        );
+        // 상품이 포함된 카테고리의 경우 상품 가져오기
+        BoardType category = combinationDetailDto.getBoardDetail().getBoardType();
+        switch(category){
+            case SALE, AUCTION -> combinationDetailDto.setProductDetail(productService.getProductByBoardUuid(boardUuid)); 
+        }
+        // 경매 카테고리의 경우 가져오기
+        if(BoardType.AUCTION.equals(category))
+            combinationDetailDto.setAuctionDetail(auctionService.getAuctionDetail(boardUuid));
         return combinationDetailDto;
     }
 
@@ -170,11 +144,24 @@ public class BoardService {
     public void updateBoard(RequestUpdateProductBoardDto updateDTO, String boardUuid, String uuid) {
         Board updateBoard = boardRepository.findByBoardUuidAndBoardStatusTrue(boardUuid)
                 .orElseThrow(()->new BoardException(ExceptionType.UPDATE));
-        // 게시글 수정
-        updateBoard.updateBoardInfo(updateDTO);
+        // 카테고리 변경의 경우, 판매 <-> 경매(종료된)만 가능
         // 상품이 포함된 게시글의 경우만 수정 요청
         switch (updateBoard.getBoardType()){
-            case PRODUCT, SALE, AUCTION -> productService.checkUpdateProduct(boardUuid, updateDTO, uuid);
+            case SALE, AUCTION -> {
+                if (Objects.requireNonNull(updateDTO.boardType()) == BoardType.SALE || updateDTO.boardType() == BoardType.AUCTION) {
+                    updateBoard.updateBoardInfo(updateDTO);
+                    productService.checkUpdateProduct(boardUuid, updateDTO, uuid);
+                }
+            }
+            // 기존 게시글의 경우 타입 변경 불가능
+            case NOTICE, COMMISSION, CUSTOMER_SERVICE -> {
+                if(updateBoard.getBoardType().equals(updateDTO.boardType()))
+                    updateBoard.updateBoardInfo(updateDTO);
+                 else
+                     throw new BoardException(updateBoard.getBoardType(), ExceptionType.UPDATE);
+
+            }
+            case PRODUCT -> throw new BoardException(BoardType.PRODUCT, ExceptionType.UPDATE);
         }
     }
 
@@ -183,11 +170,16 @@ public class BoardService {
     public void deleteBoard(String boardUuid, String uuid) {
         Board deleteBoard = boardRepository.findByBoardUuidAndBoardStatusTrue(boardUuid)
                 .orElseThrow(()->new BoardException(ExceptionType.DELETE));
-        // 게시글 삭제
-        deleteBoard.deactiveStatus();
+        // 작성자 본인 확인
+        if(deleteBoard.getMemberUuid().equals(uuid)){
+            // 게시글 삭제
+            deleteBoard.deactiveStatus();
+        } else {
+            throw new BoardException(ExceptionType.DELETE);
+        }
         // 상품이 포함된 게시글의 경우만 비활성화 요청
         switch (deleteBoard.getBoardType()) {
-            case PRODUCT, SALE, AUCTION -> productService.checkDeleteProduct(boardUuid, uuid);
+            case SALE, AUCTION -> productService.checkDeleteProduct(boardUuid, uuid);
         }
     }
 }

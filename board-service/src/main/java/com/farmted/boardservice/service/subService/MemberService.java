@@ -14,6 +14,7 @@ public class MemberService {
     private final MemberFeignClient memberFeignClient;
     private final FeignConverter<MemberVo> memberConverter;
 
+    // 글 작성 시 회원 정보 받기
     public MemberVo getMemberInfo(String memberUuid){
         return memberConverter.convertSingleVo(
                 memberFeignClient.getMemberInfo(memberUuid),
