@@ -4,6 +4,7 @@ import com.farmted.memberservice.domain.Member;
 import com.farmted.memberservice.dto.request.RequestCreateMemberDto;
 import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
 import com.farmted.memberservice.dto.request.SearchMemberParam;
+import com.farmted.memberservice.dto.response.MemberNameImageDto;
 import com.farmted.memberservice.dto.response.ResponsePagingToListDto;
 import com.farmted.memberservice.global.GlobalResponseDto;
 import com.farmted.memberservice.service.MemberService;
@@ -58,10 +59,16 @@ public class MemberController {
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
+    // 전체 회원 조회
     @GetMapping("/all-members")
     public ResponseEntity<?> getAllMember(SearchMemberParam param, Pageable pageable) {
 //        return ResponseEntity.ok(memberService.getAllMember(param, pageable));
         ResponsePagingToListDto dto = memberService.getAllMember(param, pageable);
         return ResponseEntity.ok(GlobalResponseDto.of(dto));
+    }
+
+    @GetMapping("/member/info")
+    public ResponseEntity<?> memberNameAndImage(@RequestHeader("UUID") String memberUuid) {
+        return ResponseEntity.ok(GlobalResponseDto.of(memberService.memberNameAndImage(memberUuid)));
     }
 }

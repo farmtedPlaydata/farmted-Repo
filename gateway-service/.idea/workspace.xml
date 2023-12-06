@@ -5,19 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ef9efffa-6854-43fa-853a-8a50f38aca78" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/MemberServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/MemberServiceApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/controller/MemberController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/feignclient/PassFeignClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/feignclient/PassFeignClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../member-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/controller/PassController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/controller/PassController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/dto/response/ResponseTokenDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/repository/PassRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/repository/PassRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +111,8 @@
       <workItem from="1701606936627" duration="6695000" />
       <workItem from="1701649348385" duration="3730000" />
       <workItem from="1701655969388" duration="53000" />
-      <workItem from="1701765084519" duration="863000" />
+      <workItem from="1701765084519" duration="1017000" />
+      <workItem from="1701839205561" duration="613000" />
     </task>
     <servers />
   </component>

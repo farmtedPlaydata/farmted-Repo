@@ -3,6 +3,7 @@ package com.farmted.memberservice.service;
 import com.farmted.memberservice.dto.request.RequestCreateMemberDto;
 import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
 import com.farmted.memberservice.dto.request.SearchMemberParam;
+import com.farmted.memberservice.dto.response.MemberNameImageDto;
 import com.farmted.memberservice.dto.response.MemberResponseDto;
 import com.farmted.memberservice.dto.response.ResponsePagingToListDto;
 import com.farmted.memberservice.enums.RoleEnums;
@@ -19,4 +20,5 @@ public interface MemberService {
     void deleteMember(String uuid);
     void grantRole(String uuid, RoleEnums role);
     ResponsePagingToListDto getAllMember(SearchMemberParam param, Pageable pageable);
+    MemberNameImageDto memberNameAndImage(String uuid);
 }

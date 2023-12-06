@@ -3,6 +3,7 @@ package com.farmted.memberservice.service;
 import com.farmted.memberservice.domain.Member;
 import com.farmted.memberservice.dto.request.RequestCreateMemberDto;
 import com.farmted.memberservice.dto.request.SearchMemberParam;
+import com.farmted.memberservice.dto.response.MemberNameImageDto;
 import com.farmted.memberservice.dto.response.MemberResponseDto;
 import com.farmted.memberservice.dto.response.ResponsePagingToListDto;
 import com.farmted.memberservice.enums.RoleEnums;
@@ -94,5 +95,12 @@ public class MemberServiceImpl implements MemberService {
         ResponsePagingToListDto dto = new ResponsePagingToListDto();
         dto.setMemberList(pagingMember);
         return dto;
+    }
+
+    @Override
+    public MemberNameImageDto memberNameAndImage(String uuid) {
+        Member member = memberRepository.findByMemberUuid(uuid)
+                .orElseThrow(() -> new MemberException("MemberService - memberInfo"));
+        return new MemberNameImageDto(member.getMemberName(), member.getMemberImage());
     }
 }
