@@ -1,4 +1,4 @@
-package com.farmted.boardservice.service;
+package com.farmted.boardservice.demoTest;
 
 import com.farmted.boardservice.dto.request.RequestCreateBoardDto;
 import com.farmted.boardservice.enums.BoardType;
@@ -7,6 +7,7 @@ import com.farmted.boardservice.feignClient.AuctionFeignClient;
 import com.farmted.boardservice.feignClient.MemberFeignClient;
 import com.farmted.boardservice.feignClient.ProductFeignClient;
 import com.farmted.boardservice.repository.BoardRepository;
+import com.farmted.boardservice.service.BoardService;
 import com.farmted.boardservice.service.subService.AuctionService;
 import com.farmted.boardservice.service.subService.MemberService;
 import com.farmted.boardservice.service.subService.NoticeService;
