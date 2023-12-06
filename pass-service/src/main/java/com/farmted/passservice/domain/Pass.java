@@ -38,6 +38,4 @@ public class Pass extends TimeStamp implements Serializable {
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
-    private String imageUrl;
-
 }
