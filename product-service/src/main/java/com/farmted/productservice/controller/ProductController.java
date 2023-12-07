@@ -3,6 +3,7 @@ package com.farmted.productservice.controller;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
+import com.farmted.productservice.enums.ProductType;
 import com.farmted.productservice.service.ProductService;
 import com.farmted.productservice.util.GlobalResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class ProductController {
     private final ProductService productService;
 
     // 판매자 상품 등록
+    // TODO: 단순 상품, 경매 상품 구분
     @PostMapping("/products/boards")
     public ResponseEntity<?>  saveProduct(
             @RequestBody ProductSaveRequestDto productSaveRequestDto,
@@ -51,7 +53,7 @@ public class ProductController {
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
-    // 전체 상품 조회
+    // 전체 상품 조회 -> Sale
     @GetMapping("/products")
     public ResponseEntity<?> getProductList(
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo

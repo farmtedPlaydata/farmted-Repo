@@ -1,6 +1,8 @@
 package com.farmted.productservice.dto.response;
 
 import com.farmted.productservice.domain.Product;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Getter @Setter @Builder
@@ -13,6 +15,8 @@ public class ProductResponseDto {
     private String source;
     private String image;
     private boolean status;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private boolean auctionStatus;
 
     public ProductResponseDto(Product product) {

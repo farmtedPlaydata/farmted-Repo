@@ -1,4 +1,4 @@
-package com.farmted.auctionservice.dto.responseDto;
+package com.farmted.auctionservice.dto.responseAuctionDto;
 
 
 import com.farmted.auctionservice.domain.Auction;

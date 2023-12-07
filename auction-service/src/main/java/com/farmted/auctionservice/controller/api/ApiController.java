@@ -1,14 +1,16 @@
 package com.farmted.auctionservice.controller.api;
 
-import com.farmted.auctionservice.dto.requestDto.AuctionCreateRequestDto;
-import com.farmted.auctionservice.dto.responseDto.AuctionStatusResponseDto;
+import com.farmted.auctionservice.dto.requestAuctionDto.AuctionCreateRequestDto;
+import com.farmted.auctionservice.dto.responseAuctionDto.AuctionGetResponseDto;
+import com.farmted.auctionservice.dto.responseAuctionDto.AuctionStatusResponseDto;
 import com.farmted.auctionservice.service.AuctionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
+// Api는 product관련
 
 @RestController
 @RequiredArgsConstructor
@@ -33,4 +35,12 @@ public class ApiController {
         List<AuctionStatusResponseDto> auctionStatusResponseDtoList = auctionService.endAuctions();
         return ResponseEntity.ok(auctionStatusResponseDtoList);
     }
+
+    // 경매 내역 상세 조회
+    @GetMapping("/{productUuid}/auctions")
+    public ResponseEntity<?> getAuctionIng(@PathVariable String productUuid){
+        AuctionGetResponseDto auction = auctionService.getAuctionList(productUuid);
+        return ResponseEntity.ok(auction);
+    }
+
 }
