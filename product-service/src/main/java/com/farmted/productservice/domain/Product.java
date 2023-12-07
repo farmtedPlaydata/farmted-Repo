@@ -2,6 +2,7 @@ package com.farmted.productservice.domain;
 
 
 import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
+import com.farmted.productservice.enums.ProductType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -39,7 +40,9 @@ public class Product extends TimeStamp{
     @NotNull
     private boolean status;
 
-    @NotNull
+    @Enumerated(EnumType.STRING)
+    private ProductType productType;
+
     private boolean auctionStatus;
 
     @NotNull
