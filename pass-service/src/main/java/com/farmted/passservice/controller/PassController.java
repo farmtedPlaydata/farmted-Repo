@@ -62,4 +62,12 @@ public class PassController {
         String uuid = passService.findUuidByEmail(email);
         return ResponseEntity.ok(GlobalResponseDto.of(uuid));
     }
+
+    @PostMapping("/reissue/{uuid}")
+    public ResponseEntity<?> reIssue(@PathVariable String uuid,
+                                     HttpServletResponse response) {
+        String token = passService.reIssue(uuid);
+        jwtProvider.setToken(token, TokenType.ACCESS, response);
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
+    }
 }

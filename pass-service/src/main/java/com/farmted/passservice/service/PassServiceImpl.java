@@ -4,6 +4,7 @@ import com.farmted.passservice.domain.Pass;
 import com.farmted.passservice.dto.request.RequestCreatePassDto;
 import com.farmted.passservice.dto.request.RequestLoginDto;
 import com.farmted.passservice.dto.response.ResponseListDto;
+import com.farmted.passservice.enums.RoleEnums;
 import com.farmted.passservice.enums.TokenType;
 import com.farmted.passservice.exception.PassException;
 import com.farmted.passservice.repository.PassRepository;
@@ -91,6 +92,17 @@ public class PassServiceImpl implements PassService {
                 .orElseThrow(() -> new PassException("PassService - findUuidByEmail"));
 
         return findPass.getUuid();
+    }
+
+    @Override
+    public String reIssue(String uuid) {
+        redisRepository.findById(uuid)
+                .orElseThrow(() -> new PassException("PassService - reIssue : RefreshToken을 찾을 수 없습니다."));
+
+        Pass pass = passRepository.findByUuid(uuid)
+                .orElseThrow(() -> new PassException("PassService - reIssue : 사용자를 찾을 수 없습니다."));
+
+        return jwtProvider.createToken(uuid, pass.getRole(), TokenType.ACCESS);
     }
 
 

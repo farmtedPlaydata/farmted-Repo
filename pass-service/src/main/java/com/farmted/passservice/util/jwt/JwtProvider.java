@@ -47,7 +47,7 @@ public class JwtProvider {
     public static final String AUTH_KEY = "auth";
     public static final String BEARER_PREFIX = "Bearer-";
 
-    public static final long ACCESS_TOKEN_TIME = 10 * 60 * 60 * 1000L;
+    public static final long ACCESS_TOKEN_TIME = 10 * 60 * 60;
     public static final long REFRESH_TOKEN_TIME = 14 * 24 * 60 * 60 * 1000L;    // 2주
 
 
@@ -132,6 +132,12 @@ public class JwtProvider {
         // Jwts.parserBuilder를 통해 JWT parser 생성, 토큰의 서명키 설정, 토큰의 Cliam(토큰에 담긴 정보) 반환
         return  Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
+
+    public RoleEnums getRoleFromToken(String token) {
+        Claims claims = getUserInfoFromToken(token);
+        return claims.get(AUTH_KEY, RoleEnums.class);
+    }
+
 
     public Authentication createAuth(String uuid) {
         UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(uuid);

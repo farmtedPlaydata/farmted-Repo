@@ -17,4 +17,5 @@ public interface PassService {
     void logout(String uuid);
     List<ResponseListDto> getPassByAll(int pageNo);
     String findUuidByEmail(String email);
+    String reIssue(String uuid);
 }

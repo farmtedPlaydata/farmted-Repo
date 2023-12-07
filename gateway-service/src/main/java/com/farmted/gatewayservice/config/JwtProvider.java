@@ -21,6 +21,10 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class JwtProvider {
 
+    public static final String AUTH_HEADER = "Authorization";
+    public static final String BEARER_PREFIX = "Bearer-";
+
+
     @Value("${jwt-secret-key}")
     private String secretkey;
     private Key key;
@@ -29,6 +33,16 @@ public class JwtProvider {
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(secretkey);
         key = Keys.hmacShaKeyFor(bytes);
+    }
+
+    // header Token 가져오기
+    public String resolveToken(Cookie cookie) throws UnsupportedEncodingException {
+        // cookie에서 값을 가져온 뒤 URL 디코딩
+        String bearerToken = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);  // 표준 상수 사용
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
     public boolean validateToken(String accessToken) {

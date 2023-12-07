@@ -10,6 +10,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -21,6 +22,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
@@ -57,7 +59,8 @@ public class JwtFilter extends OncePerRequestFilter {
                     // 만료된 AccessToken인 경우, RefreshToken을 검증하고 새로운 AccessToken 생성
                     Claims passInfo = jwtProvider.getUserInfoFromToken(accessToken);
                     String uuid = passInfo.getSubject();
-                    String createdAccessToken = jwtProvider.createToken(uuid, RoleEnums.GUEST, TokenType.ACCESS);
+                    RoleEnums role = jwtProvider.getRoleFromToken(accessToken);
+                    String createdAccessToken = jwtProvider.createToken(uuid, role, TokenType.ACCESS);
                     
                     // 생성된 AccessToken을 응답에 추가
                     ResponseCookie cookie = ResponseCookie.from(
