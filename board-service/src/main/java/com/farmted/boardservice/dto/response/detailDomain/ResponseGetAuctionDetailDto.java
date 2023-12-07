@@ -1,6 +1,7 @@
 package com.farmted.boardservice.dto.response.detailDomain;
 
 import com.farmted.boardservice.vo.AuctionVo;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class ResponseGetAuctionDetailDto {
 
     // 경매용 정보

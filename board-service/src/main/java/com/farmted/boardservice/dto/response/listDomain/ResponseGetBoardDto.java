@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ResponseGetBoardDto {
     // 게시글용 정보
+    private String memberName;
     private String boardUuid;
     private BoardType boardType;
     private String boardTitle;
@@ -20,7 +21,8 @@ public class ResponseGetBoardDto {
     private LocalDateTime createAt;
 
     public ResponseGetBoardDto(Board board) {
-        this.boardUuid = board.getBoardUuID();
+        this.memberName = board.getMemberName();
+        this.boardUuid = board.getBoardUuid();
         this.boardType = board.getBoardType();
         this.boardTitle = board.getBoardTitle();
         this.viewCount = board.getViewCount();
