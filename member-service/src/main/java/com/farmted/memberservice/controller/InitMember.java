@@ -36,7 +36,8 @@ public class InitMember {
                 em.persist(new Member(UUID.randomUUID().toString(),"Test" + i,
                         RoleEnums.USER,
                         "010-0000-000" + i,
-                        true));
+                        true,
+                        10000L));
             }
         }
     }

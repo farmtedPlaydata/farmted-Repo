@@ -12,7 +12,6 @@ import com.farmted.memberservice.exception.MemberException;
 import com.farmted.memberservice.feignclient.PassFeignClient;
 import com.farmted.memberservice.global.GlobalResponseDto;
 import com.farmted.memberservice.repository.MemberRepository;
-import com.farmted.memberservice.vo.PassVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -109,6 +107,11 @@ public class MemberServiceImpl implements MemberService {
     public void checkIn(String uuid) {
         Member member = memberRepository.findByMemberUuid(uuid)
                 .orElseThrow(() -> new MemberException("MemberService - checkIn"));
-        member.checkIn(member);
+
+        if (member.isCheckIn()) {
+            log.info("이미 출석체크를 했습니다.");
+        } else {
+            member.checkedIn(member);
+        }
     }
 }

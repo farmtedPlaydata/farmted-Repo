@@ -44,12 +44,14 @@ public class Member extends TimeStamp implements Serializable {
 
     private boolean checkIn;
 
-    public Member(String memberUuid, String memberName, RoleEnums memberRole, String memberPhone, Boolean memberStatus) {
+    public Member(String memberUuid, String memberName, RoleEnums memberRole, String memberPhone, Boolean memberStatus,
+                  Long memberBalance) {
         this.memberUuid = memberUuid;
         this.memberName = memberName;
         this.memberRole = memberRole;
         this.memberPhone = memberPhone;
         this.memberStatus = memberStatus;
+        this.memberBalance = memberBalance;
     }
 
     public void updateMember(RequestUpdateMemberDto dto) {
@@ -64,8 +66,9 @@ public class Member extends TimeStamp implements Serializable {
         this.memberRole = this.memberRole == roles ? RoleEnums.USER : roles;
     }
 
-    public void checkIn(Member member) {
+    public void checkedIn(Member member) {
         this.checkIn = true;
+        this.memberBalance = member.getMemberBalance() + 1000L;
     }
 
     public void checkInRefresh() {
