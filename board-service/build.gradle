@@ -39,8 +39,6 @@ dependencies {
     testImplementation 'org.awaitility:awaitility:4.2.0'
         // Hibernate Naming Strategy 라이브러리
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '3.1.5'
-        // 테스트코드 내 Feign통신 추가를 위한 wireMock 라이브러리
-    testImplementation 'com.github.tomakehurst:wiremock-jre8:2.30.1'
     // swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 }

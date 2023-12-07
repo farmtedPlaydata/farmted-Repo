@@ -1,5 +1,6 @@
 package com.farmted.boardservice.feignClient;
 
+import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.util.GlobalResponseDto;
 import com.farmted.boardservice.vo.ProductVo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "product-service", path= "/product-service")
+@FeignClient(name = "${service.product.name}", path= "${service.product.url}")
 public interface ProductFeignClient {
     // 판매자 상품 게시글 등록
         // 반환 boolean
@@ -21,6 +22,7 @@ public interface ProductFeignClient {
     @GetMapping("/products/seller/{member_uuid}")
     ResponseEntity<GlobalResponseDto<List<ProductVo>>> getProductListSeller(
             @PathVariable (value = "member_uuid") String memberUuid,
+            @RequestParam(value="category") BoardType category,
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo);
 
 
@@ -35,6 +37,7 @@ public interface ProductFeignClient {
         // 반환 List<ProductResponseDto>
     @GetMapping("/products")
     ResponseEntity<GlobalResponseDto<List<ProductVo>>> getProductList(
+            @RequestParam(value="category") BoardType category,
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo);
 
     // 상품 상세 조회

@@ -40,20 +40,26 @@ public class Board extends TimeStamp {
     @Column(nullable = false)
     private boolean boardStatus;
 
+    @Column(nullable = false)
+    private String memberName;
+
+    @Column
+    private String memberProfile;
+
     // member-service와 통신용 FK
     @Column(nullable = false)
     private String memberUuid;
 
     // 다른 MS와 통신하기 위한 UUID
     @Column(nullable = false, updatable = false, unique = true)
-    private String boardUuID;
+    private String boardUuid;
 
     ////////////////////////////////////////////////
     // 엔티티 최초 생성 시 자동 초기화할 값
     // UUID, Status, viewCount
     @PrePersist
     public void createUuid(){
-        boardUuID = UUID.randomUUID().toString();
+        boardUuid = UUID.randomUUID().toString();
         boardStatus = true;
         viewCount = 0;
     }

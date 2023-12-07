@@ -1,14 +1,14 @@
 package com.farmted.auctionservice.controller;
 
-import com.farmted.auctionservice.dto.requestDto.AuctionCreateRequestDto;
 import com.farmted.auctionservice.dto.responseDto.AuctionBuyerResponseDto;
 import com.farmted.auctionservice.dto.responseDto.AuctionSellerResponseDto;
 import com.farmted.auctionservice.service.AuctionService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -19,17 +19,11 @@ public class AuctionController {
 
     private final AuctionService auctionService;
 
-    // 경매 정보 생성 및 시작
-    @PostMapping(value = "/auctions/products")
-    public ResponseEntity<?> createAuction(
-            @RequestHeader String memberUuid,
-            @RequestHeader String boardUuid,
-            AuctionCreateRequestDto auctionCreateRequestDto){
-        auctionService.createAuction(auctionCreateRequestDto, memberUuid,boardUuid);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+    // 경매 상세 내역 조회
 
-    // 판매자 낙찰 내역 조회
+    // 경매 중인 내역 조회 -> 경매 진행 상태
+
+    // 판매자 -> 낙찰 내역 조회 -> memberUuid
     @GetMapping("/seller/{memberUuid}/board")
     public ResponseEntity<?> findAuctionToSeller(
             @PathVariable String memberUuid
@@ -38,12 +32,12 @@ public class AuctionController {
         return ResponseEntity.ok(auctionBuyerList);
     }
 
-    // 구매자 낙찰 내역 조회
-    @GetMapping("/{memberUuid}/board")
+    // 구매자  ->  낙찰 내역 조회 -> auctionBuyer
+    @GetMapping("/{auctionBuyer}/board")
         public ResponseEntity<?> findAuctionTrue(
-                @PathVariable String memberUuid
+                @PathVariable String auctionBuyer
     ){
-        List<AuctionSellerResponseDto> auctionSellerList = auctionService.auctionTrueList(memberUuid);
+        List<AuctionSellerResponseDto> auctionSellerList = auctionService.auctionTrueList(auctionBuyer);
         return ResponseEntity.ok(auctionSellerList);
     }
 

@@ -10,7 +10,7 @@ public enum BoardType {
     AUCTION("Auction", "경매"),
     COMMISSION("Commission", "구매요청"),
     SALE("Sale", "판매"),
-    PRODUCT("Product", "상품 전체"),
+    PRODUCT("Product", "상품(판매+경매)"),
     NOTICE("Notice", "공지사항"),
     CUSTOMER_SERVICE("CustomerService", "고객센터");
 

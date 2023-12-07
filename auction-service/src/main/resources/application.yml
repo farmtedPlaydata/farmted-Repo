@@ -30,3 +30,7 @@ eureka:
   # 인스턴스별로 유레카에 보여지는 표기를 다르게 설정함
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+## 스케줄러 세팅
+schedules:
+  cron: "*/60 * * * * *"  # 1초마다 스케줄러 실행
