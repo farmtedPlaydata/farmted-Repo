@@ -1,0 +1,25 @@
+server:
+  port: 9090
+
+# Swagger
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  # Database
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/msa_db
+    username: root
+    password: 12341234
+    # Uncomment the line below if you want to set a different password
+    # password: 001112
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

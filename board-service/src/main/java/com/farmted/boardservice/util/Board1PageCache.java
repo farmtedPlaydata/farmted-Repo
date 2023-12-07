@@ -12,16 +12,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class Auction1PageCache {
+// 메인 페이지인 상품(판매+경매)의 1페이지를 가지는 캐싱 코드
+public class Board1PageCache {
     private Page<ResponseGetBoardDto> page1;
     private final BoardRepository boardRepository;
 
     // yml에 cron 설정 저장
     @Scheduled(cron = "${schedules.cron}")
     private void updateCache(){
-        page1 = boardRepository.findByBoardTypeAndBoardStatusTrue(BoardType.AUCTION,
-                PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createdAt")))
-                .map(ResponseGetBoardDto::new);
+        page1 = boardRepository.findByBoardType(BoardType.PRODUCT,
+                PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createdAt")));
         System.out.println("@@@@ 페이징 캐싱 완료! : 콘텐츠 갯수 - "+page1.getContent().size());
     }
     public Page<ResponseGetBoardDto> getPage1(){
