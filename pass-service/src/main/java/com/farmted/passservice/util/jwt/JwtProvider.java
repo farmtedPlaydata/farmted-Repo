@@ -47,8 +47,8 @@ public class JwtProvider {
     public static final String AUTH_KEY = "auth";
     public static final String BEARER_PREFIX = "Bearer-";
 
-    public static final long ACCESS_TOKEN_TIME = 10 * 60 * 60L;
-    public static final long REFRESH_TOKEN_TIME = 14 * 24 * 60 * 60L;    // 2주
+    public static final long ACCESS_TOKEN_TIME = 10 * 60 * 60 * 1000L;
+    public static final long REFRESH_TOKEN_TIME = 14 * 24 * 60 * 60 * 1000L;    // 2주
 
 
     @Value("${jwt-secret-key}")
