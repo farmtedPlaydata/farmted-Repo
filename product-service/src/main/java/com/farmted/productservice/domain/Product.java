@@ -1,6 +1,8 @@
 package com.farmted.productservice.domain;
 
 
+import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
+import com.farmted.productservice.enums.ProductType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -38,7 +40,9 @@ public class Product extends TimeStamp{
     @NotNull
     private boolean status;
 
-    @NotNull
+    @Enumerated(EnumType.STRING)
+    private ProductType productType;
+
     private boolean auctionStatus;
 
     @NotNull
@@ -51,12 +55,20 @@ public class Product extends TimeStamp{
     public void createUuid(){
         uuid = UUID.randomUUID().toString();
         status = true;
-        auctionStatus = true;
+        auctionStatus = false;
     }
 
-    // 가격 수정
-    public void modifyPrice(int price){
-        this.price =price;
+
+    public void modifyProduct(ProductUpdateRequestDto productUpdateRequestDto){
+        this.name = productUpdateRequestDto.name();
+        this.stock= productUpdateRequestDto.stock();
+        this.price= productUpdateRequestDto.price();
+        this.source= productUpdateRequestDto.source();
+        this.image = productUpdateRequestDto.image();
+    }
+
+    public void updateStatus(boolean auctionStatus){
+        this.auctionStatus=true;
     }
 
 

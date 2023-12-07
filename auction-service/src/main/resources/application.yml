@@ -17,6 +17,14 @@ spring:
     hibernate:
       ddl-auto: create
 
+  # Redis
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: 1234 #비번을 만들려면 레디스를 먼저 해야 하는건가?
+
+
 server:
   port: 8082
 
@@ -30,3 +38,7 @@ eureka:
   # 인스턴스별로 유레카에 보여지는 표기를 다르게 설정함
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+## 스케줄러 세팅
+schedules:
+  cron: "*/60 * * * * *"  # 1초마다 스케줄러 실행

@@ -1,3 +1,15 @@
+# Feign 클라이언트 설정
+service:
+  product:
+    name: "product-service"
+    url: "/product-service"
+  auction:
+    name: "auction-service"
+    url: "/auction-service"
+  member:
+    name: "member-service"
+    url: "/member-service"
+# board-service 설정
 server:
   port: 8080
 spring:

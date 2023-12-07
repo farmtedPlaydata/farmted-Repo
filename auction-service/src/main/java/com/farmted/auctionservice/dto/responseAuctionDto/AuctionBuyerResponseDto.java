@@ -1,11 +1,15 @@
-package com.farmted.auctionservice.dto.responseDto;
+package com.farmted.auctionservice.dto.responseAuctionDto;
 
 
 import com.farmted.auctionservice.domain.Auction;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AuctionBuyerResponseDto {
     private int auctionPrice; // 가격
 
@@ -15,7 +19,7 @@ public class AuctionBuyerResponseDto {
 
     private Boolean auctionStatus; // 0: 경매중, 1:  경매 종료
 
-    private String memberUuid;
+    private String memberUuid; // 판매자
 
     public AuctionBuyerResponseDto(Auction auction){
         this.auctionPrice=auction.getAuctionPrice();
