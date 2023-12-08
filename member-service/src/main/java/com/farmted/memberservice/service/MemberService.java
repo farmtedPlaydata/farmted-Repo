@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface MemberService {
     // 회원 상세 정보
-    void createMember(RequestCreateMemberDto dto, String uuid);
+    void createMember(RequestCreateMemberDto dto);
     // 회원 정보 수정
     void updateMember(RequestUpdateMemberDto dto, String uuid);
     // 회원 삭제

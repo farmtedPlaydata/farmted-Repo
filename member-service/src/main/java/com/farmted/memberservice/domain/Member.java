@@ -68,7 +68,7 @@ public class Member extends TimeStamp implements Serializable {
 
     public void checkedIn(Member member) {
         this.checkIn = true;
-        this.memberBalance = member.getMemberBalance() + 1000L;
+        this.memberBalance += 1000L;
     }
 
     public void checkInRefresh() {

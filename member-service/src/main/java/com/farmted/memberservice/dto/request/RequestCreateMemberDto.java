@@ -16,6 +16,7 @@ public class RequestCreateMemberDto {
     private String memberAddressDetail;
     private String memberPhone;
     private String uuid;
+    private String email;
 
     public Member toEntity() {
         return Member.builder()

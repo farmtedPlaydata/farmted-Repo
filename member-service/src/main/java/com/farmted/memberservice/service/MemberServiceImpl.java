@@ -26,17 +26,16 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PassFeignClient passFeignClient;
 
-    @Transactional
     @Override
-    public void createMember(RequestCreateMemberDto dto, String email) {
+    public void createMember(RequestCreateMemberDto dto) {
         try {
-            ResponseEntity<?> re = passFeignClient.findByEmail(email);
+            ResponseEntity<?> re = passFeignClient.findByEmail(dto.getEmail());
             String uuid =((GlobalResponseDto<?>)re.getBody()).getData().toString();
             dto.setMemberRole(RoleEnums.USER);
             dto.setUuid(uuid);
@@ -47,7 +46,6 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    @Transactional
     @Override
     public void updateMember(RequestUpdateMemberDto dto, String uuid) {
         try {
@@ -59,7 +57,6 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    @Transactional
     @Override
     public void deleteMember(String uuid) {
         Optional<Member> member = memberRepository.findByMemberUuid(uuid);
@@ -74,7 +71,6 @@ public class MemberServiceImpl implements MemberService {
 //                        () -> new RuntimeException("ERROR : member-service - deleteMember"));
     }
 
-    @Transactional
     @Override
     public void grantRole(String uuid, RoleEnums role) {
         Member member = memberRepository.findByMemberUuid(uuid)
@@ -87,6 +83,7 @@ public class MemberServiceImpl implements MemberService {
         member.changeRole(newRole);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public ResponsePagingToListDto getAllMember(SearchMemberParam param, Pageable pageable) {
         Page<MemberResponseDto> pagingMember = memberRepository.findAll(param, pageable);
@@ -95,6 +92,7 @@ public class MemberServiceImpl implements MemberService {
         return dto;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public MemberNameImageDto memberNameAndImage(String uuid) {
         Member member = memberRepository.findByMemberUuid(uuid)
@@ -103,7 +101,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    @Transactional
     public void checkIn(String uuid) {
         Member member = memberRepository.findByMemberUuid(uuid)
                 .orElseThrow(() -> new MemberException("MemberService - checkIn"));

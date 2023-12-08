@@ -13,15 +13,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Scheduler {
 
-    private MemberRepository memberRepository;
-
-    @Autowired
-    public Scheduler(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+    private final MemberRepository memberRepository;
 
     @Scheduled(cron = "0 0 0 * * *")    // 매일 자정
-    public void checkInRefresh() {
+    private void checkInRefresh() {
         List<Member> members = memberRepository.findAll();
         for (Member member : members) {
             member.checkInRefresh();    // 출석체크 초기화

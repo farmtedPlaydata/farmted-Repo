@@ -23,10 +23,9 @@ public class MemberController {
     private final MemberService memberService;
 
     // 회원 상세 정보
-    @PostMapping("/members/{email}")
-    public ResponseEntity<?> createMember(@PathVariable String email,
-                                          @RequestBody RequestCreateMemberDto dto) {
-        memberService.createMember(dto, email);
+    @PostMapping("/members/")
+    public ResponseEntity<?> createMember(@RequestBody RequestCreateMemberDto dto) {
+        memberService.createMember(dto);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
