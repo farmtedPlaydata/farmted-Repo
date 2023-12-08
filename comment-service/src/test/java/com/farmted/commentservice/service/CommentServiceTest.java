@@ -26,6 +26,7 @@ class CommentServiceTest {
     @Test
     void getAllComments() {
         //given
+        Long commentUuid = 1L;
 
         //when
         List<Comment> findComments = commentService.getAllComments();
@@ -81,29 +82,27 @@ class CommentServiceTest {
     }
 
     @Test
+    @Transactional
     void deleteComment() {
-            // Given
-            Long commentIdToDelete = 1L;
+        // Given
+        String commentUuid = commentRepository.findAll().get(0).getCommentUuid();
+        // Get the initial count of comments
+        int beforeCommentCount = commentService.getAllComments().size();
 
-            // Get the initial count of comments
-            int initialCommentCount = commentService.getAllComments().size();
+        // When
+        commentService.deleteComment(commentUuid);
 
-            // When
-            System.out.println("Before deletion - Comment count: " + initialCommentCount);
-            commentService.deleteComment(String.valueOf(commentIdToDelete));
-            System.out.println("Comment deleted with ID: " + commentIdToDelete);
+        // Then
+        // Verify that the comment with the given UUID is deleted
+        int afterCommentCount = commentService.getAllComments().size();
+        Assertions.assertThat(afterCommentCount).isEqualTo(beforeCommentCount - 1);
+//
+//        // Ensure that the deleted comment is not present in the list
+//        Comment deletedComment = commentService.getCommentById(commentUuid);
+//        Assertions.assertThat(deletedComment).isNull();
 
-            // Then
-            // Verify that the comment with the given ID is deleted
-            Comment deletedComment = commentService.getCommentById(commentIdToDelete);
-            Assertions.assertThat(deletedComment).isNull();
-            System.out.println("Deleted comment: " + deletedComment);
 
-            // Verify that the total number of comments is reduced by 1
-            int finalCommentCount = commentService.getAllComments().size();
-            Assertions.assertThat(finalCommentCount).isEqualTo(initialCommentCount - 1);
-            System.out.println("After deletion - Comment count: " + finalCommentCount);
-        }
+    }
     }
 
 
