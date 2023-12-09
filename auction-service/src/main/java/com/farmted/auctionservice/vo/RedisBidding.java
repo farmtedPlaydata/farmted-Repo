@@ -1,20 +1,22 @@
-package com.farmted.auctionservice.domain;
+package com.farmted.auctionservice.vo;
 
-import jakarta.persistence.*;
+import com.farmted.auctionservice.domain.TimeStamp;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-@NoArgsConstructor @AllArgsConstructor
-@Builder @Getter
-public class Bidding extends TimeStamp {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long biddingId;
+@Builder @Getter @AllArgsConstructor @NoArgsConstructor
+@RedisHash(value = "auction", timeToLive = 3000)
+public class RedisBidding extends TimeStamp {
+
+    @Id
     private String biddingUuid;
 
     private Integer biddingPrice; // 일반 입찰
@@ -24,8 +26,4 @@ public class Bidding extends TimeStamp {
     private String memberUuid; // 응찰자
     private String boardUuid;
 
-    @PrePersist
-    public void createUuid(){
-        this.biddingUuid= UUID.randomUUID().toString();
-    }
 }

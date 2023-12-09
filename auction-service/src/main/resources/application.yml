@@ -1,4 +1,13 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
+
+  # Redis
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+
   application:
     name: auction-service
 
@@ -16,13 +25,6 @@ spring:
         physical_naming_strategy: com.farmted.auctionservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
     hibernate:
       ddl-auto: create
-
-  # Redis
-  data:
-    redis:
-      host: 127.0.0.1
-      port: 6379
-      password: 1234 #비번을 만들려면 레디스를 먼저 해야 하는건가?
 
 
 server:
@@ -42,3 +44,5 @@ eureka:
 ## 스케줄러 세팅
 schedules:
   cron: "*/60 * * * * *"  # 1초마다 스케줄러 실행
+
+
