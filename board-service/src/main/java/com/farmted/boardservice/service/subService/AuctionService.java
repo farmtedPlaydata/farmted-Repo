@@ -34,11 +34,12 @@ public class AuctionService {
                 .toList();
     }
 
+    // 경매 상세 내역 조회
     public ResponseGetAuctionDetailDto getAuctionDetail(String boardUuid){
         return new ResponseGetAuctionDetailDto(
                 auctionConverter.convertSingleVo(
                         auctionFeignClient.findAuctionByBoardUuid(boardUuid),
-                            FeignDomainType.AUCTION, ExceptionType.GETLIST));
+                            FeignDomainType.AUCTION, ExceptionType.GET));
     }
 
 }

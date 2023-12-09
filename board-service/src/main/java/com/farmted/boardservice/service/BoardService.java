@@ -71,24 +71,26 @@ public class BoardService {
 
 // 전체 게시글 카테고리별 리스트 조회
     public ResponseGetCombinationListDto getBoardList(BoardType category, int pageNo) {
-        ResponseGetCombinationListDto combinationListDto = new ResponseGetCombinationListDto();
-    // 게시글 리스트 담기
-        combinationListDto.setBoardList(
+        // 게시글 리스트 담기
+        ResponseGetCombinationListDto combinationListDto = new ResponseGetCombinationListDto(
                 // 1페이지 캐싱처리 : 1페이지 && 상품 카테고리인 경우만
                 (pageNo < 1 && category.equals(BoardType.PRODUCT))
                     //1페이지 캐싱
                     ? board1PageCache.getPage1()
-                    // 생성일을 기준으로 내림치순 (최신 글이 먼저 조회)
+                    // 생성일을 기준으로 내림차순 (최신 글이 먼저 조회)
                     : boardRepository.findByBoardType(category,
                         PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createdAt")))
         );
-    // 상품 리스트 담기
+        // 상품 리스트 담기
         switch (category) {
             case PRODUCT, SALE, AUCTION
-                    -> combinationListDto.setProductList(
-                            productService.getProductList(category, pageNo));
+                    -> {
+                System.out.println("####"+category);
+                combinationListDto.setProductList(
+                        productService.getProductList(category, pageNo));
+            }
         }
-    // 경매 리스트 담기 - 경매 전용 카테고리일 따로 조회
+        // 경매 리스트 담기 - 경매 전용 카테고리일 따로 조회
         if(BoardType.AUCTION.equals(category))
             combinationListDto.setAuctionList(
                     auctionService.getAuctionList(pageNo));
@@ -98,9 +100,8 @@ public class BoardService {
 // 작성자 글 카테고리별 리스트 조회 (판매자 입장)
     public ResponseGetCombinationListDto getWriterBoardList(BoardType category, int pageNo, String sellerUuid) {
         if (pageNo < 1) pageNo = 0;
-        ResponseGetCombinationListDto combinationListDto = new ResponseGetCombinationListDto();
         // 게시글 리스트 담기
-        combinationListDto.setBoardList(
+        ResponseGetCombinationListDto combinationListDto = new ResponseGetCombinationListDto(
                 boardRepository
                         .findByMemberUuidAndBoardType(sellerUuid, category,
                                 PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createdAt")))
