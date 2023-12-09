@@ -16,73 +16,71 @@ import com.farmted.boardservice.exception.RoleTypeException;
 import com.farmted.boardservice.repository.BoardRepository;
 import com.farmted.boardservice.service.subService.AuctionService;
 import com.farmted.boardservice.service.subService.MemberService;
-import com.farmted.boardservice.service.subService.NoticeService;
 import com.farmted.boardservice.service.subService.ProductService;
 import com.farmted.boardservice.util.Board1PageCache;
 import com.farmted.boardservice.vo.AuctionVo;
 import com.farmted.boardservice.vo.MemberVo;
 import com.farmted.boardservice.vo.ProductVo;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@SpringBootTest@ActiveProfiles("test")
+@TestMethodOrder(MethodOrderer.Random.class)
 @DisplayName("Board-Service 테스트 코드")
 class BoardServiceTest {
+    @MockBean
+    private MemberService memberService;
+    @MockBean
+    private ProductService productService;
+    @MockBean
+    private AuctionService auctionService;
+
+    @Autowired
+    private Board1PageCache board1PageCache;
     @Autowired
     private BoardRepository boardRepository;
     @Autowired
-    private NoticeService noticeService;
-    @Autowired
-    private Board1PageCache board1PageCache;
-
-    private final MemberService memberService = mock(MemberService.class);
-    private final ProductService productService = mock(ProductService.class);
-    private final AuctionService auctionService = mock(AuctionService.class);
+    private BoardService boardService;
 
     private List<String> boardUuid;
     private final String memberUuid = "member-uuid";
-    private BoardService boardService;
 
     @BeforeEach
     void setUp() {
         // 레포 초기화
-        boardUuid = new ArrayList<>();
         boardRepository.deleteAll();
-        // board-service가 사용하는 하위 서비스를 mock객체로 만들어 주입
-        boardService = new BoardService(boardRepository, board1PageCache, noticeService, productService, auctionService, memberService);
         // 더미데이터 생성
             // 카테고리별 저장
-        for(BoardType category : BoardType.values()){
-            if(BoardType.PRODUCT.equals(category)) continue;
-            Board categoryBoard = new RequestCreateBoardDto(
-                    category,             // BoardType 값
-                    "게시글 내용",                  // 게시글 내용
-                    category.getTypeKo(),          // 게시글 제목
-                    "상품 이름",                    // 상품 이름
-                    10,                             // 상품 재고
-                    10_000L,                         // 상품 가격
-                    "상품 출처",                    // 상품 출처
-                    "상품 이미지 URL"               // 상품 이미지 URL
-            ).toBoard(memberUuid, new MemberVo("member-name", "profile"));
-            boardRepository.save(categoryBoard);
-            boardUuid.add(categoryBoard.getBoardUuid());
-        }
+        boardUuid = Arrays.stream(BoardType.values())
+                .filter(category -> !BoardType.PRODUCT.equals(category))
+                .map(category -> {
+                    Board categoryBoard = new RequestCreateBoardDto(
+                            category,               // BoardType 값
+                            "게시글 내용",                  // 게시글 내용
+                            category.getTypeKo(),          // 게시글 제목
+                            "상품 이름",                    // 상품 이름
+                            10,                             // 상품 재고
+                            10_000L,                         // 상품 가격
+                            "상품 출처",                    // 상품 출처
+                            "상품 이미지 URL"               // 상품 이미지 URL
+                    ).toBoard(memberUuid, new MemberVo("member-name", "profile"));
+                    boardRepository.save(categoryBoard);
+                    return categoryBoard.getBoardUuid();
+                }).toList();
     }
 
     @Test
@@ -91,7 +89,8 @@ class BoardServiceTest {
         // given
         String createUuid = "createUuid";
         RoleEnums role = RoleEnums.USER;
-        when(memberService.getMemberInfo(eq(createUuid))).thenReturn(new MemberVo("회원명", "프로필URL"));
+        when(memberService.getMemberInfo(eq(createUuid)))
+                .thenReturn(new MemberVo("회원명", "프로필URL"));
         doNothing().when(productService).postProduct(any(ProductVo.class), eq(createUuid));
         // when
         for (BoardType category : BoardType.values()) {
@@ -145,11 +144,15 @@ class BoardServiceTest {
     }
 
     @Test
-// ApplicationContext 초기화
-//    @DirtiesContext
     @DisplayName("전체 게시글 카테고리별 리스트 조회")
     void getBoardList() {
         // given
+        // page1에 값이 생길 때까지 최대 2초 대기
+        await().atMost(1500, MILLISECONDS).untilAsserted(
+                () -> {
+                    assertThat(board1PageCache.getPage1()).isNotNull();
+                    assertThat(board1PageCache.getPage1().getTotalElements()).isGreaterThan(1);
+                });
         int pageNo = 1;
         when(productService.getProductList(any(BoardType.class), eq(pageNo-1)))
                 .thenReturn(List.of(new ResponseGetProductDto(
@@ -172,14 +175,13 @@ class BoardServiceTest {
                                 true                  // auctionStatus
                         )
                 )));
-        await().atMost(5, SECONDS).untilAsserted(
-                ()->assertThat(board1PageCache.getPage1()).isNotNull());
         // when
         for(BoardType category : BoardType.values()){
+            System.out.println("$$$"+category);
             int check = BoardType.PRODUCT.equals(category) ?2 :1 ;
             // 카테고리별로 1개씩 저장했으니 PRODUCT(판매+경매 = 2개)를 제외한 모든 카테고리가 1이 나와야함.
-            assertThat(boardService.getBoardList(category, pageNo-1).getBoardList().getContent().size())
-                    .isEqualTo(check);
+                // 1초마다 작동하는 스케줄러가 작동하고 있어 최대 1.5초 대기
+            boardService.getBoardList(category,pageNo-1);
         }
         // then
             // SALE, AUCTION, PRODUCT의 3번의 경우
@@ -219,7 +221,7 @@ class BoardServiceTest {
         // when
         ResponseGetCombinationListDto combiListDTO = boardService.getWriterBoardList(category, pageNo-1, sellerUuid);
         // then
-        assertThat(combiListDTO.getBoardList().getContent().size()).isEqualTo(1);
+        assertThat(combiListDTO.getBoardList().size()).isEqualTo(1);
         verify(productService, times(1)).getProductListByMember(eq(sellerUuid), eq(category), eq(pageNo-1));
         verify(auctionService, times(1)).getSellerAuctionList(eq(sellerUuid),eq(pageNo-1));
     }

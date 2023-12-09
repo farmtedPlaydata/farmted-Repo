@@ -9,26 +9,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+// 해당 어노테이션은 @DataJpaTest에 내장되어 있으며, 이 어노테이션은 '내장된 메모리 데이터베이스'로 테스트를 진행
+// 설정을 통해 내장된 메모리 데이터베이스로 변경하지 못하도록 막기
 @DisplayName("JPQL 테스트 코드")
-@Transactional
 class JPQLTest {
-    private final BoardRepository boardRepository;
 
     @Autowired
-    JPQLTest(BoardRepository boardRepository) {
-        this.boardRepository = boardRepository;
-    }
+    private BoardRepository boardRepository;
 
     // 레포 초기화 및 더미데이터 생성
     @BeforeEach

@@ -21,9 +21,12 @@ import com.farmted.boardservice.vo.ProductVo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.stream.IntStream;
 
@@ -31,31 +34,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+@ActiveProfiles("test")
+@DisplayName("Feign Mock객체 실험")
 public class MockFeignTest {
-    private final Board1PageCache board1PageCache;
-    private final NoticeService noticeService;
-    private final BoardRepository boardRepository;
+    @Spy
+    private BoardRepository boardRepository;
+    @Spy
+    private Board1PageCache board1PageCache;
+    @Spy
+    private NoticeService noticeService;
 
-    private final ProductFeignClient productFeignClient = mock(ProductFeignClient.class);
-    private final MemberFeignClient memberFeignClient = mock(MemberFeignClient.class);
-    private final AuctionFeignClient auctionFeignClient = mock(AuctionFeignClient.class);
+    @Mock
+    private ProductFeignClient productFeignClient;
+    @Mock
+    private MemberFeignClient memberFeignClient;
+    @Mock
+    private AuctionFeignClient auctionFeignClient;
 
-    private final FeignConverter<ProductVo> productConverter;
-    private final FeignConverter<AuctionVo> auctionConverter;
-    private final FeignConverter<MemberVo> memberConverter;
+    @Spy
+    private FeignConverter<ProductVo> productConverter;
+    @Spy
+    private FeignConverter<AuctionVo> auctionConverter;
+    @Spy
+    private FeignConverter<MemberVo> memberConverter;
 
+    @InjectMocks
     private BoardService boardService;
-
-    @Autowired
-    public MockFeignTest(Board1PageCache board1PageCache, NoticeService noticeService, BoardRepository boardRepository, FeignConverter<ProductVo> productConverter, FeignConverter<AuctionVo> auctionConverter, FeignConverter<MemberVo> memberConverter) {
-        this.board1PageCache = board1PageCache;
-        this.noticeService = noticeService;
-        this.boardRepository = boardRepository;
-        this.productConverter = productConverter;
-        this.auctionConverter = auctionConverter;
-        this.memberConverter = memberConverter;
-    }
-
 
     @BeforeEach
     void setUp() {
