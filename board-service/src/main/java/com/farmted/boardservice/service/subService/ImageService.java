@@ -10,6 +10,7 @@ import com.farmted.boardservice.exception.BoardException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -62,7 +63,9 @@ public class ImageService {
         }
     }
 // 필요할 때 추가할 기초 삭제 로직
-    public void deleteImage(String key) {
+    public void deleteImage(String url) {
+//        "https://framted-product.s3.ap-northeast-2.amazonaws.com/c0e43592-237c-4f00-98be-c17d87439b56.gif"
+        String key = url.replace("https://"+bucketName+".s3.ap-northeast-2.amazonaws.com/", "");
         DeleteObjectRequest deleteRequest = new DeleteObjectRequest(bucketName, key);
         amazonS3.deleteObject(deleteRequest);
     }

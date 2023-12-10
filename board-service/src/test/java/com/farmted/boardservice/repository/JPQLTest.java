@@ -41,8 +41,7 @@ class JPQLTest {
                 "Auction Product",
                 10,
                 100,
-                "Auction Source",
-                "Auction Image"
+                "Auction Source"
         ).toBoard("uuid", new MemberVo("member", "memberProfile")));
         // 판매 생성
         boardRepository.save(new RequestCreateBoardDto(
@@ -52,15 +51,14 @@ class JPQLTest {
                 "Sale Product",
                 20,
                 200,
-                "Sale Source",
-                "Sale Image"
+                "Sale Source"
         ).toBoard("uuid", new MemberVo("member", "memberProfile")));
         // 구매요청 생성
         boardRepository.save(new RequestCreateBoardDto(
                 BoardType.COMMISSION,
                 "Commission Content",
                 "Commission Title",
-                "", 0, 0, "", ""
+                "", 0, 0, ""
         ).toBoard("uuid", new MemberVo("member", "memberProfile")));
         // 그 이외의 더미데이터 (고객센터로 고정)
         IntStream.rangeClosed(1, 5).forEach((i) -> {
@@ -71,8 +69,7 @@ class JPQLTest {
                             "상품 이름" + i,                    // 상품 이름
                             10 * i,                             // 상품 재고
                             10_000L * i,                         // 상품 가격
-                            "상품 출처" + i,                    // 상품 출처
-                            "상품 이미지 URL" + i               // 상품 이미지 URL
+                            "상품 출처" + i                    // 상품 출처
                     ).toBoard("DummuUuid" + i, new MemberVo("member" +i, "memberProfile"+i)));
                 }
         );
@@ -138,8 +135,7 @@ class JPQLTest {
                 "Auction Product",
                 10,
                 100,
-                "Auction Source",
-                "Auction Image"
+                "Auction Source"
         );
             // 저장
         Board board = createBoardDto.toBoard(memberUuid, new MemberVo("memberDetail", "memberProfile"));
@@ -169,8 +165,7 @@ class JPQLTest {
                 "Auction Product",
                 10,
                 100,
-                "Auction Source",
-                "Auction Image"
+                "Auction Source"
         );
             // 저장
         Board board = createBoardDto.toBoard(memberUuid, new MemberVo("memberEntity", "memberProfile"));

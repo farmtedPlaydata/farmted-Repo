@@ -13,20 +13,22 @@ service:
 server:
   port: 8080
 spring:
+  profiles:
+    active: private
   application:
     name: board-service
   datasource:
-    url: jdbc:mysql://localhost:3306/msa_db
-    username: root
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${dbURL}
+    username: ${dbName}
+    password: ${dbPwd}
+    driver-class-name: ${driverName}
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
         format_sql: true
-        physical_naming_strategy: com.farmted.boardservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
+        physical_naming_strategy: ${namingRoute}
     show-sql: true
   #swagger
   mvc:
@@ -48,11 +50,11 @@ schedules:
 cloud:
   aws:
     region:
-      static: ap-northeast-2
+      static: ${regionLocation}
     s3:
-      bucket: framted-product
+      bucket: ${bucketName}
     stack:
       auto: false
     credentials:
-      secret-key: 9DzAHdJ0/wdfWrnuG9elfic84QzFpZfP1/xzeIPs
-      access-key: AKIA5SR74QLFYEY2E2X4
+      secret-key: ${secret}
+      access-key: ${access}

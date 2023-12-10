@@ -1,10 +1,9 @@
-package com.farmted.boardservice.demoTest;
+package com.farmted.boardservice.util;
 
 import com.farmted.boardservice.domain.Board;
 import com.farmted.boardservice.dto.response.listDomain.ResponseGetBoardDto;
 import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.repository.BoardRepository;
-import com.farmted.boardservice.util.Board1PageCache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

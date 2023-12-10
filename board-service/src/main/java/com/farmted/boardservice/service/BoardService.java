@@ -48,7 +48,7 @@ public class BoardService {
     @Transactional
     public void createBoard(RequestCreateBoardDto boardDto,
                             String uuid, RoleEnums role,
-                            MultipartFile image) {
+                            MultipartFile... image) {
     // 게시글을 작성하기 유효한 ROLE인지 확인
         // 게스트면 불가능
         if (RoleEnums.GUEST.equals(role)) {
@@ -62,7 +62,7 @@ public class BoardService {
         switch(boardDto.boardType()){
             // 상품 서비스에 요청이 필요한 경우 : S3 업로드 이후 Feign 요청 및 예외처리
             case SALE, AUCTION -> {
-                String imageUrl = imageService.uploadImageToS3(image);
+                String imageUrl = imageService.uploadImageToS3(image[0]);
                 productService.postProduct(boardDto.toProduct(board.getBoardUuid(), imageUrl), uuid);
             }
             // 일반 게시글은 추가 처리 필요없음.

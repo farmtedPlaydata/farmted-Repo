@@ -1,5 +1,6 @@
 package com.farmted.boardservice.service;
 
+import com.farmted.boardservice.config.ImageUtils;
 import com.farmted.boardservice.domain.Board;
 import com.farmted.boardservice.dto.request.RequestCreateBoardDto;
 import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDto;
@@ -27,12 +28,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.farmted.boardservice.enums.BoardType.*;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -75,8 +78,7 @@ class BoardServiceTest {
                             "상품 이름",                    // 상품 이름
                             10,                             // 상품 재고
                             10_000L,                         // 상품 가격
-                            "상품 출처",                    // 상품 출처
-                            "상품 이미지 URL"               // 상품 이미지 URL
+                            "상품 출처"                    // 상품 출처
                     ).toBoard(memberUuid, new MemberVo("member-name", "profile"));
                     boardRepository.save(categoryBoard);
                     return categoryBoard.getBoardUuid();
@@ -89,6 +91,7 @@ class BoardServiceTest {
         // given
         String createUuid = "createUuid";
         RoleEnums role = RoleEnums.USER;
+        MultipartFile image = ImageUtils.createTestImage("images/testJpg.jpg");
         when(memberService.getMemberInfo(eq(createUuid)))
                 .thenReturn(new MemberVo("회원명", "프로필URL"));
         doNothing().when(productService).postProduct(any(ProductVo.class), eq(createUuid));
@@ -96,16 +99,18 @@ class BoardServiceTest {
         for (BoardType category : BoardType.values()) {
             switch (category){
                 case NOTICE, PRODUCT -> {}
-                case SALE, COMMISSION, AUCTION, CUSTOMER_SERVICE -> boardService.createBoard(new RequestCreateBoardDto(
-                        category,             // BoardType 값
-                        "게시글 내용",                  // 게시글 내용
-                        "게시글 제목",                  // 게시글 제목
-                        "상품 이름",                    // 상품 이름
-                        10,                             // 상품 재고
-                        10_000L,                         // 상품 가격
-                        "상품 출처",                    // 상품 출처
-                        "상품 이미지 URL"               // 상품 이미지 URL
-                ), createUuid, role);
+                case SALE, COMMISSION, AUCTION, CUSTOMER_SERVICE -> {
+                    if(!(category == SALE || category == AUCTION)) image = null;
+                    boardService.createBoard(new RequestCreateBoardDto(
+                            category,             // BoardType 값
+                            "게시글 내용",                  // 게시글 내용
+                            "게시글 제목",                  // 게시글 제목
+                            "상품 이름",                    // 상품 이름
+                            10,                             // 상품 재고
+                            10_000L,                         // 상품 가격
+                            "상품 출처"                   // 상품 출처
+                    ), createUuid, role, image);
+                }
             }
         }
         // then
@@ -125,8 +130,7 @@ class BoardServiceTest {
                         "상품 이름",                    // 상품 이름
                         10,                             // 상품 재고
                         10_000L,                         // 상품 가격
-                        "상품 출처",                    // 상품 출처
-                        "상품 이미지 URL"               // 상품 이미지 URL
+                        "상품 출처"                    // 상품 출처
                 ), createUuid, role));
             // 올바르지 않은 생성 카테고리(PRODUCT)인 경우 BoardException
         Assertions.assertThrows(
@@ -138,9 +142,8 @@ class BoardServiceTest {
                         "상품 이름",                    // 상품 이름
                         10,                             // 상품 재고
                         10_000L,                         // 상품 가격
-                        "상품 출처",                    // 상품 출처
-                        "상품 이미지 URL"               // 상품 이미지 URL
-                ), createUuid, role));
+                        "상품 출처"                    // 상품 출처
+                ), createUuid, role, ImageUtils.createTestImage("images/testJpg.jpg")));
     }
 
     @Test
@@ -194,7 +197,7 @@ class BoardServiceTest {
     @DisplayName("작성자 글 카테고리별 리스트 조회")
     void getWriterBoardList() {
         // given
-        BoardType category = BoardType.AUCTION;
+        BoardType category = AUCTION;
         int pageNo = 1;
         String sellerUuid = memberUuid;
         when(productService.getProductListByMember(eq(sellerUuid), eq(category), eq(pageNo-1)))
@@ -221,7 +224,7 @@ class BoardServiceTest {
         // when
         ResponseGetCombinationListDto combiListDTO = boardService.getWriterBoardList(category, pageNo-1, sellerUuid);
         // then
-        assertThat(combiListDTO.getBoardList().size()).isEqualTo(1);
+        assertThat(combiListDTO.getBoardList().getSize()).isEqualTo(1);
         verify(productService, times(1)).getProductListByMember(eq(sellerUuid), eq(category), eq(pageNo-1));
         verify(auctionService, times(1)).getSellerAuctionList(eq(sellerUuid),eq(pageNo-1));
     }
@@ -262,7 +265,7 @@ class BoardServiceTest {
     void updateBoard() {
         // given
         RequestUpdateProductBoardDto updateDTO = new RequestUpdateProductBoardDto(
-                BoardType.SALE,           // BoardType 값
+                SALE,           // BoardType 값
                 "수정된 게시글 내용",         // 수정된 게시글 내용
                 "수정된 게시글 제목",         // 수정된 게시글 제목
                 "수정된 상품 이름",           // 수정된 상품 이름
