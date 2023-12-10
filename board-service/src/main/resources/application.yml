@@ -44,4 +44,15 @@ eureka:
 ## 스케줄러 세팅
 schedules:
   cron: "* * * * * *"  # 1초마다 스케줄러 실행
-
+## S3 세팅
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: framted-product
+    stack:
+      auto: false
+    credentials:
+      secret-key: 9DzAHdJ0/wdfWrnuG9elfic84QzFpZfP1/xzeIPs
+      access-key: AKIA5SR74QLFYEY2E2X4

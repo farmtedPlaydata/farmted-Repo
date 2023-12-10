@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,10 +25,11 @@ public class BoardController {
     @PostMapping(value = "/boards")
     @Operation(summary = "게시글 작성", description = "카테고리별 게시글의 등록 요청")
     public ResponseEntity<GlobalResponseDto<?>> createBoard(
-            @Valid @RequestBody RequestCreateBoardDto productBoardDto,
+            @Valid @RequestPart("CREATE") RequestCreateBoardDto productBoardDto,
             @RequestHeader("UUID") String uuid,
-            @RequestHeader("ROLE") RoleEnums role){
-        boardService.createBoard(productBoardDto, uuid, role);
+            @RequestHeader("ROLE") RoleEnums role,
+            @RequestPart("IMAGE") MultipartFile image){
+        boardService.createBoard(productBoardDto, uuid, role, image);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
