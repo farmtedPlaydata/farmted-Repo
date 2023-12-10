@@ -1,6 +1,7 @@
 package com.farmted.boardservice.service;
 
 import com.farmted.boardservice.config.ImageUtils;
+import com.farmted.boardservice.config.InitDB;
 import com.farmted.boardservice.domain.Board;
 import com.farmted.boardservice.dto.request.RequestCreateBoardDto;
 import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDto;
@@ -16,6 +17,7 @@ import com.farmted.boardservice.exception.BoardException;
 import com.farmted.boardservice.exception.RoleTypeException;
 import com.farmted.boardservice.repository.BoardRepository;
 import com.farmted.boardservice.service.subService.AuctionService;
+import com.farmted.boardservice.service.subService.ImageService;
 import com.farmted.boardservice.service.subService.MemberService;
 import com.farmted.boardservice.service.subService.ProductService;
 import com.farmted.boardservice.util.Board1PageCache;
@@ -32,16 +34,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static com.farmted.boardservice.enums.BoardType.*;
+import static com.farmted.boardservice.config.InitDB.BOARD_UUIDS;
+import static com.farmted.boardservice.config.InitDB.MEMBER_UUID;
+import static com.farmted.boardservice.enums.BoardType.AUCTION;
+import static com.farmted.boardservice.enums.BoardType.SALE;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest@ActiveProfiles("test")
+@SpringBootTest
+@ActiveProfiles({"test","testConfig"})
 @TestMethodOrder(MethodOrderer.Random.class)
 @DisplayName("Board-Service 테스트 코드")
 class BoardServiceTest {
@@ -51,6 +56,8 @@ class BoardServiceTest {
     private ProductService productService;
     @MockBean
     private AuctionService auctionService;
+    @MockBean
+    private ImageService imageService;
 
     @Autowired
     private Board1PageCache board1PageCache;
@@ -58,32 +65,6 @@ class BoardServiceTest {
     private BoardRepository boardRepository;
     @Autowired
     private BoardService boardService;
-
-    private List<String> boardUuid;
-    private final String memberUuid = "member-uuid";
-
-    @BeforeEach
-    void setUp() {
-        // 레포 초기화
-        boardRepository.deleteAll();
-        // 더미데이터 생성
-            // 카테고리별 저장
-        boardUuid = Arrays.stream(BoardType.values())
-                .filter(category -> !BoardType.PRODUCT.equals(category))
-                .map(category -> {
-                    Board categoryBoard = new RequestCreateBoardDto(
-                            category,               // BoardType 값
-                            "게시글 내용",                  // 게시글 내용
-                            category.getTypeKo(),          // 게시글 제목
-                            "상품 이름",                    // 상품 이름
-                            10,                             // 상품 재고
-                            10_000L,                         // 상품 가격
-                            "상품 출처"                    // 상품 출처
-                    ).toBoard(memberUuid, new MemberVo("member-name", "profile"));
-                    boardRepository.save(categoryBoard);
-                    return categoryBoard.getBoardUuid();
-                }).toList();
-    }
 
     @Test
     @DisplayName("게시글 생성")
@@ -94,6 +75,8 @@ class BoardServiceTest {
         MultipartFile image = ImageUtils.createTestImage("images/testJpg.jpg");
         when(memberService.getMemberInfo(eq(createUuid)))
                 .thenReturn(new MemberVo("회원명", "프로필URL"));
+        when(imageService.uploadImageToS3(image))
+                .thenReturn("imageURL");
         doNothing().when(productService).postProduct(any(ProductVo.class), eq(createUuid));
         // when
         for (BoardType category : BoardType.values()) {
@@ -101,6 +84,7 @@ class BoardServiceTest {
                 case NOTICE, PRODUCT -> {}
                 case SALE, COMMISSION, AUCTION, CUSTOMER_SERVICE -> {
                     if(!(category == SALE || category == AUCTION)) image = null;
+                    else image = ImageUtils.createTestImage("images/testJpg.jpg");
                     boardService.createBoard(new RequestCreateBoardDto(
                             category,             // BoardType 값
                             "게시글 내용",                  // 게시글 내용
@@ -120,6 +104,7 @@ class BoardServiceTest {
         verify(memberService, times(4)).getMemberInfo(eq(createUuid));
             // SALE, AUCTION -> 총 2회 호출
         verify(productService, times(2)).postProduct(any(ProductVo.class), eq(createUuid));
+        verify(imageService, times(2)).uploadImageToS3(any(MultipartFile.class));
             // 관리자가 아닌 경우 RoleTypeException
         Assertions.assertThrows(
                 RoleTypeException.class,
@@ -199,7 +184,7 @@ class BoardServiceTest {
         // given
         BoardType category = AUCTION;
         int pageNo = 1;
-        String sellerUuid = memberUuid;
+        String sellerUuid = InitDB.MEMBER_UUID;
         when(productService.getProductListByMember(eq(sellerUuid), eq(category), eq(pageNo-1)))
                 .thenReturn(List.of(new ResponseGetProductDto(
                         ProductVo.builder()
@@ -224,7 +209,7 @@ class BoardServiceTest {
         // when
         ResponseGetCombinationListDto combiListDTO = boardService.getWriterBoardList(category, pageNo-1, sellerUuid);
         // then
-        assertThat(combiListDTO.getBoardList().getSize()).isEqualTo(1);
+        assertThat(combiListDTO.getBoardList().size()).isEqualTo(1);
         verify(productService, times(1)).getProductListByMember(eq(sellerUuid), eq(category), eq(pageNo-1));
         verify(auctionService, times(1)).getSellerAuctionList(eq(sellerUuid),eq(pageNo-1));
     }
@@ -250,11 +235,11 @@ class BoardServiceTest {
                 ));
         // when
         List<ResponseGetCombinationDetailDto> dtoList = new ArrayList<>();
-        for(String uuid : boardUuid){
+        for(String uuid : BOARD_UUIDS){
             dtoList.add(boardService.getBoard(uuid));
         }
         // then
-        assertThat(dtoList.size()).isEqualTo(boardUuid.size());
+        assertThat(dtoList.size()).isEqualTo(BOARD_UUIDS.size());
         verify(productService, times(2)).getProductByBoardUuid(anyString());
         verify(auctionService, times(1)).getAuctionDetail(anyString());
     }
@@ -274,12 +259,12 @@ class BoardServiceTest {
                 "수정된 상품 출처",           // 수정된 상품 출처
                 "수정된 상품 이미지 URL"      // 수정된 상품 이미지 URL
         );
-        doNothing().when(productService).checkUpdateProduct(anyString(), eq(updateDTO), eq(memberUuid));
+        doNothing().when(productService).checkUpdateProduct(anyString(), eq(updateDTO), eq(MEMBER_UUID));
 
         // when
-        for(String uuid : boardUuid) {
+        for(String uuid : BOARD_UUIDS) {
             try{
-                boardService.updateBoard(updateDTO, uuid, memberUuid);
+                boardService.updateBoard(updateDTO, uuid, MEMBER_UUID);
             }catch (Exception e){
                 // Exception Pass 예외검사 then에서 할 예정
             }
@@ -297,7 +282,7 @@ class BoardServiceTest {
             }
         }
          // 모든 카테고리 중 (SALE, AUCTION)의 경우만 상품 비활성화 가능
-        verify(productService, times(2)).checkUpdateProduct(anyString(), eq(updateDTO), eq(memberUuid));
+        verify(productService, times(2)).checkUpdateProduct(anyString(), eq(updateDTO), eq(MEMBER_UUID));
     }
 
     @Test
@@ -306,11 +291,11 @@ class BoardServiceTest {
     void deleteBoard() {
         // given
             // 반환값이 void
-        doNothing().when(productService).checkDeleteProduct(anyString(), eq(memberUuid));
+        doNothing().when(productService).checkDeleteProduct(anyString(), eq(MEMBER_UUID));
 
         // when
-        for(String uuid : boardUuid){
-            boardService.deleteBoard(uuid, memberUuid);
+        for(String uuid : BOARD_UUIDS){
+            boardService.deleteBoard(uuid, MEMBER_UUID);
         }
 
         // then
@@ -318,6 +303,6 @@ class BoardServiceTest {
             assertThat(board.isBoardStatus()).isEqualTo(false);
         }
             // 모든 카테고리 중 (SALE, AUCTION)의 경우만 상품 비활성화 가능
-        verify(productService, times(2)).checkDeleteProduct(anyString(), eq(memberUuid));
+        verify(productService, times(2)).checkDeleteProduct(anyString(), eq(MEMBER_UUID));
     }
 }

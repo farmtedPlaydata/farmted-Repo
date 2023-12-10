@@ -19,34 +19,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
-@ActiveProfiles("test") // Eureka Discovery Client 등록을 해제하기 위한 프로필
+@ActiveProfiles({"test","testConfig"}) // Eureka Discovery Client 등록을 해제하기 위한 프로필
 @DisplayName("1페이지 캐시 스케줄러 테스트 코드")
 public class SchedulerTest {
     @Autowired
     private BoardRepository boardRepository;
     @Autowired
     private Board1PageCache board1PageCache;
-
-    @BeforeEach
-    void setUp() {
-        // 레포지토리 초기화 후 캐시 클래스에 주입
-        boardRepository.deleteAll();
-        // 카테고리 별로 하나씩 생성
-        for(BoardType category : BoardType.values()) {
-            // PRODUCT의 경우, 판매+경매를 아우르는 카테고리기 때문에 생성은 하지 않음
-            if (BoardType.PRODUCT.equals(category)) continue;
-            boardRepository.save(Board.builder()
-                    .boardType(category)
-                    .boardTitle("Dummy Title")
-                    .boardContent("Dummy Content")
-                    .viewCount(0)
-                    .boardStatus(true)
-                    .memberName("Dummy Member")
-                    .memberProfile("Dummy Profile")
-                    .memberUuid("memberUuid")
-                    .build());
-        }
-    }
 
     @Test
     @DisplayName("스케줄러 테스트")

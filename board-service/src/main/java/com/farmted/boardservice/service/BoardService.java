@@ -80,7 +80,7 @@ public class BoardService {
     public ResponseGetCombinationListDto getBoardList(BoardType category, int pageNo) {
         ResponseGetCombinationListDto combinationListDto = new ResponseGetCombinationListDto();
     // 게시글 리스트 담기
-        combinationListDto.setBoardList(
+        combinationListDto.setPageList(
                 // 1페이지 캐싱처리 : 1페이지 && 상품 카테고리인 경우만
                 (pageNo < 1 && category.equals(BoardType.PRODUCT))
                     //1페이지 캐싱
@@ -88,7 +88,7 @@ public class BoardService {
                     // 생성일을 기준으로 내림치순 (최신 글이 먼저 조회)
                     : boardRepository.findByBoardType(category,
                         PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createdAt")))
-        );
+        , pageNo);
     // 상품 리스트 담기
         switch (category) {
             case PRODUCT, SALE, AUCTION
@@ -107,10 +107,11 @@ public class BoardService {
         if (pageNo < 1) pageNo = 0;
         ResponseGetCombinationListDto combinationListDto = new ResponseGetCombinationListDto();
         // 게시글 리스트 담기
-        combinationListDto.setBoardList(
+        combinationListDto.setPageList(
                 boardRepository
                         .findByMemberUuidAndBoardType(sellerUuid, category,
                                 PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createdAt")))
+                ,pageNo
         );
     //  상품 리스트 담기
         switch (category) {

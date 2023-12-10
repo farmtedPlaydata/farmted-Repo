@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResponseGetAuctionDetailDto {
-
     // 경매용 정보
     private int auctionPrice;
     private String auctionBuyer;

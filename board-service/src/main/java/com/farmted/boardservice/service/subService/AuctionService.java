@@ -7,6 +7,7 @@ import com.farmted.boardservice.enums.FeignDomainType;
 import com.farmted.boardservice.feignClient.AuctionFeignClient;
 import com.farmted.boardservice.util.feignConverter.FeignConverter;
 import com.farmted.boardservice.vo.AuctionVo;
+import com.farmted.boardservice.vo.ProductVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,11 +35,12 @@ public class AuctionService {
                 .toList();
     }
 
+    // 경매 상세 조회
     public ResponseGetAuctionDetailDto getAuctionDetail(String boardUuid){
         return new ResponseGetAuctionDetailDto(
                 auctionConverter.convertSingleVo(
                         auctionFeignClient.findAuctionByBoardUuid(boardUuid),
-                            FeignDomainType.AUCTION, ExceptionType.GETLIST));
+                            FeignDomainType.AUCTION, ExceptionType.GET));
     }
 
 }
