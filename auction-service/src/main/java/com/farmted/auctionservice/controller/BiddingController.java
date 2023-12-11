@@ -19,7 +19,7 @@ public class BiddingController {
     private final BiddingService biddingService;
 
     // 입찰 신청
-    @PostMapping("")
+    @PostMapping("/bid")
     public ResponseEntity<?> createBidding(
             @RequestBody BiddingCreateRequestDto biddingCreateRequestDto,
             @RequestHeader ("UUID") String memberUuid,
