@@ -42,6 +42,5 @@ public class Comment extends TimeStamp {
 
     public void updateComment(CommentUpdateRequestDto dto) {
         this.commentContent = dto.getContent();
-        this.commentUuid = dto.getCommentUuid();
     }
 }
