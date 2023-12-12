@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -15,9 +16,15 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class ResponseGetCombinationListDto {
-    private Page<ResponseGetBoardDto> boardList;
+    private List<ResponseGetBoardDto> boardList;
+    private int pageInfo;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<ResponseGetProductDto> productList;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<ResponseGetAuctionDto> auctionList;
+
+    public ResponseGetCombinationListDto(Page<ResponseGetBoardDto> boardDtoPage) {
+        this.boardList = boardDtoPage.getContent();
+        this.pageInfo = boardDtoPage.getTotalPages();
+    }
 }
