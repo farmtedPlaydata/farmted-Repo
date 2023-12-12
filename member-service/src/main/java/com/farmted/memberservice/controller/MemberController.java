@@ -8,7 +8,10 @@ import com.farmted.memberservice.dto.response.MemberNameImageDto;
 import com.farmted.memberservice.dto.response.ResponsePagingToListDto;
 import com.farmted.memberservice.global.GlobalResponseDto;
 import com.farmted.memberservice.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +21,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/member-service")
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
 
+    @PostMapping("/health-check")
+    public ResponseEntity<?> healthCheck(HttpServletRequest request,
+                                         HttpServletResponse response) {
+        String uuid = request.getHeader("UUID");
+        String role = request.getHeader("ROLE");
+        log.info("UUID : " + uuid);
+        log.info("ROLE : " + role);
+        response.addHeader("UUID", uuid);
+        response.addHeader("ROLE", role);
+
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
+    }
+
     // 회원 상세 정보
-    @PostMapping("/members/")
+    @PostMapping("/members")
     public ResponseEntity<?> createMember(@RequestBody RequestCreateMemberDto dto) {
         memberService.createMember(dto);
         return ResponseEntity.ok(GlobalResponseDto.of(true));

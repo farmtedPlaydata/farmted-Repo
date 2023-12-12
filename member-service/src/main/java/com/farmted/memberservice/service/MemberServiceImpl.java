@@ -20,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedHashMap;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -36,11 +38,20 @@ public class MemberServiceImpl implements MemberService {
     public void createMember(RequestCreateMemberDto dto) {
         try {
             ResponseEntity<?> re = passFeignClient.findByEmail(dto.getEmail());
-            String uuid =((GlobalResponseDto<?>)re.getBody()).getData().toString();
-            dto.setMemberRole(RoleEnums.USER);
-            dto.setUuid(uuid);
-            Member member = dto.toEntity();
-            memberRepository.save(member);
+
+            Object responseBody = re.getBody();
+            if (responseBody instanceof LinkedHashMap<?, ?> responseMap) {
+                // data 값 가져오기
+                Object dataField = responseMap.get("data");
+                String uuid = dataField.toString();
+                dto.setMemberRole(RoleEnums.USER);
+                dto.setUuid(uuid);
+                Member member = dto.toEntity();
+                memberRepository.save(member);
+            } else {
+                // data 값을 가져올 수 없을 경우
+                throw new MemberException("MemberService - createMember : Failed to createdMember");
+            }
         } catch (MemberException e) {
             throw new MemberException("MemberService - createMember");
         }
