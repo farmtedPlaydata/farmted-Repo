@@ -51,8 +51,7 @@ public class ImageService {
     }
     //이미지 이름 중복 방지를 위해 랜덤으로 생성
     private String changedImageName(String ext) {
-        String random = UUID.randomUUID().toString();
-        return random+ext;
+        return UUID.randomUUID() + ext;
     }
     // 이미지 업로드 예외처리 (받아온 image에 InputStream없는 경우)
     private InputStream handleInputStream(Supplier<MultipartFile> imageInputStream) {

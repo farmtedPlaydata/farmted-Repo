@@ -4,7 +4,7 @@ import com.farmted.boardservice.dto.request.RequestCreateBoardDto;
 import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDto;
 import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.enums.RoleEnums;
-import com.farmted.boardservice.service.BoardService;
+import com.farmted.boardservice.facade.BoardFacade;
 import com.farmted.boardservice.util.GlobalResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/board-service")
 public class BoardController {
 
-    private final BoardService boardService;
+    private final BoardFacade boardFacade;
 
     @PostMapping(value = "/boards")
     @Operation(summary = "게시글 작성", description = "카테고리별 게시글의 등록 요청")
@@ -29,7 +29,7 @@ public class BoardController {
             @RequestHeader("UUID") String uuid,
             @RequestHeader("ROLE") RoleEnums role,
             @RequestPart("IMAGE") MultipartFile image){
-        boardService.createBoard(productBoardDto, uuid, role, image);
+        boardFacade.createBoard(productBoardDto, uuid, role, image);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
@@ -43,7 +43,7 @@ public class BoardController {
                                                                 value = "page") int pageNo){
         return ResponseEntity.ok(
                 GlobalResponseDto.of(
-                    boardService.getBoardList(category,pageNo-1)
+                    boardFacade.getBoardList(category,pageNo-1)
         ));
     }
 
@@ -52,7 +52,7 @@ public class BoardController {
     public ResponseEntity<GlobalResponseDto<?>> getAuctionBoard(@PathVariable(value = "board_uuid") String boardUuid){
         return ResponseEntity.ok(
                 GlobalResponseDto.of(
-                    boardService.getBoard(boardUuid)
+                    boardFacade.getBoard(boardUuid)
         ));
     }
 
@@ -80,7 +80,7 @@ public class BoardController {
     ){
         return ResponseEntity.ok(
                 GlobalResponseDto.of(
-                        boardService.getWriterBoardList(category,pageNo-1, uuid)
+                        boardFacade.getWriterBoardList(category,pageNo-1, uuid)
         ));
     }
 
@@ -90,7 +90,7 @@ public class BoardController {
     public ResponseEntity<GlobalResponseDto<?>> updateAuctionBoard(@PathVariable(value= "board_uuid") String boardUuid,
                                                 @Valid @RequestBody RequestUpdateProductBoardDto updateDTO,
                                                 @RequestHeader("UUID") String uuid){
-        boardService.updateBoard(updateDTO, boardUuid, uuid);
+        boardFacade.updateBoard(updateDTO, boardUuid, uuid);
         return ResponseEntity.ok(
                 GlobalResponseDto.of(true)
         );
@@ -100,7 +100,7 @@ public class BoardController {
     @Operation(summary = "개별 경매 게시글 삭제", description = "개별 경매 게시글에 대한 삭제 요청")
     public ResponseEntity<GlobalResponseDto<?>> deleteAuctionBoard(@PathVariable(value = "board_uuid") String boardUuid,
                                                 @RequestHeader("UUID") String uuid) {
-        boardService.deleteBoard(boardUuid, uuid);
+        boardFacade.deleteBoard(boardUuid, uuid);
         return ResponseEntity.ok(
                 GlobalResponseDto.of(true)
         );
