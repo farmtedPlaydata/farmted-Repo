@@ -22,13 +22,13 @@ public class CommentCreateRequestDto {
 
     // 생성자, 게터, 세터 등 필요한 메서드들....
 
-    public Comment toEntity() {
+    public Comment toEntity(String memberUUID, String boardUUID) {
         return Comment.builder()
         .commentContent(this.content)
         .commentMemberName(this.name)
         .commentUuid(UUID.randomUUID().toString())
-        .memberUuid(this.userUUID)
-        .boardUuid(this.boardUUID)
+        .memberUuid(memberUUID)
+        .boardUuid(boardUUID)
                 .build();
     }
 }
