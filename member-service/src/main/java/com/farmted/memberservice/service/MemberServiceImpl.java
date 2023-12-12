@@ -12,6 +12,7 @@ import com.farmted.memberservice.exception.MemberException;
 import com.farmted.memberservice.feignclient.PassFeignClient;
 import com.farmted.memberservice.global.GlobalResponseDto;
 import com.farmted.memberservice.repository.MemberRepository;
+import com.farmted.memberservice.util.ProfileManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.LinkedHashMap;
 import java.util.Objects;
@@ -33,9 +35,10 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PassFeignClient passFeignClient;
+    private final ProfileManager profileManager;
 
     @Override
-    public void createMember(RequestCreateMemberDto dto) {
+    public void createMember(RequestCreateMemberDto dto, MultipartFile... image) {
         try {
             ResponseEntity<?> re = passFeignClient.findByEmail(dto.getEmail());
 
@@ -46,6 +49,11 @@ public class MemberServiceImpl implements MemberService {
                 String uuid = dataField.toString();
                 dto.setMemberRole(RoleEnums.USER);
                 dto.setUuid(uuid);
+
+                // 프로필 사진
+                String imageUrl = profileManager.uploadImageToS3(image[0]);
+                dto.setMemberProfile(imageUrl);
+
                 Member member = dto.toEntity();
                 memberRepository.save(member);
             } else {
@@ -73,6 +81,7 @@ public class MemberServiceImpl implements MemberService {
         Optional<Member> member = memberRepository.findByMemberUuid(uuid);
         if (member.isPresent()) {
             memberRepository.deleteMemberByMemberUuid(uuid);
+            profileManager.deleteImage(member.orElseThrow().getMemberProfile());
         } else {
             throw new MemberException("MemberService - deleteMember");
         }
@@ -80,6 +89,16 @@ public class MemberServiceImpl implements MemberService {
 //                .ifPresentOrElse(
 //                        member -> memberRepository.deleteMemberByMemberUuid(uuid),
 //                        () -> new RuntimeException("ERROR : member-service - deleteMember"));
+    }
+
+    @Override
+    public void expelMember(String role, String uuid) {
+        if (role.equals("ADMIN")) {
+            deleteMember(uuid);
+        } else {
+            // 권한이 ADMIN이 아닐 경우
+            throw new MemberException("MemberService - expelMember");
+        }
     }
 
     @Override
@@ -108,7 +127,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberNameImageDto memberNameAndImage(String uuid) {
         Member member = memberRepository.findByMemberUuid(uuid)
                 .orElseThrow(() -> new MemberException("MemberService - memberNameAndImage"));
-        return new MemberNameImageDto(member.getMemberName(), member.getMemberImage());
+        return new MemberNameImageDto(member.getMemberName(), member.getMemberProfile());
     }
 
     @Override

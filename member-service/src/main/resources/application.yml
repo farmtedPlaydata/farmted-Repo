@@ -28,3 +28,16 @@ eureka:
   # 인스턴스별로 유레카에 보여지는 표기를 다르게 설정함
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+
+cloud:
+  aws:
+    region:
+      static: ${regionLocation}
+    s3:
+      bucket: ${bucketName}
+    stack:
+      auto: false
+    credentials:
+      secret-key: ${secret}
+      access-key: ${access}

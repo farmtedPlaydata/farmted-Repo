@@ -34,11 +34,11 @@ public class QMember extends EntityPathBase<Member> {
 
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 
-    public final StringPath memberImage = createString("memberImage");
-
     public final StringPath memberName = createString("memberName");
 
     public final StringPath memberPhone = createString("memberPhone");
+
+    public final StringPath memberProfile = createString("memberProfile");
 
     public final EnumPath<com.farmted.memberservice.enums.RoleEnums> memberRole = createEnum("memberRole", com.farmted.memberservice.enums.RoleEnums.class);
 

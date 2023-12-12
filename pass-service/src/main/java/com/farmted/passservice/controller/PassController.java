@@ -71,8 +71,8 @@ public class PassController {
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
-    @PutMapping("/change-role")
-    public ResponseEntity<?> changeRoleByMemberService(@RequestBody String uuid) {
+    @PutMapping("/change-role/{uuid}")
+    public ResponseEntity<?> changeRoleByMemberService(@PathVariable String uuid) {
         passService.changeRoleByMemberService(uuid);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
