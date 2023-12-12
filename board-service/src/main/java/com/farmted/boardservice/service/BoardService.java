@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+import static com.farmted.boardservice.enums.ExceptionType.DELETE;
+import static com.farmted.boardservice.enums.ExceptionType.UPDATE;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -33,6 +36,13 @@ public class BoardService {
         Board board = boardDto.toBoard(uuid, memberInfo);
         boardRepository.save(board);
         return board.getBoardUuid();
+    }
+
+// 게시글 사진 관리 (등록 및 업데이트)
+    public void imageManager(String imageURL, String boardUuid){
+        boardRepository.findByBoardUuidAndBoardStatusTrue(boardUuid)
+                .orElseThrow(() -> new BoardException(ExceptionType.IMAGE))
+            .imageManager(imageURL);
     }
 
 // 전체 게시글 카테고리별 리스트 조회
@@ -64,8 +74,6 @@ public class BoardService {
         return combinationListDto;
     }
 
-
-
     // 개별 경매 상품 상세 조회
     public ResponseGetCombinationDetailDto getBoard(String boardUuid) {
         ResponseGetCombinationDetailDto combinationDetailDto = new ResponseGetCombinationDetailDto();
@@ -76,9 +84,11 @@ public class BoardService {
     }
 
     // 게시글 업데이트
-    public boolean updateBoard(RequestUpdateProductBoardDto updateDTO, String boardUuid, String uuid) {
+    public boolean updateBoard(RequestUpdateProductBoardDto updateDTO, String boardUuid, String memberUuid) {
         Board updateBoard = boardRepository.findByBoardUuidAndBoardStatusTrue(boardUuid)
-                .orElseThrow(()->new BoardException(ExceptionType.UPDATE));
+                .orElseThrow(()->new BoardException(UPDATE));
+        // 본인 확인
+        identify(memberUuid, updateBoard, UPDATE);
         // 카테고리 변경의 경우, 판매 <-> 경매(종료된)만 가능
         // 상품이 포함된 게시글의 경우만 수정 요청
         switch (updateBoard.getBoardType()){
@@ -98,20 +108,23 @@ public class BoardService {
             }
         }
         // 업데이트 안됐으면 다 예외
-        throw new BoardException(updateBoard.getBoardType(), ExceptionType.UPDATE);
+        throw new BoardException(updateBoard.getBoardType(), UPDATE);
     }
 
-    // 게시글 삭제, 성공하면 1페이지로 리다이렉트
-    public BoardType deleteBoard(String boardUuid, String uuid) {
+    // 게시글 삭제
+    public String deleteBoard(String boardUuid, String memberUuid) {
         Board deleteBoard = boardRepository.findByBoardUuidAndBoardStatusTrue(boardUuid)
-                .orElseThrow(()->new BoardException(ExceptionType.DELETE));
+                .orElseThrow(()->new BoardException(DELETE));
         // 작성자 본인 확인
-        if(deleteBoard.getMemberUuid().equals(uuid)){
-            // 게시글 삭제
-            deleteBoard.deactiveStatus();
-        } else {
-            throw new BoardException(ExceptionType.DELETE);
-        }
-        return deleteBoard.getBoardType();
+        identify(memberUuid, deleteBoard, DELETE);
+        // 게시글 삭제
+        deleteBoard.deactiveStatus();
+        // 이미지 있는 애들만 String값 존재 
+        return deleteBoard.getProductImage();
+    }
+
+    // 작성자 본인인지 확인
+    private void identify(String memberUuid, Board board, ExceptionType exceptionType){
+        if(!board.getMemberUuid().equals(memberUuid)) throw new BoardException(exceptionType);
     }
 }

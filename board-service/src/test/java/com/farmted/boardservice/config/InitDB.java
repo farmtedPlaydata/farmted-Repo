@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Component
 public class InitDB {
@@ -39,15 +41,36 @@ public class InitDB {
             BOARD_UUIDS = Arrays.stream(BoardType.values())
                     .filter(category -> !BoardType.PRODUCT.equals(category))
                     .map(category -> {
-                        Board categoryBoard = new RequestCreateBoardDto(
-                                category,               // BoardType 값
-                                "게시글 내용",                  // 게시글 내용
-                                category.getTypeKo(),          // 게시글 제목
-                                "상품 이름",                    // 상품 이름
-                                10,                             // 상품 재고
-                                10_000L,                         // 상품 가격
-                                "상품 출처"                    // 상품 출처
-                        ).toBoard(MEMBER_UUID, new MemberVo("member-name", "profile"));
+                        Board categoryBoard =
+                            switch (category){
+                                case PRODUCT -> null;
+                                // 사진 추가해야하는 데이터만 추가
+                                case AUCTION, SALE ->
+                                    Board.builder()
+                                            .boardType(category) // 무작위 값으로 변경
+                                            .boardTitle("Random Board Title")
+                                            .boardContent("Random Board Content")
+                                            .viewCount(0) // 초기값
+                                            .boardStatus(true) // 초기값
+                                            .memberName("member-name")
+                                            .memberProfile("profile")
+                                            .memberUuid(MEMBER_UUID) // 무작위 UUID
+                                            .boardUuid(UUID.randomUUID().toString()) // 무작위 UUID
+                                            .productImage("ImageURL")
+                                            .build();
+                                case NOTICE, COMMISSION, CUSTOMER_SERVICE ->
+                                        Board.builder()
+                                                .boardType(category) // 무작위 값으로 변경
+                                                .boardTitle("Random Board Title")
+                                                .boardContent("Random Board Content")
+                                                .viewCount(0) // 초기값
+                                                .boardStatus(true) // 초기값
+                                                .memberName("member-name")
+                                                .memberProfile("profile")
+                                                .memberUuid(MEMBER_UUID) // 무작위 UUID
+                                                .boardUuid(UUID.randomUUID().toString()) // 무작위 UUID
+                                                .build();
+                            };
                         em.persist(categoryBoard);
                         return categoryBoard.getBoardUuid();
                     }).toList();

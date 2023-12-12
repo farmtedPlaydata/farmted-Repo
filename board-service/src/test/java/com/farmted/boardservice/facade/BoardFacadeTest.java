@@ -349,7 +349,7 @@ class BoardFacadeTest {
         // given
         // 반환값이 void
         doNothing().when(productService).checkDeleteProduct(anyString(), eq(MEMBER_UUID));
-
+        doNothing().when(imageService).deleteImage(anyString());
         // when
         for(String uuid : BOARD_UUIDS){
             boardFacade.deleteBoard(uuid, MEMBER_UUID);
@@ -361,5 +361,6 @@ class BoardFacadeTest {
         }
         // 모든 카테고리 중 (SALE, AUCTION)의 경우만 상품 비활성화 가능
         verify(productService, times(2)).checkDeleteProduct(anyString(), eq(MEMBER_UUID));
+        verify(imageService, times(2)).deleteImage(anyString());
     }
 }

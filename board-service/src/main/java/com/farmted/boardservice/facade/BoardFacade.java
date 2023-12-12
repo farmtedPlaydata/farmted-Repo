@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -48,6 +50,7 @@ public class BoardFacade {
             // 상품 서비스에 요청이 필요한 경우 : S3 업로드 이후 Feign 요청 및 예외처리
             case SALE, AUCTION -> {
                 String imageUrl = imageService.uploadImageToS3(image[0]);
+                boardService.imageManager(imageUrl, boardUuid);
                 productService.postProduct(boardDto.toProduct(boardUuid, imageUrl), memberUuid);
             }
             // 일반 게시글은 추가 처리 필요없음.
@@ -125,10 +128,11 @@ public class BoardFacade {
     // 게시글 삭제, 성공하면 1페이지로 리다이렉트
     @Transactional
     public void deleteBoard(String boardUuid, String uuid) {
-        BoardType category = boardService.deleteBoard(boardUuid, uuid);
+        String imageURL = boardService.deleteBoard(boardUuid, uuid);
         // 상품이 포함된 게시글의 경우만 비활성화 요청
-        switch (category) {
-            case SALE, AUCTION -> productService.checkDeleteProduct(boardUuid, uuid);
+        if(Objects.nonNull(imageURL)) {
+            imageService.deleteImage(imageURL);
+            productService.checkDeleteProduct(boardUuid, uuid);
         }
     }
 }

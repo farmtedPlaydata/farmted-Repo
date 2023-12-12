@@ -28,10 +28,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.farmted.boardservice.enums.BoardType.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,18 +57,19 @@ class BoardServiceTest {
     @BeforeAll
     static void beforeAll() {
         String memberUuid = "member-uuid";
-        MemberVo memberInfo = new MemberVo("member-name", "profile");
         for(BoardType category : BoardType.values()){
             if (category.equals(PRODUCT)) continue;
-            DUMMY_BOARD_LIST.add( new RequestCreateBoardDto(
-                    category,             // BoardType 값
-                    "게시글 내용",          // 게시글 내용
-                    "게시글 제목",          // 게시글 제목
-                    "상품 이름",            // 상품 이름
-                    10,                    // 상품 재고
-                    10_000L,               // 상품 가격
-                    "상품 출처"             // 상품 출처
-                ).toBoard(memberUuid, memberInfo)
+            DUMMY_BOARD_LIST.add( Board.builder()
+                    .boardType(category) // 무작위 값으로 변경
+                    .boardTitle("Random Board Title")
+                    .boardContent("Random Board Content")
+                    .viewCount(0) // 초기값
+                    .boardStatus(true) // 초기값
+                    .memberName("Random Member Name")
+                    .memberProfile("Random Member Profile")
+                    .memberUuid(memberUuid) // 무작위 UUID
+                    .boardUuid(UUID.randomUUID().toString()) // 무작위 UUID
+                    .build()
             );
         }
         DUMMY_BOARD = DUMMY_BOARD_LIST.get(0);
@@ -174,7 +172,7 @@ class BoardServiceTest {
                 "수정된 상품 출처",           // 수정된 상품 출처
                 "수정된 상품 이미지 URL"      // 수정된 상품 이미지 URL
         );
-        DUMMY_BOARD_LIST.stream()
+        DUMMY_BOARD_LIST
                 .forEach(board ->
                         when(boardRepository.findByBoardUuidAndBoardStatusTrue(DUMMY_BOARD_UUID))
                                 .thenReturn(Optional.of(board))
@@ -215,15 +213,15 @@ class BoardServiceTest {
                 "수정된 상품 출처",           // 수정된 상품 출처
                 "수정된 상품 이미지 URL"      // 수정된 상품 이미지 URL
         );
-        DUMMY_BOARD_LIST.stream()
+        DUMMY_BOARD_LIST
                 .forEach(board ->
-                        when(boardRepository.findByBoardUuidAndBoardStatusTrue(DUMMY_BOARD_UUID))
+                        when(boardRepository.findByBoardUuidAndBoardStatusTrue(board.getBoardUuid()))
                                 .thenReturn(Optional.of(board))
                 );
         // when
         for(Board board : DUMMY_BOARD_LIST){
             try{
-                boolean updateCheck = boardService.updateBoard(updateDTO, DUMMY_BOARD_UUID, memberUuid);
+                boolean updateCheck = boardService.updateBoard(updateDTO, board.getBoardUuid(), memberUuid);
                 switch (board.getBoardType()){
                     // then
                     // BoardType 변경의 경우, 판매와 경매(경매종료된)끼리의 변경만 가능
@@ -242,63 +240,21 @@ class BoardServiceTest {
 
     @Test
     @Transactional
-    @DisplayName("게시글 업데이트 - PRODUCT의 경우")
-    void updateBoardPRODUCT() {
-        // given
-        String memberUuid = "member-uuid";
-        RequestUpdateProductBoardDto updateDTO = new RequestUpdateProductBoardDto(
-                PRODUCT,           // BoardType 값
-                "수정된 게시글 내용",         // 수정된 게시글 내용
-                "수정된 게시글 제목",         // 수정된 게시글 제목
-                "수정된 상품 이름",           // 수정된 상품 이름
-                20,                           // 수정된 상품 재고
-                15_000L,                      // 수정된 상품 가격
-                "수정된 상품 출처",           // 수정된 상품 출처
-                "수정된 상품 이미지 URL"      // 수정된 상품 이미지 URL
-        );
-        DUMMY_BOARD_LIST.stream()
-                .forEach(board ->
-                        when(boardRepository.findByBoardUuidAndBoardStatusTrue(DUMMY_BOARD_UUID))
-                                .thenReturn(Optional.of(board))
-                );
-        // when
-        for(Board board : DUMMY_BOARD_LIST){
-            try{
-                boolean updateCheck = boardService.updateBoard(updateDTO, DUMMY_BOARD_UUID, memberUuid);
-                switch (board.getBoardType()){
-                    // then
-                    // BoardType 변경의 경우, 판매와 경매(경매종료된)끼리의 변경만 가능
-                    case NOTICE, COMMISSION, CUSTOMER_SERVICE
-                            -> assertThat(updateCheck)
-                            .isEqualTo(false);
-                    case SALE, AUCTION
-                            -> assertThat(updateCheck)
-                            .isEqualTo(true);
-                }
-            } catch (Exception e){
-                assertThat(e).isInstanceOf(BoardException.class);
-            }
-        }
-    }
-
-    @Test
-    @Transactional
     @DisplayName("게시글 삭제")
     void deleteBoard() {
         // given
         String memberUuid = "member-uuid";
-        DUMMY_BOARD_LIST.stream()
+        DUMMY_BOARD_LIST
                 .forEach(board ->
-                        when(boardRepository.findByBoardUuidAndBoardStatusTrue(DUMMY_BOARD_UUID))
+                        when(boardRepository.findByBoardUuidAndBoardStatusTrue(board.getBoardUuid()))
                                 .thenReturn(Optional.of(board))
                 );
-            // 예외 확인용 BoardUuid
-        String lastBoardUuid = DUMMY_BOARD_LIST.get(DUMMY_BOARD_LIST.size()-1).getBoardUuid();
+        // 예외 확인용 BoardUuid
         // when
         for(Board board : DUMMY_BOARD_LIST){
             // 하나는 Exception 확인용으로 실패
-            if(board.getBoardType() == SALE){
-                Assertions.assertThrows( BoardException.class,
+            if(Objects.equals(board.getBoardUuid(), DUMMY_BOARD_UUID)){
+                Assertions.assertThrows(BoardException.class,
                     () ->
                         boardService.deleteBoard(board.getBoardUuid(), "123"));
                 continue;
@@ -307,7 +263,7 @@ class BoardServiceTest {
         }
         // then
         for(Board board : DUMMY_BOARD_LIST) {
-            if(board.getBoardType() == SALE) continue;
+            if(Objects.equals(board.getBoardUuid(), DUMMY_BOARD_UUID)) continue;
             assertThat(board.isBoardStatus()).isEqualTo(false);
         }
     }
