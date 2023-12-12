@@ -122,4 +122,12 @@ public class MemberServiceImpl implements MemberService {
             member.checkedIn(member);
         }
     }
+
+    @Override
+    public String updateRole(String uuid) {
+        Member member = memberRepository.findByMemberUuid(uuid)
+                .orElseThrow(() -> new MemberException("MemberService - findMemberRoleByUuid"));
+
+        return ("ROLE_" + member.getMemberRole());
+    }
 }

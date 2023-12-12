@@ -5,14 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ef9efffa-6854-43fa-853a-8a50f38aca78" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/farmted/gatewayservice/config/JwtProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/farmted/gatewayservice/config/JwtProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/farmted/gatewayservice/config/JwtTokenFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/farmted/gatewayservice/config/JwtTokenFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/controller/MemberController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/jwt/JwtProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/jwt/JwtProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/PassServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/PassServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/controller/PassController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/controller/PassController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/domain/Pass.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/domain/Pass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/enums/RoleEnums.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/enums/RoleEnums.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +130,7 @@
       <workItem from="1701846939361" duration="4455000" />
       <workItem from="1701851518794" duration="832000" />
       <workItem from="1701924996089" duration="6904000" />
-      <workItem from="1702340352721" duration="3853000" />
+      <workItem from="1702340352721" duration="6798000" />
     </task>
     <servers />
   </component>

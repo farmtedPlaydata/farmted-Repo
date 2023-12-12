@@ -70,4 +70,10 @@ public class PassController {
         jwtProvider.setToken(token, TokenType.ACCESS, response);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
+
+    @PutMapping("/change-role")
+    public ResponseEntity<?> changeRoleByMemberService(@RequestBody String uuid) {
+        passService.changeRoleByMemberService(uuid);
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
+    }
 }

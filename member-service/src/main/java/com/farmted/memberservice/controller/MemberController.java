@@ -6,6 +6,7 @@ import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
 import com.farmted.memberservice.dto.request.SearchMemberParam;
 import com.farmted.memberservice.dto.response.MemberNameImageDto;
 import com.farmted.memberservice.dto.response.ResponsePagingToListDto;
+import com.farmted.memberservice.enums.RoleEnums;
 import com.farmted.memberservice.global.GlobalResponseDto;
 import com.farmted.memberservice.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -92,5 +93,10 @@ public class MemberController {
     public ResponseEntity<?> memberCheckIn(@RequestHeader("UUID") String uuid) {
         memberService.checkIn(uuid);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
+    }
+
+    @PostMapping("/member/update-role/{uuid}")
+    public ResponseEntity<?> updateRole(@PathVariable String uuid) {
+        return ResponseEntity.ok(GlobalResponseDto.of(memberService.updateRole(uuid)));
     }
 }

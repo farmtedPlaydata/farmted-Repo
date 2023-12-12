@@ -18,4 +18,5 @@ public interface PassService {
     List<ResponseListDto> getPassByAll(int pageNo);
     String findUuidByEmail(String email);
     String reIssue(String uuid);
+    void changeRoleByMemberService(String uuid);
 }
