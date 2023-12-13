@@ -5,9 +5,11 @@ import com.farmted.passservice.dto.request.RequestCreatePassDto;
 import com.farmted.passservice.dto.request.RequestLoginDto;
 import com.farmted.passservice.dto.response.ResponseListDto;
 import com.farmted.passservice.enums.TokenType;
+import com.farmted.passservice.exception.PassException;
 import com.farmted.passservice.global.GlobalResponseDto;
 import com.farmted.passservice.repository.PassRepository;
 import com.farmted.passservice.service.PassService;
+import com.farmted.passservice.util.cookies.CookieUtil;
 import com.farmted.passservice.util.jwt.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,7 +26,8 @@ import java.util.List;
 public class PassController {
 
     private final PassService passService;
-    private final JwtProvider jwtProvider;
+    private final CookieUtil cookieUtil;
+    private final PassRepository passRepository;
 
     @PostMapping("/passes")
     public ResponseEntity<?> createPass(@RequestBody RequestCreatePassDto dto) {
@@ -36,8 +39,10 @@ public class PassController {
     @PostMapping("/login")
     public ResponseEntity<?> loginPass(@RequestBody RequestLoginDto dto, HttpServletResponse response) {
         String token = passService.login(dto);
-        jwtProvider.setToken(token, TokenType.ACCESS, response);
-        jwtProvider.setToken(token, TokenType.REFRESH, response);
+        cookieUtil.setToken(token, TokenType.ACCESS, response);
+        cookieUtil.setToken(token, TokenType.REFRESH, response);
+        String role = passService.setRole(dto);
+        cookieUtil.setRoleCookie(role, response);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
@@ -46,7 +51,7 @@ public class PassController {
                                     HttpServletResponse response,
                                     HttpServletRequest request) {
         passService.logout(uuid);
-        jwtProvider.deleteCookie(response, request);
+        cookieUtil.deleteCookie(response, request);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
@@ -67,7 +72,7 @@ public class PassController {
     public ResponseEntity<?> reIssue(@PathVariable String uuid,
                                      HttpServletResponse response) {
         String token = passService.reIssue(uuid);
-        jwtProvider.setToken(token, TokenType.ACCESS, response);
+        cookieUtil.setToken(token, TokenType.ACCESS, response);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 

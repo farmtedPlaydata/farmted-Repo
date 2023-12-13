@@ -131,6 +131,13 @@ public class PassServiceImpl implements PassService {
         }
     }
 
+    @Override
+    public String setRole(RequestLoginDto dto) {
+        Pass pass = passRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new PassException("PassService - setRole"));
+        return pass.getRole().toString();
+    }
+
 
     // email 중복 검사
     private void duplicateUserCheck(RequestCreatePassDto dto) {
