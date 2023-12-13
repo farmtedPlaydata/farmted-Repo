@@ -23,7 +23,7 @@ public class CommentController {
 
     @GetMapping("/comments")
     public ResponseEntity<List<Comment>> getAllComments() {
-        return ResponseEntity.ok(commentService.getALlComments());
+        return ResponseEntity.ok(commentService.getAllComments());
     }
 
     @GetMapping("/comments/{id}")
@@ -44,8 +44,8 @@ public class CommentController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<?> updateComment(@PathVariable String uuid, @RequestBody CommentUpdateRequestDto updateRequestDto) {
-        commentService.updateComment(uuid, updateRequestDto);
+    public ResponseEntity<?> updateComment(@RequestBody CommentUpdateRequestDto updateRequestDto) {
+        commentService.updateComment(updateRequestDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

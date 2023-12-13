@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
     Optional<Member> findByMemberUuid(String uuid);
     Member getMemberByMemberUuid(String uuid);
-    void deleteByMemberUuid(String uuid);
+    void deleteMemberByMemberUuid(String uuid);
 }

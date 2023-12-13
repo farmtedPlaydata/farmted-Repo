@@ -15,12 +15,15 @@ public class RequestCreateMemberDto {
     private String memberAddress;
     private String memberAddressDetail;
     private String memberPhone;
+    private String uuid;
+    private String email;
 
     public Member toEntity() {
         return Member.builder()
-                .memberUuid(UUID.randomUUID().toString())
+                .memberUuid(this.uuid)
                 .memberAddress(this.memberAddress)
                 .memberName(this.memberName)
+                .memberBalance(10000L)
                 .memberAddressDetail(this.memberAddressDetail)
                 .memberPhone(this.memberPhone)
                 .memberRole(RoleEnums.USER)

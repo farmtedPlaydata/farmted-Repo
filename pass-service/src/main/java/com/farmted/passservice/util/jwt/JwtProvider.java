@@ -95,6 +95,23 @@ public class JwtProvider {
         }
     }
 
+    public void saveRefreshToken(String uuid, String refreshToken) {
+        redisRepository.findById(uuid)
+                .ifPresentOrElse(
+                        refreshTokenEntity -> {
+                            refreshTokenEntity.updateToken(uuid, refreshToken, JwtProvider.REFRESH_TOKEN_TIME);
+                            redisRepository.save(refreshTokenEntity);
+                        },
+                        () -> {
+                            RefreshToken refreshToSave = RefreshToken.builder()
+                                    .uuid(uuid)
+                                    .refreshToken(refreshToken)
+                                    .expiration(JwtProvider.REFRESH_TOKEN_TIME)
+                                    .build();
+                            redisRepository.save(refreshToSave);
+                        }
+                );
+    }
     
     
     // refreshToken 검증
@@ -116,6 +133,12 @@ public class JwtProvider {
         return  Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
+    public RoleEnums getRoleFromToken(String token) {
+        Claims claims = getUserInfoFromToken(token);
+        return claims.get(AUTH_KEY, RoleEnums.class);
+    }
+
+
     public Authentication createAuth(String uuid) {
         UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(uuid);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -126,17 +149,29 @@ public class JwtProvider {
                         ? JwtProvider.ACCESS_TOKEN_TIME
                         : JwtProvider.REFRESH_TOKEN_TIME;
 
-        ResponseCookie cookie = ResponseCookie.from(
-                        JwtProvider.AUTH_HEADER,    // 쿠키의 이름
-                        URLEncoder.encode(token, StandardCharsets.UTF_8))
-                .path("/")
-                .httpOnly(true)
-                .sameSite("None")
-                .secure(true)
-                .maxAge(time)
-                .build();
-        // 응답 헤더에 쿠키 추가
-        response.addHeader("Set-Cookie", cookie.toString());
+        if (tokenType.equals(TokenType.ACCESS)) {
+            ResponseCookie cookie = ResponseCookie.from(
+                            JwtProvider.AUTH_HEADER,    // 쿠키의 이름
+                            URLEncoder.encode(token, StandardCharsets.UTF_8))
+                    .path("/")
+                    .httpOnly(true)
+                    .sameSite("None")
+                    .secure(true)
+                    .maxAge(time)
+                    .build();
+            // 응답 헤더에 쿠키 추가
+            response.addHeader("Set-Cookie", cookie.toString());
+        } else if (tokenType.equals(TokenType.REFRESH)) {
+            ResponseCookie cookie = ResponseCookie.from(
+                        JwtProvider.REFRESH_HEADER,
+                            URLEncoder.encode(token, StandardCharsets.UTF_8))
+                    .path("/")
+                    .httpOnly(true)
+                    .secure(true)
+                    .maxAge(JwtProvider.REFRESH_TOKEN_TIME)
+                    .build();
+            response.addHeader("Set-Cookie", cookie.toString());
+        }
     }
 
     public void deleteCookie(HttpServletResponse response, HttpServletRequest request) {

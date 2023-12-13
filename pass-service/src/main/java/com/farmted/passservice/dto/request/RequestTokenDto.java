@@ -6,9 +6,7 @@ import lombok.Setter;
 
 @Getter @Setter
 public class RequestTokenDto {
-
     private String uuid;
     private RoleEnums role;
-
 
 }

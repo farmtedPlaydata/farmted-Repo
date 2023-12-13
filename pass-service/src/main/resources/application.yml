@@ -13,18 +13,11 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+#        dialect: org.hibernate.dialect.MySQLDialect
         physical_naming_strategy: com.farmted.passservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
     show-sql: true
     hibernate:
       ddl-auto: create
-
-  #Redis
-  data:
-    redis:
-      host: 127.0.0.1
-      port: 6379
-      password: 5986
 
   security:
     oauth2:
@@ -40,5 +33,28 @@ spring:
     view:
       prefix: /resources/static/**
       suffix: .html
+  application:
+    name: pass-service
 server:
-  port: 5986
+  port: 0
+
+---
+
+#Redis
+spring:
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: 5986
+
+eureka:
+  client:
+    register-with-eureka: true # 유레카 서버에 등록하기
+    fetch-registry: true # 유레카 서버에서 서버 상태 지속적 감시
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka # 타켓 유레카 서버
+
+  # 인스턴스별로 유레카에 보여지는 표기를 다르게 설정함
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}

@@ -54,7 +54,7 @@ public class OAuthAttributes {
 
     /*
     * of 메서드로 OAuthAttribues 객체가 생성, 유저 정보들이 담긴 OAuth2UserInfo가 소셜 타입별로 주입된 상태
-    * OAuth2UserInfo에서 socialId(식별값), email, imageUrl을 가져오고
+    * OAuth2UserInfo에서 socialId(식별값), email을 가져오고
     * JWT에 담기위한 값으로 랜덤 UUID, role은 GUEST로 설정하여 build
     * */
 
@@ -64,7 +64,6 @@ public class OAuthAttributes {
                 .socialId(oAuth2UserInfo.getId())
                 .email(oAuth2UserInfo.getEmail())
                 .uuid(UUID.randomUUID().toString())
-                .imageUrl(oAuth2UserInfo.getImageUrl())
                 .role(RoleEnums.GUEST)
                 .build();
     }

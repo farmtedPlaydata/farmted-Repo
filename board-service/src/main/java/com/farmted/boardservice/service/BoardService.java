@@ -54,7 +54,7 @@ public class BoardService {
                 (pageNo < 1 && category.equals(BoardType.PRODUCT))
                     //1페이지 캐싱
                     ? board1PageCache.getPage1()
-                    // 생성일을 기준으로 내림치순 (최신 글이 먼저 조회)
+                    // 생성일을 기준으로 내림차순 (최신 글이 먼저 조회)
                     : boardRepository.findByBoardType(category,
                         PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createdAt")))
         , pageNo);

@@ -7,7 +7,6 @@ import com.farmted.boardservice.enums.FeignDomainType;
 import com.farmted.boardservice.feignClient.AuctionFeignClient;
 import com.farmted.boardservice.util.feignConverter.FeignConverter;
 import com.farmted.boardservice.vo.AuctionVo;
-import com.farmted.boardservice.vo.ProductVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

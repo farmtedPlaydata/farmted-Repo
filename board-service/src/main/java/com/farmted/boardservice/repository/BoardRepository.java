@@ -36,13 +36,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             "WHERE b.boardUuid = :boardUuid AND b.boardStatus = true")
     Optional<ResponseGetBoardDetailDto> findDetailByBoardUuid(String boardUuid);
 
-// 본인의 낙찰 내역 리스트 추출
-//    @Query("SELECT new com.farmted.boardservice.dto.response.listDomain.ResponseGetBoardDto(b) " +
-//            "FROM Board b " +
-//            "WHERE b.boardUuid = :boardUuid AND b.boardStatus = true")
-//    Optional<ResponseGetBoardDto> findBidderByBoardUuid(String boardUuid);
-
-
 // 업데이트/삭제용 엔티티 불러오기 (영속성때문에)
     Optional<Board> findByBoardUuidAndBoardStatusTrue(String boardUuid);
 

@@ -2,6 +2,7 @@ package com.farmted.passservice.repository;
 
 import com.farmted.passservice.domain.Pass;
 import com.farmted.passservice.enums.SocialType;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

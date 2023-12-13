@@ -10,6 +10,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -21,6 +22,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
@@ -41,6 +43,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 // AccessToken과 RefreshToken을 쿠키에서 추출
                 if (cookie.getName().equals(JwtProvider.AUTH_HEADER)) {
                     accessToken = jwtProvider.resolveToken(cookie);
+                } else if (cookie.getName().equals(JwtProvider.REFRESH_HEADER)) {
+                    refreshToken = jwtProvider.resolveToken(cookie);
                 }
             }
         }
@@ -55,7 +59,8 @@ public class JwtFilter extends OncePerRequestFilter {
                     // 만료된 AccessToken인 경우, RefreshToken을 검증하고 새로운 AccessToken 생성
                     Claims passInfo = jwtProvider.getUserInfoFromToken(accessToken);
                     String uuid = passInfo.getSubject();
-                    String createdAccessToken = jwtProvider.createToken(uuid, RoleEnums.GUEST, TokenType.ACCESS);
+                    RoleEnums role = jwtProvider.getRoleFromToken(accessToken);
+                    String createdAccessToken = jwtProvider.createToken(uuid, role, TokenType.ACCESS);
                     
                     // 생성된 AccessToken을 응답에 추가
                     ResponseCookie cookie = ResponseCookie.from(
@@ -70,6 +75,11 @@ public class JwtFilter extends OncePerRequestFilter {
                     setAuthentication(uuid);
                 }
             }
+            // accessToken이 null 인데 refreshToken이 있을 경우
+        } else if (refreshToken != null) {
+            if (jwtProvider.validateRefreshToken(refreshToken)) {
+                setAuthentication(jwtProvider.getUserInfoFromToken(refreshToken).getSubject());
+            }
         }
         filterChain.doFilter(request, response);
     }
@@ -78,10 +88,14 @@ public class JwtFilter extends OncePerRequestFilter {
     public void setAuthentication(String uuid) {
         // 빈 SecurityContext 생성
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-        // JwtProvider의 createAuth를 사용하여 Authentication 객체 생성
+        /*
+        * JwtProvider의 createAuth를 사용하여 Authentication 객체 생성
+        * 생성된 Authentication 객체를 SecurityContext에 설정 후
+        * SecurityContextHolder를 새로운 컨텍스트로 업데이트.
+        *   -> 사용자를 인증된 사용자로 인식할 수 있음
+        * */
         Authentication authentication = jwtProvider.createAuth(uuid);
         context.setAuthentication(authentication);
-
         SecurityContextHolder.setContext(context);
     }
 }
