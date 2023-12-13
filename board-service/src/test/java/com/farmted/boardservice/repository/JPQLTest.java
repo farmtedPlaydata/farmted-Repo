@@ -1,83 +1,34 @@
 package com.farmted.boardservice.repository;
 
+import com.farmted.boardservice.config.InitDB;
 import com.farmted.boardservice.domain.Board;
 import com.farmted.boardservice.dto.request.RequestCreateBoardDto;
 import com.farmted.boardservice.dto.response.listDomain.ResponseGetBoardDto;
 import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.vo.MemberVo;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.stream.IntStream;
-
+import static com.farmted.boardservice.config.InitDB.MEMBER_UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+// 해당 어노테이션은 @DataJpaTest에 내장되어 있으며, 이 어노테이션은 '내장된 메모리 데이터베이스'로 테스트를 진행
+// 설정을 통해 내장된 메모리 데이터베이스로 변경하지 못하도록 막기
+@Import(InitDB.class)
 @DisplayName("JPQL 테스트 코드")
-@Transactional
 class JPQLTest {
-    private final BoardRepository boardRepository;
-
     @Autowired
-    JPQLTest(BoardRepository boardRepository) {
-        this.boardRepository = boardRepository;
-    }
-
-    // 레포 초기화 및 더미데이터 생성
-    @BeforeEach
-    void beforeEach() {
-        boardRepository.deleteAll();
-        // 경매 생성
-        boardRepository.save(new RequestCreateBoardDto(
-                BoardType.AUCTION,
-                "Auction Content",
-                "Auction Title",
-                "Auction Product",
-                10,
-                100,
-                "Auction Source",
-                "Auction Image"
-        ).toBoard("uuid", new MemberVo("member", "memberProfile")));
-        // 판매 생성
-        boardRepository.save(new RequestCreateBoardDto(
-                BoardType.SALE,
-                "Sale Content",
-                "Sale Title",
-                "Sale Product",
-                20,
-                200,
-                "Sale Source",
-                "Sale Image"
-        ).toBoard("uuid", new MemberVo("member", "memberProfile")));
-        // 구매요청 생성
-        boardRepository.save(new RequestCreateBoardDto(
-                BoardType.COMMISSION,
-                "Commission Content",
-                "Commission Title",
-                "", 0, 0, "", ""
-        ).toBoard("uuid", new MemberVo("member", "memberProfile")));
-        // 그 이외의 더미데이터 (고객센터로 고정)
-        IntStream.rangeClosed(1, 5).forEach((i) -> {
-                    boardRepository.save(new RequestCreateBoardDto(
-                            BoardType.CUSTOMER_SERVICE,      // BoardType 값
-                            "게시글 내용" + i,                  // 게시글 내용
-                            "게시글 제목" + i,                  // 게시글 제목
-                            "상품 이름" + i,                    // 상품 이름
-                            10 * i,                             // 상품 재고
-                            10_000L * i,                         // 상품 가격
-                            "상품 출처" + i,                    // 상품 출처
-                            "상품 이미지 URL" + i               // 상품 이미지 URL
-                    ).toBoard("DummuUuid" + i, new MemberVo("member" +i, "memberProfile"+i)));
-                }
-        );
-    }
+    private BoardRepository boardRepository;
 
     @Test
     @DisplayName("Product(판매+경매) 게시글 조회")
@@ -108,7 +59,7 @@ class JPQLTest {
         // given
         // when
         // 회원UUID가 "uuid"인 게시글
-        Page<ResponseGetBoardDto> boardDTO = boardRepository.findByMemberUuidAndBoardType("uuid", BoardType.PRODUCT,
+        Page<ResponseGetBoardDto> boardDTO = boardRepository.findByMemberUuidAndBoardType(MEMBER_UUID, BoardType.PRODUCT,
                 PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createdAt")));
         // then
         assertThat(boardDTO.getContent().size()).isEqualTo(2);
@@ -120,13 +71,14 @@ class JPQLTest {
         // given
         // when
             // 회원UUID가 "uuid"인 게시글 중 SALE인 게시글
-        Page<ResponseGetBoardDto> boardDTO = boardRepository.findByMemberUuidAndBoardType("uuid", BoardType.SALE,
+        Page<ResponseGetBoardDto> boardDTO = boardRepository.findByMemberUuidAndBoardType(MEMBER_UUID, BoardType.SALE,
                 PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createdAt")));
         // then
         assertThat(boardDTO.getContent().size()).isEqualTo(1);
     }
 
     @Test
+    @Transactional
     @DisplayName("게시글 상세 조회")
     void GetBoardDetail(){
         // given
@@ -139,8 +91,7 @@ class JPQLTest {
                 "Auction Product",
                 10,
                 100,
-                "Auction Source",
-                "Auction Image"
+                "Auction Source"
         );
             // 저장
         Board board = createBoardDto.toBoard(memberUuid, new MemberVo("memberDetail", "memberProfile"));
@@ -158,6 +109,7 @@ class JPQLTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("업데이트, 삭제용 엔티티 불러오기")
     void GetEntity(){
         // given
@@ -170,8 +122,7 @@ class JPQLTest {
                 "Auction Product",
                 10,
                 100,
-                "Auction Source",
-                "Auction Image"
+                "Auction Source"
         );
             // 저장
         Board board = createBoardDto.toBoard(memberUuid, new MemberVo("memberEntity", "memberProfile"));

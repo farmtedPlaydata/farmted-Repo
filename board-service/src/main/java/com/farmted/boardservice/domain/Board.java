@@ -34,6 +34,9 @@ public class Board extends TimeStamp {
     @Column(nullable = false)
     private String boardContent;
 
+    @Column
+    private String productImage;
+
     @Column(nullable = false)
     private long viewCount;
 
@@ -74,4 +77,6 @@ public class Board extends TimeStamp {
         boardTitle = updateDTO.boardTitle();
         boardContent = updateDTO.boardContent();
     }
+    // 게시글 사진 관리 로직
+    public void imageManager(String imageURL) {productImage = imageURL;}
 }

@@ -1,0 +1,11 @@
+dbURL: jdbc:mysql://localhost:3306/msa_db
+dbName: root
+dbPwd: 1234
+driverName: com.mysql.cj.jdbc.Driver
+
+namingRoute: com.farmted.boardservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
+
+regionLocation: ap-northeast-2
+bucketName: farm
+secret: secret
+access: access

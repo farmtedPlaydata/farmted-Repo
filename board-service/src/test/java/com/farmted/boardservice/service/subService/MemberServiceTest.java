@@ -4,44 +4,37 @@ import com.farmted.boardservice.feignClient.MemberFeignClient;
 import com.farmted.boardservice.util.GlobalResponseDto;
 import com.farmted.boardservice.util.feignConverter.FeignConverter;
 import com.farmted.boardservice.vo.MemberVo;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ContextConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
+@ContextConfiguration(classes = {FeignConverter.class, MemberService.class, MemberFeignClient.class})
 @DisplayName("Member-Service 테스트 코드")
 class MemberServiceTest {
-    private final MemberFeignClient memberFeignClient = mock(MemberFeignClient.class);
-    private final FeignConverter<MemberVo> memberConverter;
-
-    @Autowired
-    public MemberServiceTest(FeignConverter<MemberVo> memberConverter) {
-        this.memberConverter = memberConverter;
-    }
-
+    @Mock
+    private MemberFeignClient memberFeignClient;
+    @Spy
+    private FeignConverter<MemberVo> memberConverter;
+    @InjectMocks
     private MemberService memberService;
-
-    // mock으로 받을 객체값
-    private static final MemberVo memberDetail = new MemberVo(
-            "member-name", "profile-url");
-
-    @BeforeEach
-    void setUp(){
-        memberService = new MemberService(memberFeignClient, memberConverter);
-    }
 
     @Test
     @DisplayName("회원 정보 받기 - 글 작성시")
     void getMemberInfo() {
         // given
         String memberUuid = "uuid";
+        MemberVo memberDetail =
+                new MemberVo("member-name", "profile-url");
         when(memberFeignClient.getMemberInfo(memberUuid))
                 .thenReturn(ResponseEntity.ok(
                         GlobalResponseDto.of(memberDetail)));
