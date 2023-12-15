@@ -2,6 +2,8 @@ package com.farmted.memberservice.dto.request;
 
 import com.farmted.memberservice.domain.Member;
 import com.farmted.memberservice.enums.RoleEnums;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,9 +13,11 @@ import java.util.UUID;
 public class RequestCreateMemberDto {
     private RoleEnums memberRole;
     private Boolean memberStatus;
+    @NotBlank
     private String memberName;
     private String memberAddress;
     private String memberAddressDetail;
+    @NotBlank
     private String memberPhone;
     private String uuid;
     private String memberProfile;
