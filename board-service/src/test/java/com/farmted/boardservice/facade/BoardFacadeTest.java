@@ -16,14 +16,15 @@ import com.farmted.boardservice.enums.RoleEnums;
 import com.farmted.boardservice.exception.BoardException;
 import com.farmted.boardservice.exception.RoleTypeException;
 import com.farmted.boardservice.repository.BoardRepository;
-import com.farmted.boardservice.service.BoardService;
-import com.farmted.boardservice.service.subService.*;
+import com.farmted.boardservice.service.subService.AuctionService;
+import com.farmted.boardservice.service.subService.ImageService;
+import com.farmted.boardservice.service.subService.MemberService;
+import com.farmted.boardservice.service.subService.ProductService;
 import com.farmted.boardservice.util.Board1PageCache;
 import com.farmted.boardservice.vo.AuctionVo;
 import com.farmted.boardservice.vo.MemberVo;
 import com.farmted.boardservice.vo.ProductVo;
 import org.junit.jupiter.api.*;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -302,7 +303,6 @@ class BoardFacadeTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("게시글 업데이트")
     void updateBoard() {
         // given
@@ -343,7 +343,6 @@ class BoardFacadeTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("게시글 삭제")
     void deleteBoard() {
         // given

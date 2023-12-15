@@ -44,7 +44,7 @@ dependencies {
     // S3 등록
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.609'
     // 암호화 라이브러리
-    implementation group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter', version: '3.0.4'
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 }
 
 
@@ -57,4 +57,5 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+    systemProperty "jasypt.encryptor.password", System.getenv("jasypt.encryptor.password")
 }
