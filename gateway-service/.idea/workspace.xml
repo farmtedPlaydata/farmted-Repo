@@ -8,11 +8,12 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/farmted/gatewayservice/config/JwtProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/farmted/gatewayservice/config/JwtProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/farmted/gatewayservice/config/JwtTokenFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/farmted/gatewayservice/config/JwtTokenFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/controller/MemberController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/farmted/gatewayservice/config/AuthorizationFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/controller/PassController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/controller/PassController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/jwt/JwtProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/jwt/JwtProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/oauth2/handler/OAuth2LoginSuccessHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/util/oauth2/handler/OAuth2LoginSuccessHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +72,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/#35&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#60&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/farmted-Repo/gateway-service&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -127,7 +128,9 @@
       <workItem from="1701846939361" duration="4455000" />
       <workItem from="1701851518794" duration="832000" />
       <workItem from="1701924996089" duration="6904000" />
-      <workItem from="1702340352721" duration="3853000" />
+      <workItem from="1702340352721" duration="6798000" />
+      <workItem from="1702373642345" duration="765000" />
+      <workItem from="1702445654374" duration="1773000" />
     </task>
     <servers />
   </component>

@@ -16,6 +16,7 @@ public class RequestCreateMemberDto {
     private String memberAddressDetail;
     private String memberPhone;
     private String uuid;
+    private String memberProfile;
     private String email;
 
     public Member toEntity() {
@@ -27,6 +28,7 @@ public class RequestCreateMemberDto {
                 .memberAddressDetail(this.memberAddressDetail)
                 .memberPhone(this.memberPhone)
                 .memberRole(RoleEnums.USER)
+                .memberProfile(this.memberProfile)
                 .memberStatus(true)
                 .build();
     }

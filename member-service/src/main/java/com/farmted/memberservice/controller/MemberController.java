@@ -6,6 +6,7 @@ import com.farmted.memberservice.dto.request.RequestUpdateMemberDto;
 import com.farmted.memberservice.dto.request.SearchMemberParam;
 import com.farmted.memberservice.dto.response.MemberNameImageDto;
 import com.farmted.memberservice.dto.response.ResponsePagingToListDto;
+import com.farmted.memberservice.enums.RoleEnums;
 import com.farmted.memberservice.global.GlobalResponseDto;
 import com.farmted.memberservice.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -41,8 +43,9 @@ public class MemberController {
 
     // 회원 상세 정보
     @PostMapping("/members")
-    public ResponseEntity<?> createMember(@RequestBody RequestCreateMemberDto dto) {
-        memberService.createMember(dto);
+    public ResponseEntity<?> createMember(@RequestPart("CREATE") RequestCreateMemberDto dto,
+                                          @RequestPart("IMAGE")MultipartFile image) {
+        memberService.createMember(dto, image);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
@@ -54,16 +57,18 @@ public class MemberController {
     }
 
     // 회원 탈퇴(본인)
-    @DeleteMapping("/delete/{uuid}")
-    public ResponseEntity<?> deleteMember(@PathVariable String uuid) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteMember(@RequestHeader("UUID") String uuid) {
         memberService.deleteMember(uuid);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
     // 회원 강퇴
     @DeleteMapping("/expel/{uuid}")
-    public ResponseEntity<?> expelMember(@PathVariable String uuid) {
-        memberService.deleteMember(uuid);
+    public ResponseEntity<?> expelMember(@RequestHeader("ROLE") String role,
+                                         @PathVariable String uuid) {
+//        memberService.deleteMember(uuid);
+        memberService.expelMember(role, uuid);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
@@ -92,5 +97,10 @@ public class MemberController {
     public ResponseEntity<?> memberCheckIn(@RequestHeader("UUID") String uuid) {
         memberService.checkIn(uuid);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
+    }
+
+    @PostMapping("/member/update-role/{uuid}")
+    public ResponseEntity<?> updateRole(@PathVariable String uuid) {
+        return ResponseEntity.ok(GlobalResponseDto.of(memberService.updateRole(uuid)));
     }
 }

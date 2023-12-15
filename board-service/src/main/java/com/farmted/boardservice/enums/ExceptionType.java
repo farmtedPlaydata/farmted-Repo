@@ -8,6 +8,7 @@ public enum ExceptionType {
     UPDATE(" 갱신에 실패했습니다."),
     DELETE(" 삭제에 실패했습니다."),
     CHECK(" 확인에 실패했습니다."),
+    IMAGE(" 이미지 업로드에 실패했습니다."),
     UNKNOWN(" 통신 중 알 수 없는 오류가 발생했습니다.");
 
     private final String errorMessage;

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
 
 public record RequestCreateBoardDto(
         // 게시글용 정보
@@ -22,9 +23,7 @@ public record RequestCreateBoardDto(
         @JsonInclude(JsonInclude.Include.NON_NULL)
         @JsonProperty("productPrice") @Min(value = 1) long productPrice,
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        @JsonProperty("productSource") @NotBlank String productSource,
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        @JsonProperty("productImage") @NotBlank String productImage) {
+        @JsonProperty("productSource") @NotBlank String productSource) {
 
     // 게시글 전용 데이터 - 저장용 Entity
     public Board toBoard(String memberUuid, MemberVo memberVo){
@@ -39,14 +38,14 @@ public record RequestCreateBoardDto(
     }
 
     // 상품 전용 데이터 - 전송용 VO
-    public ProductVo toProduct(String boardUuid){
+    public ProductVo toProduct(String boardUuid, String imageUrl){
         return ProductVo.builder()
                 .productName(this.productName)
                 .productStock(this.productStock)
                 .productPrice(this.productPrice)
                 .productSource(this.productSource)
-                .productImage(this.productImage)
                 .boardType(this.boardType)
+                .productImage(imageUrl)
                 .boardUuid(boardUuid)
                 .build();
     }

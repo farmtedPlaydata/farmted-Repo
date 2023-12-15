@@ -1,5 +1,6 @@
 package com.farmted.passservice.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -13,4 +14,13 @@ public enum RoleEnums {
 
     private final String key;
 
+    @JsonCreator
+    public static RoleEnums fromKey(String key) {
+        for (RoleEnums roleEnum : RoleEnums.values()) {
+            if (roleEnum.getKey().equals(key)) {
+                return roleEnum;
+            }
+        }
+        throw new IllegalArgumentException("Unknown key: " + key);
+    }
 }

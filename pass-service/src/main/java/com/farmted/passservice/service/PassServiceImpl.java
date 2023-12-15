@@ -7,6 +7,7 @@ import com.farmted.passservice.dto.response.ResponseListDto;
 import com.farmted.passservice.enums.RoleEnums;
 import com.farmted.passservice.enums.TokenType;
 import com.farmted.passservice.exception.PassException;
+import com.farmted.passservice.feignclient.MemberFeignClient;
 import com.farmted.passservice.repository.PassRepository;
 import com.farmted.passservice.util.jwt.JwtProvider;
 import com.farmted.passservice.util.redis.RedisRepository;
@@ -16,10 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,6 +37,7 @@ public class PassServiceImpl implements PassService {
     private final PasswordEncoder passwordEncoder;
     private final RedisRepository redisRepository;
     private final JwtProvider jwtProvider;
+    private final MemberFeignClient memberFeignClient;
 
     @Override
     @Transactional
@@ -103,6 +107,35 @@ public class PassServiceImpl implements PassService {
                 .orElseThrow(() -> new PassException("PassService - reIssue : 사용자를 찾을 수 없습니다."));
 
         return jwtProvider.createToken(uuid, pass.getRole(), TokenType.ACCESS);
+    }
+
+    @Override
+    @Transactional
+    public void changeRoleByMemberService(String uuid) {
+        try {
+            ResponseEntity<?> re = memberFeignClient.updateRole(uuid);
+            Object responseBody = re.getBody();
+            if (responseBody instanceof LinkedHashMap<?, ?> responseMap) {
+                // data 값 가져오기
+                Object dataField = responseMap.get("data");
+                RoleEnums role = RoleEnums.fromKey(dataField.toString());
+                Pass pass = passRepository.findByUuid(uuid)
+                        .orElseThrow(() -> new PassException("passService - changeRoleByMemberService"));
+                log.info(role.toString());
+
+                pass.updateRole(role);
+                passRepository.save(pass);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String setRole(RequestLoginDto dto) {
+        Pass pass = passRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new PassException("PassService - setRole"));
+        return pass.getRole().toString();
     }
 
 

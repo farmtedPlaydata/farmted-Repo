@@ -8,11 +8,15 @@ import com.farmted.boardservice.feignClient.ProductFeignClient;
 import com.farmted.boardservice.util.GlobalResponseDto;
 import com.farmted.boardservice.util.feignConverter.FeignConverter;
 import com.farmted.boardservice.vo.ProductVo;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -22,42 +26,42 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
+@Import({ProductService.class, FeignConverter.class, ProductFeignClient.class})
 @DisplayName("Product-Service 테스트 코드")
 public class ProductServiceTest {
-    private final ProductFeignClient productFeignClient = mock(ProductFeignClient.class);
-    private final FeignConverter<ProductVo> productConverter;
+    @Mock
+    private ProductFeignClient productFeignClient;
+    @Spy
+    private FeignConverter<ProductVo> productConverter;
 
-    @Autowired
-    ProductServiceTest(FeignConverter<ProductVo> productConverter, ProductService productService) {
-        this.productConverter = productConverter;
-    }
-
+    @InjectMocks
     private ProductService productService;
 
-
     // mock으로 받을 객체값
-    private static final ProductVo productDetail = ProductVo.builder()
-            .productName("Name")
-            .productStock(100)
-            .productSource("Source")
-            .productImage("Image")
-            .boardUuid("boardUUID")
-            .boardType(BoardType.AUCTION)
-            .productPrice(100_000L)
-            .build() ;
-    private static final List<ProductVo> productList = IntStream.rangeClosed(1, 3).mapToObj(
-            i -> ProductVo.builder()
-                    .boardUuid("boardUUID"+i)
-                    .productImage("Image"+i)
-                    .productSource("Source"+i)
-                    .productName("Name"+i)
-                    .boardType(BoardType.AUCTION)
-                    .productPrice(100_000L * i)
-                    .build()).toList();
-    @BeforeEach
-    void setUp(){
-        productService = new ProductService(productFeignClient, productConverter);
+    private static ProductVo productDetail;
+    private static List<ProductVo> productList;
+
+    @BeforeAll
+    static void beforeAll() {
+        productDetail = ProductVo.builder()
+                .productName("Name")
+                .productStock(100)
+                .productSource("Source")
+                .productImage("Image")
+                .boardUuid("boardUUID")
+                .boardType(BoardType.AUCTION)
+                .productPrice(100_000L)
+                .build() ;
+        productList = IntStream.rangeClosed(1, 3).mapToObj(
+                i -> ProductVo.builder()
+                        .boardUuid("boardUUID"+i)
+                        .productImage("Image"+i)
+                        .productSource("Source"+i)
+                        .productName("Name"+i)
+                        .boardType(BoardType.AUCTION)
+                        .productPrice(100_000L * i)
+                        .build()).toList();
     }
 
     @Test

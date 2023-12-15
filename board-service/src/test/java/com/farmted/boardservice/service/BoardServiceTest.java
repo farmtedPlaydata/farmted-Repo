@@ -1,266 +1,169 @@
 package com.farmted.boardservice.service;
 
+import com.farmted.boardservice.config.InitDB;
 import com.farmted.boardservice.domain.Board;
 import com.farmted.boardservice.dto.request.RequestCreateBoardDto;
 import com.farmted.boardservice.dto.request.RequestUpdateProductBoardDto;
 import com.farmted.boardservice.dto.response.ResponseGetCombinationDetailDto;
 import com.farmted.boardservice.dto.response.ResponseGetCombinationListDto;
-import com.farmted.boardservice.dto.response.detailDomain.ResponseGetAuctionDetailDto;
-import com.farmted.boardservice.dto.response.detailDomain.ResponseGetProductDetailDto;
-import com.farmted.boardservice.dto.response.listDomain.ResponseGetAuctionDto;
-import com.farmted.boardservice.dto.response.listDomain.ResponseGetProductDto;
+import com.farmted.boardservice.dto.response.detailDomain.ResponseGetBoardDetailDto;
+import com.farmted.boardservice.dto.response.listDomain.ResponseGetBoardDto;
 import com.farmted.boardservice.enums.BoardType;
-import com.farmted.boardservice.enums.RoleEnums;
 import com.farmted.boardservice.exception.BoardException;
-import com.farmted.boardservice.exception.RoleTypeException;
 import com.farmted.boardservice.repository.BoardRepository;
-import com.farmted.boardservice.service.subService.AuctionService;
-import com.farmted.boardservice.service.subService.MemberService;
-import com.farmted.boardservice.service.subService.NoticeService;
-import com.farmted.boardservice.service.subService.ProductService;
 import com.farmted.boardservice.util.Board1PageCache;
-import com.farmted.boardservice.vo.AuctionVo;
 import com.farmted.boardservice.vo.MemberVo;
-import com.farmted.boardservice.vo.ProductVo;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static com.farmted.boardservice.enums.BoardType.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class)
+@Import({Board1PageCache.class, BoardService.class, BoardRepository.class})
 @DisplayName("Board-Service 테스트 코드")
 class BoardServiceTest {
-    @Autowired
+    @Mock
+    Board1PageCache board1PageCache;
+    @Mock
     private BoardRepository boardRepository;
-    @Autowired
-    private NoticeService noticeService;
-    @Autowired
-    private Board1PageCache board1PageCache;
-
-    private final MemberService memberService = mock(MemberService.class);
-    private final ProductService productService = mock(ProductService.class);
-    private final AuctionService auctionService = mock(AuctionService.class);
-
-    private List<String> boardUuid;
-    private final String memberUuid = "member-uuid";
+    @InjectMocks
     private BoardService boardService;
 
-    @BeforeEach
-    void setUp() {
-        // 레포 초기화
-        boardUuid = new ArrayList<>();
-        boardRepository.deleteAll();
-        // board-service가 사용하는 하위 서비스를 mock객체로 만들어 주입
-        boardService = new BoardService(boardRepository, board1PageCache, noticeService, productService, auctionService, memberService);
-        // 더미데이터 생성
-            // 카테고리별 저장
+    // 조회용 더미데이터
+    static List<ResponseGetBoardDto> DUMMY_DATA_LIST;
+    static Page<ResponseGetBoardDto> DUMMY_PAGE;
+    static ResponseGetBoardDetailDto DUMMY_DATA;
+    static Board DUMMY_BOARD;
+    static List<Board> DUMMY_BOARD_LIST = new ArrayList<>();
+    static String DUMMY_BOARD_UUID;
+    static Pageable PAGE_INFO;
+    @BeforeAll
+    static void beforeAll() {
+        String memberUuid = "member-uuid";
         for(BoardType category : BoardType.values()){
-            if(BoardType.PRODUCT.equals(category)) continue;
-            Board categoryBoard = new RequestCreateBoardDto(
-                    category,             // BoardType 값
-                    "게시글 내용",                  // 게시글 내용
-                    category.getTypeKo(),          // 게시글 제목
-                    "상품 이름",                    // 상품 이름
-                    10,                             // 상품 재고
-                    10_000L,                         // 상품 가격
-                    "상품 출처",                    // 상품 출처
-                    "상품 이미지 URL"               // 상품 이미지 URL
-            ).toBoard(memberUuid, new MemberVo("member-name", "profile"));
-            boardRepository.save(categoryBoard);
-            boardUuid.add(categoryBoard.getBoardUuid());
+            if (category.equals(PRODUCT)) continue;
+            DUMMY_BOARD_LIST.add( Board.builder()
+                    .boardType(category) // 무작위 값으로 변경
+                    .boardTitle("Random Board Title")
+                    .boardContent("Random Board Content")
+                    .viewCount(0) // 초기값
+                    .boardStatus(true) // 초기값
+                    .memberName("Random Member Name")
+                    .memberProfile("Random Member Profile")
+                    .memberUuid(memberUuid) // 무작위 UUID
+                    .boardUuid(UUID.randomUUID().toString()) // 무작위 UUID
+                    .build()
+            );
         }
+        DUMMY_BOARD = DUMMY_BOARD_LIST.get(0);
+        ResponseGetBoardDto DUMMY_DTO = new ResponseGetBoardDto(DUMMY_BOARD);
+        PAGE_INFO = PageRequest.of(0, 3);
+        DUMMY_DATA_LIST = Arrays.asList(DUMMY_DTO, DUMMY_DTO);
+        DUMMY_PAGE = new PageImpl<>(DUMMY_DATA_LIST, PAGE_INFO, DUMMY_DATA_LIST.size());
+        DUMMY_DATA = new ResponseGetBoardDetailDto(DUMMY_BOARD);
+        DUMMY_BOARD_UUID = DUMMY_BOARD.getBoardUuid();
     }
 
     @Test
+    @Transactional
     @DisplayName("게시글 생성")
     void createBoard() {
         // given
         String createUuid = "createUuid";
-        RoleEnums role = RoleEnums.USER;
-        when(memberService.getMemberInfo(eq(createUuid))).thenReturn(new MemberVo("회원명", "프로필URL"));
-        doNothing().when(productService).postProduct(any(ProductVo.class), eq(createUuid));
+        MemberVo memberInfo = new MemberVo("회원명", "프로필URL");
+        RequestCreateBoardDto createBoardDto = new RequestCreateBoardDto(
+                AUCTION,             // BoardType 값
+                "게시글 내용",                  // 게시글 내용
+                "게시글 제목",                  // 게시글 제목
+                "상품 이름",                    // 상품 이름
+                10,                             // 상품 재고
+                10_000L,                         // 상품 가격
+                "상품 출처"                   // 상품 출처
+                );
+        Board saveBoard = createBoardDto.toBoard(createUuid, memberInfo);
+        when(boardRepository.save(any(Board.class)))
+                .thenReturn(createBoardDto.toBoard(createUuid, memberInfo));
         // when
-        for (BoardType category : BoardType.values()) {
-            switch (category){
-                case NOTICE, PRODUCT -> {}
-                case SALE, COMMISSION, AUCTION, CUSTOMER_SERVICE -> boardService.createBoard(new RequestCreateBoardDto(
-                        category,             // BoardType 값
-                        "게시글 내용",                  // 게시글 내용
-                        "게시글 제목",                  // 게시글 제목
-                        "상품 이름",                    // 상품 이름
-                        10,                             // 상품 재고
-                        10_000L,                         // 상품 가격
-                        "상품 출처",                    // 상품 출처
-                        "상품 이미지 URL"               // 상품 이미지 URL
-                ), createUuid, role);
-            }
-        }
+        String boardUuid = boardService.createBoard(createBoardDto, createUuid, memberInfo);
         // then
-            // createUuid로 조회되는 게시글 4개 (Product, Notice 제외)
-        assertThat(boardRepository.findAll().stream().filter(board -> board.getMemberUuid().equals(createUuid)).count()).isEqualTo(4);
-            // 게시글 4개 저장했으니 4회 호출
-        verify(memberService, times(4)).getMemberInfo(eq(createUuid));
-            // SALE, AUCTION -> 총 2회 호출
-        verify(productService, times(2)).postProduct(any(ProductVo.class), eq(createUuid));
-            // 관리자가 아닌 경우 RoleTypeException
-        Assertions.assertThrows(
-                RoleTypeException.class,
-                ()->boardService.createBoard(new RequestCreateBoardDto(
-                        BoardType.NOTICE,             // BoardType 값
-                        "게시글 내용",                  // 게시글 내용
-                        "게시글 제목",                  // 게시글 제목
-                        "상품 이름",                    // 상품 이름
-                        10,                             // 상품 재고
-                        10_000L,                         // 상품 가격
-                        "상품 출처",                    // 상품 출처
-                        "상품 이미지 URL"               // 상품 이미지 URL
-                ), createUuid, role));
-            // 올바르지 않은 생성 카테고리(PRODUCT)인 경우 BoardException
-        Assertions.assertThrows(
-                BoardException.class,
-                ()->boardService.createBoard(new RequestCreateBoardDto(
-                        BoardType.PRODUCT,             // BoardType 값
-                        "게시글 내용",                  // 게시글 내용
-                        "게시글 제목",                  // 게시글 제목
-                        "상품 이름",                    // 상품 이름
-                        10,                             // 상품 재고
-                        10_000L,                         // 상품 가격
-                        "상품 출처",                    // 상품 출처
-                        "상품 이미지 URL"               // 상품 이미지 URL
-                ), createUuid, role));
+            // createUuid로 조회되는 게시글 1개
+        assertThat(saveBoard.getBoardUuid()).isEqualTo(boardUuid);
     }
 
     @Test
-// ApplicationContext 초기화
-//    @DirtiesContext
     @DisplayName("전체 게시글 카테고리별 리스트 조회")
     void getBoardList() {
         // given
         int pageNo = 1;
-        when(productService.getProductList(any(BoardType.class), eq(pageNo-1)))
-                .thenReturn(List.of(new ResponseGetProductDto(
-                        ProductVo.builder()
-                                .productName("Name")
-                                .productStock(100)
-                                .productSource("Source")
-                                .productImage("Image")
-                                .boardUuid("boardUUID")
-                                .boardType(BoardType.PRODUCT)
-                                .productPrice(100_000L)
-                                .build()))
-                );
-        when(auctionService.getAuctionList(eq(pageNo-1)))
-                .thenReturn(List.of(new ResponseGetAuctionDto(
-                        new AuctionVo(
-                                500,                  // auctionPrice
-                                "Dummy Buyer",        // auctionBuyer
-                                LocalDateTime.now(), // auctionDeadline
-                                true                  // auctionStatus
-                        )
-                )));
-        await().atMost(5, SECONDS).untilAsserted(
-                ()->assertThat(board1PageCache.getPage1()).isNotNull());
+        when(board1PageCache.getPage1()).thenReturn(DUMMY_PAGE);
+        when(boardRepository.findByBoardType(any(BoardType.class), any(Pageable.class)))
+                .thenReturn(DUMMY_PAGE);
         // when
-        for(BoardType category : BoardType.values()){
-            int check = BoardType.PRODUCT.equals(category) ?2 :1 ;
-            // 카테고리별로 1개씩 저장했으니 PRODUCT(판매+경매 = 2개)를 제외한 모든 카테고리가 1이 나와야함.
-            assertThat(boardService.getBoardList(category, pageNo-1).getBoardList().getContent().size())
-                    .isEqualTo(check);
-        }
+        for (BoardType category : BoardType.values()) {
+            ResponseGetCombinationListDto combiDTO = boardService.getBoardList(category, pageNo - 1);
         // then
-            // SALE, AUCTION, PRODUCT의 3번의 경우
-        verify(productService, times(3)).getProductList(any(BoardType.class), eq(pageNo-1));
-            // AUCTION 일때만
-        verify(auctionService, times(1)).getAuctionList(eq(pageNo-1));
+            assertThat(combiDTO.getBoardList().size()).isEqualTo(2);
+        }
+        verify(board1PageCache, times(1)).getPage1();
+            // Product 이외의 카테고리는 레포가 조회 (5회)
+        verify(boardRepository, times(5)).findByBoardType(any(BoardType.class), any(Pageable.class));
     }
 
     @Test
     @DisplayName("작성자 글 카테고리별 리스트 조회")
     void getWriterBoardList() {
         // given
-        BoardType category = BoardType.AUCTION;
+        BoardType category = AUCTION;
         int pageNo = 1;
-        String sellerUuid = memberUuid;
-        when(productService.getProductListByMember(eq(sellerUuid), eq(category), eq(pageNo-1)))
-                .thenReturn(List.of(new ResponseGetProductDto(
-                        ProductVo.builder()
-                                .productName("Name")
-                                .productStock(100)
-                                .productSource("Source")
-                                .productImage("Image")
-                                .boardUuid("boardUUID")
-                                .boardType(BoardType.PRODUCT)
-                                .productPrice(100_000L)
-                                .build()))
-                );
-        when(auctionService.getSellerAuctionList(eq(sellerUuid),eq(pageNo-1)))
-                .thenReturn(List.of(new ResponseGetAuctionDto(
-                        new AuctionVo(
-                                500,                  // auctionPrice
-                                "Dummy Buyer",        // auctionBuyer
-                                LocalDateTime.now(), // auctionDeadline
-                                true                  // auctionStatus
-                        )
-                )));
+        String sellerUuid = InitDB.MEMBER_UUID;
+        when(boardRepository.findByMemberUuidAndBoardType(eq(sellerUuid), eq(category), any(Pageable.class)))
+                .thenReturn(DUMMY_PAGE);
         // when
-        ResponseGetCombinationListDto combiListDTO = boardService.getWriterBoardList(category, pageNo-1, sellerUuid);
+        ResponseGetCombinationListDto combiListDTO =
+                boardService.getWriterBoardList(category, pageNo-1, sellerUuid);
         // then
-        assertThat(combiListDTO.getBoardList().getContent().size()).isEqualTo(1);
-        verify(productService, times(1)).getProductListByMember(eq(sellerUuid), eq(category), eq(pageNo-1));
-        verify(auctionService, times(1)).getSellerAuctionList(eq(sellerUuid),eq(pageNo-1));
+        assertThat(combiListDTO.getBoardList().size()).isEqualTo(2);
     }
 
     @Test
     @DisplayName("개별 경매 상품 상세 조회")
     void getBoard() {
         // given
-        when(productService.getProductByBoardUuid(anyString()))
-                .thenReturn(new ResponseGetProductDetailDto(
-                        "Dummy Product",
-                        10,
-                        10000L,
-                        "Dummy Source",
-                        "Dummy Image"
-                ));
-        when(auctionService.getAuctionDetail(anyString()))
-                .thenReturn(new ResponseGetAuctionDetailDto(
-                        500,       // auctionPrice
-                        "Dummy Buyer",        // auctionBuyer
-                        LocalDateTime.now(),  // auctionDeadline
-                        true                  // auctionStatus
-                ));
+        String boardUuid = "board_uuid";
+        when(boardRepository.findDetailByBoardUuid(anyString()))
+                .thenReturn(Optional.of(DUMMY_DATA));
         // when
-        List<ResponseGetCombinationDetailDto> dtoList = new ArrayList<>();
-        for(String uuid : boardUuid){
-            dtoList.add(boardService.getBoard(uuid));
-        }
+        ResponseGetCombinationDetailDto detailDTO = boardService.getBoard(boardUuid);
+
         // then
-        assertThat(dtoList.size()).isEqualTo(boardUuid.size());
-        verify(productService, times(2)).getProductByBoardUuid(anyString());
-        verify(auctionService, times(1)).getAuctionDetail(anyString());
+        assertThat(detailDTO.getBoardDetail().getBoardUuid()).isEqualTo(DUMMY_BOARD_UUID);
     }
 
     @Test
     @Transactional
-    @DisplayName("게시글 업데이트")
-    void updateBoard() {
+    @DisplayName("게시글 업데이트 - 상품 게시글의 경우")
+    void updateBoardSALE() {
         // given
+        String memberUuid = "member-uuid";
         RequestUpdateProductBoardDto updateDTO = new RequestUpdateProductBoardDto(
-                BoardType.SALE,           // BoardType 값
+                SALE,           // BoardType 값
                 "수정된 게시글 내용",         // 수정된 게시글 내용
                 "수정된 게시글 제목",         // 수정된 게시글 제목
                 "수정된 상품 이름",           // 수정된 상품 이름
@@ -269,30 +172,70 @@ class BoardServiceTest {
                 "수정된 상품 출처",           // 수정된 상품 출처
                 "수정된 상품 이미지 URL"      // 수정된 상품 이미지 URL
         );
-        doNothing().when(productService).checkUpdateProduct(anyString(), eq(updateDTO), eq(memberUuid));
-
+        DUMMY_BOARD_LIST
+                .forEach(board ->
+                        when(boardRepository.findByBoardUuidAndBoardStatusTrue(DUMMY_BOARD_UUID))
+                                .thenReturn(Optional.of(board))
+                );
         // when
-        for(String uuid : boardUuid) {
+        for(Board board : DUMMY_BOARD_LIST){
             try{
-                boardService.updateBoard(updateDTO, uuid, memberUuid);
-            }catch (Exception e){
-                // Exception Pass 예외검사 then에서 할 예정
-            }
-        }
+                boolean updateCheck = boardService.updateBoard(updateDTO, DUMMY_BOARD_UUID, memberUuid);
+                switch (board.getBoardType()){
         // then
             // BoardType 변경의 경우, 판매와 경매(경매종료된)끼리의 변경만 가능
-        for (Board board : boardRepository.findAll()){
-            switch (board.getBoardType()){
-                case NOTICE, COMMISSION, CUSTOMER_SERVICE
-                        -> assertThat(board.getBoardTitle())
-                        .isNotEqualTo(updateDTO.boardTitle());
-                case SALE, AUCTION
-                        -> assertThat(board.getBoardTitle())
-                        .isEqualTo(updateDTO.boardTitle());
+                    case NOTICE, COMMISSION, CUSTOMER_SERVICE
+                            -> assertThat(updateCheck)
+                            .isEqualTo(false);
+                    case SALE, AUCTION
+                            -> assertThat(updateCheck)
+                            .isEqualTo(true);
+                }
+            } catch (Exception e){
+                assertThat(e).isInstanceOf(BoardException.class);
             }
         }
-         // 모든 카테고리 중 (SALE, AUCTION)의 경우만 상품 비활성화 가능
-        verify(productService, times(2)).checkUpdateProduct(anyString(), eq(updateDTO), eq(memberUuid));
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("게시글 업데이트 - 일반 게시글의 경우")
+    void updateBoardCOMMISTION() {
+        // given
+        String memberUuid = "member-uuid";
+        RequestUpdateProductBoardDto updateDTO = new RequestUpdateProductBoardDto(
+                COMMISSION,           // BoardType 값
+                "수정된 게시글 내용",         // 수정된 게시글 내용
+                "수정된 게시글 제목",         // 수정된 게시글 제목
+                "수정된 상품 이름",           // 수정된 상품 이름
+                20,                           // 수정된 상품 재고
+                15_000L,                      // 수정된 상품 가격
+                "수정된 상품 출처",           // 수정된 상품 출처
+                "수정된 상품 이미지 URL"      // 수정된 상품 이미지 URL
+        );
+        DUMMY_BOARD_LIST
+                .forEach(board ->
+                        when(boardRepository.findByBoardUuidAndBoardStatusTrue(board.getBoardUuid()))
+                                .thenReturn(Optional.of(board))
+                );
+        // when
+        for(Board board : DUMMY_BOARD_LIST){
+            try{
+                boolean updateCheck = boardService.updateBoard(updateDTO, board.getBoardUuid(), memberUuid);
+                switch (board.getBoardType()){
+                    // then
+                    // BoardType 변경의 경우, 판매와 경매(경매종료된)끼리의 변경만 가능
+                    case NOTICE, SALE, AUCTION, CUSTOMER_SERVICE
+                            -> assertThat(updateCheck)
+                            .isEqualTo(false);
+                    case COMMISSION ->
+                            assertThat(updateCheck)
+                                .isEqualTo(true);
+                }
+            } catch (Exception e){
+                assertThat(e).isInstanceOf(BoardException.class);
+            }
+        }
     }
 
     @Test
@@ -300,19 +243,28 @@ class BoardServiceTest {
     @DisplayName("게시글 삭제")
     void deleteBoard() {
         // given
-            // 반환값이 void
-        doNothing().when(productService).checkDeleteProduct(anyString(), eq(memberUuid));
-
+        String memberUuid = "member-uuid";
+        DUMMY_BOARD_LIST
+                .forEach(board ->
+                        when(boardRepository.findByBoardUuidAndBoardStatusTrue(board.getBoardUuid()))
+                                .thenReturn(Optional.of(board))
+                );
+        // 예외 확인용 BoardUuid
         // when
-        for(String uuid : boardUuid){
-            boardService.deleteBoard(uuid, memberUuid);
+        for(Board board : DUMMY_BOARD_LIST){
+            // 하나는 Exception 확인용으로 실패
+            if(Objects.equals(board.getBoardUuid(), DUMMY_BOARD_UUID)){
+                Assertions.assertThrows(BoardException.class,
+                    () ->
+                        boardService.deleteBoard(board.getBoardUuid(), "123"));
+                continue;
+            }
+            boardService.deleteBoard(board.getBoardUuid(), memberUuid);
         }
-
         // then
-        for (Board board : boardRepository.findAll()) {
+        for(Board board : DUMMY_BOARD_LIST) {
+            if(Objects.equals(board.getBoardUuid(), DUMMY_BOARD_UUID)) continue;
             assertThat(board.isBoardStatus()).isEqualTo(false);
         }
-            // 모든 카테고리 중 (SALE, AUCTION)의 경우만 상품 비활성화 가능
-        verify(productService, times(2)).checkDeleteProduct(anyString(), eq(memberUuid));
     }
 }

@@ -29,7 +29,7 @@ public class Member extends TimeStamp implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private RoleEnums memberRole;
 
-    private String memberImage;
+    private String memberProfile;
 
     private String memberAddress;
 

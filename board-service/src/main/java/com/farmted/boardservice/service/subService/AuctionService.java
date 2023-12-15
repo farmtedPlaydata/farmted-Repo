@@ -34,7 +34,7 @@ public class AuctionService {
                 .toList();
     }
 
-    // 경매 상세 내역 조회
+    // 경매 상세 조회
     public ResponseGetAuctionDetailDto getAuctionDetail(String boardUuid){
         return new ResponseGetAuctionDetailDto(
                 auctionConverter.convertSingleVo(

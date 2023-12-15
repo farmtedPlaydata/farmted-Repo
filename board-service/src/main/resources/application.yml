@@ -13,20 +13,22 @@ service:
 server:
   port: 8080
 spring:
+  profiles:
+    active: private
   application:
     name: board-service
   datasource:
-    url: jdbc:mysql://localhost:3306/msa_db
-    username: root
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${dbURL}
+    username: ${dbName}
+    password: ${dbPwd}
+    driver-class-name: ${driverName}
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
         format_sql: true
-        physical_naming_strategy: com.farmted.boardservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
+        physical_naming_strategy: ${namingRoute}
     show-sql: true
   #swagger
   mvc:
@@ -44,4 +46,15 @@ eureka:
 ## 스케줄러 세팅
 schedules:
   cron: "* * * * * *"  # 1초마다 스케줄러 실행
-
+## S3 세팅
+cloud:
+  aws:
+    region:
+      static: ${regionLocation}
+    s3:
+      bucket: ${bucketName}
+    stack:
+      auto: false
+    credentials:
+      secret-key: ${secret}
+      access-key: ${access}
