@@ -2,24 +2,23 @@ package com.farmted.auctionservice.dto.requestBiddingDto;
 
 import com.farmted.auctionservice.domain.Bidding;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Getter @AllArgsConstructor @NoArgsConstructor @Builder
+@Getter @AllArgsConstructor @NoArgsConstructor @Builder @Setter
 public class BiddingCreateRequestDto {
-    private double biddingPrice;
+    private Integer biddingPrice;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private double biddingAutoPrice; // 자동 입찰
+    private Integer biddingAutoPrice; // 자동 입찰
 
     public Bidding toEntity(String boardUuid,String memberUuid){
         return Bidding.builder()
                 .biddingPrice(biddingPrice)
                 .boardUuid(boardUuid)
                 .memberUuid(memberUuid)
+                .biddingUuid(UUID.randomUUID().toString())
                 .build();
     }
 
