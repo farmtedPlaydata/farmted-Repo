@@ -40,6 +40,8 @@ public class Comment extends TimeStamp {
     @Column(name = "member_name")
     private String commentMemberName;
 
+    private String memberName;
+    private String memberImage;
     public void updateComment(CommentUpdateRequestDto dto) {
         this.commentContent = dto.getContent();
     }
