@@ -1,11 +1,11 @@
-dbURL: jdbc:mysql://localhost:3306/msa_db
-dbName: root
-dbPwd: 1234
-driverName: com.mysql.cj.jdbc.Driver
+dbURL: ENC(yov/eawUJlTOVROGvtVuYuIjOojDItHFCfkpRhBeL1wW/vurobLfUuSRVi5kUeDpCXjnu68viq31d2pzu3b0fGTziyig2d33OwfOID7W5H/Y4OrpmFAa1Q==)
+dbName: ENC(WdVkqIh8KyZNbYRc7StItg==)
+dbPwd: ENC(DjGjXkLXi6YKJngyr+erD+tg9AwHrl+g)
+driverName: ENC(quVWA3KFUI3Ih2j7MmGqL5B6ucJUhQVN167colW4kU/fKTI/mfgyew==)
 
 namingRoute: com.farmted.boardservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
 
-regionLocation: ap-northeast-2
+regionLocation: ENC(OxSWHMLLPWnGN5xY6h3R6LB7nVwp5ohH)
 bucketName: farm
 secret: secret
 access: access

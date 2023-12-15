@@ -43,6 +43,8 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
     // S3 등록
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.609'
+    // 암호화 라이브러리
+    implementation group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter', version: '3.0.4'
 }
 
 

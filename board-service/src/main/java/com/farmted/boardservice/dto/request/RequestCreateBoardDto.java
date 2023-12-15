@@ -17,13 +17,13 @@ public record RequestCreateBoardDto(
         @JsonProperty("boardTitle") @NotBlank String boardTitle,
         // 아이템용 정보
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        @JsonProperty("productName") @NotBlank String productName,
+        @JsonProperty("productName") String productName,
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        @JsonProperty("productStock") @Min(value = 1) int productStock,
+        @JsonProperty("productStock") int productStock,
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        @JsonProperty("productPrice") @Min(value = 1) long productPrice,
+        @JsonProperty("productPrice") long productPrice,
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        @JsonProperty("productSource") @NotBlank String productSource) {
+        @JsonProperty("productSource") String productSource) {
 
     // 게시글 전용 데이터 - 저장용 Entity
     public Board toBoard(String memberUuid, MemberVo memberVo){
