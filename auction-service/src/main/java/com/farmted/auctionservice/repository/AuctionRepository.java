@@ -23,4 +23,7 @@ public interface AuctionRepository extends JpaRepository<Auction,Long>{
     // 상태값에 따른 경매 조회
     public List<Auction> findAuctionByAuctionStatus(boolean auctionStatus);
 
+    // 게시글에 따른 경매 조회
+    public Auction findAuctionByBoardUuid(String boardUuid);
+
 }
