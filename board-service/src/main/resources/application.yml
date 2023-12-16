@@ -11,10 +11,10 @@ service:
     url: "/member-service"
 # board-service 설정
 server:
-  port: 8080
+  port: 0
 spring:
   profiles:
-    active: private
+    active: enc
   application:
     name: board-service
   datasource:
@@ -58,3 +58,7 @@ cloud:
     credentials:
       secret-key: ${secret}
       access-key: ${access}
+# jasyptStringEncryptor 빈을 Jasypt 암호화에 사용하도록 설정
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor

@@ -28,7 +28,7 @@ public class BoardController {
             @Valid @RequestPart("CREATE") RequestCreateBoardDto productBoardDto,
             @RequestHeader("UUID") String uuid,
             @RequestHeader("ROLE") RoleEnums role,
-            @RequestPart("IMAGE") MultipartFile image){
+            @RequestPart(value = "IMAGE", required = false) MultipartFile image){
         boardFacade.createBoard(productBoardDto, uuid, role, image);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
@@ -55,20 +55,6 @@ public class BoardController {
                     boardFacade.getBoard(boardUuid)
         ));
     }
-
-//    // TODO: 여기도 Product, SALE, AUCTION 카테고리 다 만들까?
-//    @GetMapping(value = "/boards/buyer")
-//    @Operation(summary = "본인 낙찰 리스트 전체 조회", description = "본인이 입찰한 경매 리스트를 조회합니다.")
-//    public ResponseEntity<GlobalResponseDto<?>> getBoardListBuyer(
-//            @RequestHeader ("UUID") String uuid,
-//            @RequestParam(value="category") BoardType category,
-//            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
-//    ){
-//        return ResponseEntity.ok(
-//                GlobalResponseDto.of(
-//                        boardService.getBuyerBoardList(category, pageNo-1, uuid)
-//                ));
-//    }
 
 // 작성자(판매자) 전용
     @GetMapping(value = "/boards/seller/{seller_uuid}")

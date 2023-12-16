@@ -1,0 +1,11 @@
+dbURL: ENC(0GVW2dA7FwZ/Uzdn9kZfvgwLtsTJzpZfGHB/jrciuXEOH5ME5cV7flFQkip5FyM3XeHuNArg9X336f0c/f8rftvZcCH4gJ3zL/GD48KqaS5EbkY3PBx8udlfoxEkjtDP)
+dbName: ENC(Wt6Ag+sWOVVT/vbTtFuctg==)
+dbPwd: ENC(O4LCGF7HLo4/rw1FGSJ9f9XkhrH/HRWl)
+driverName: ENC(2yCFOiu4DSWkCrxznu0Hy3CKQrMxXISYBBCVnTuKhPLE8zFRlcBTGg==)
+
+namingRoute: com.farmted.boardservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
+
+regionLocation: ENC(wqhCDJ9dx0FBBp7hKOeV2ZKR5P9dB2c1)
+bucketName: ENC(1LbmkoztxzLVHCy7CAyl55kXDxKl55Vr)
+secret: ENC(vIFWjT26zjnOK7ppCAfxp80N3+kWu7Te/W6sf25BN+d9ZLZhMge/Yk+cKkrglubQA7Sqx31JmnQ=)
+access: ENC(NP4ad3SSxOh9Ej/o4K8+hWJpZMxGNVdHAsPE7th2wZY=)
