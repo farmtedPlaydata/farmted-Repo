@@ -3,6 +3,7 @@ package com.farmted.commentservice.controller;
 import com.farmted.commentservice.domain.Comment;
 import com.farmted.commentservice.dto.request.CommentCreateRequestDto;
 import com.farmted.commentservice.dto.request.CommentUpdateRequestDto;
+import com.farmted.commentservice.feignclient.MemberFeignClient;
 import com.farmted.commentservice.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

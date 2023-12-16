@@ -47,6 +47,7 @@ public class BoardService {
 
 // 전체 게시글 카테고리별 리스트 조회
     public ResponseGetCombinationListDto getBoardList(BoardType category, int pageNo) {
+        if (pageNo < 1) pageNo = 0;
         ResponseGetCombinationListDto combinationListDto = new ResponseGetCombinationListDto();
         // 게시글 리스트 담기
         combinationListDto.setPageList(
@@ -103,7 +104,7 @@ public class BoardService {
             case NOTICE, COMMISSION, CUSTOMER_SERVICE -> {
                 if (updateBoard.getBoardType().equals(updateDTO.boardType())) {
                     updateBoard.updateBoardInfo(updateDTO);
-                    return true;
+                    return false;
                 }
             }
         }

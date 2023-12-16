@@ -10,6 +10,10 @@ version = '0.0.1-SNAPSHOT'
 java {
 	sourceCompatibility = '17'
 }
+// 추가 부분 1 : ext
+ext {
+	set('springCloudVersion', "2022.0.4")
+}
 
 configurations {
 	compileOnly {
@@ -29,6 +33,11 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//openFeign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	//eureka
+	// 추가 부분2 : dependencies
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 }
 
 tasks.named('bootBuildImage') {
@@ -37,4 +46,11 @@ tasks.named('bootBuildImage') {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// 추가 부분3 : dependencyManaement
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }

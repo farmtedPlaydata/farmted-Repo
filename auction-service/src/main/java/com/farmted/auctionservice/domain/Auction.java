@@ -45,4 +45,9 @@ public class Auction extends TimeStamp{
         auctionStatus = true;
     }
 
+    public void setBiddingTop(Integer auctionPrice,String auctionBuyer){
+        this.auctionPrice=auctionPrice;
+        this.auctionBuyer =auctionBuyer;
+    }
+
 }
