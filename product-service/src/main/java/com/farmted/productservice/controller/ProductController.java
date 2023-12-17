@@ -2,8 +2,10 @@ package com.farmted.productservice.controller;
 
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
+import com.farmted.productservice.dto.response.ProductAuctionResponseDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.enums.ProductType;
+import com.farmted.productservice.Facade.ProductTypeFacade;
 import com.farmted.productservice.service.ProductService;
 import com.farmted.productservice.util.GlobalResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductTypeFacade productTypeFactory;
 
     // 판매자 상품 등록
     // TODO: 단순 상품, 경매 상품 구분
@@ -26,7 +29,8 @@ public class ProductController {
             @RequestBody ProductSaveRequestDto productSaveRequestDto,
             @RequestHeader("UUID") String uuid // 멤버
     ) {
-        productService.saveProduct(uuid,productSaveRequestDto);
+        productTypeFactory.createBoard(uuid,productSaveRequestDto);
+        //productService.saveProduct(uuid,productSaveRequestDto);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
@@ -53,12 +57,13 @@ public class ProductController {
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
-    // 전체 상품 조회 -> Sale
+    // 전체 상품 조회 -> Sale + 경매
     @GetMapping("/products")
     public ResponseEntity<?> getProductList(
+            @RequestParam ProductType productType,
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ){
-        List<ProductResponseDto> listProduct = productService.getListProduct(pageNo);
+        List<ProductAuctionResponseDto> listProduct = productTypeFactory.getList(productType, pageNo);
         return ResponseEntity.ok(GlobalResponseDto.listOf(listProduct));
     }
 

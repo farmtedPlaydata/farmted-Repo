@@ -21,7 +21,6 @@ public class AuctionController {
 
 
     // 판매자 -> 낙찰 내역 조회 -> memberUuid
-    //TODO: PathVariable이 아니라 HEADER로 받는 건가?
     @GetMapping("/seller/{memberUuid}/board")
     public ResponseEntity<?> findAuctionToSeller(
             @PathVariable String memberUuid

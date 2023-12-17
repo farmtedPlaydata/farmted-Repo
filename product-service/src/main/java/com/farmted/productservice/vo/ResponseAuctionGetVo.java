@@ -10,5 +10,6 @@ import java.time.LocalDate;
 public class ResponseAuctionGetVo {
     private Integer auctionPrice; // 경매 가격
     private LocalDate auctionDeadline; // 경매 종료
+    private String productUuid;
 
 }

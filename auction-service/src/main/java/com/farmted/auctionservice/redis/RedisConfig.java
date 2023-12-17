@@ -52,11 +52,11 @@ public class RedisConfig {
 
 
     @Bean
-    public RedisTemplate<String,Long> redisTemplate(RedisConnectionFactory redisConnectionFactory ){
+    public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory redisConnectionFactory ){
 
         // RedisTemplate 는 제네릭 타입 K,V 설정 가능
         // 첫 번째는 레디스 key 에 해당하고, 두 번째는 레디스 value 에 해당함
-        RedisTemplate<String,Long> redisTemplate = new RedisTemplate<>();
+        RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
         // key 와 value 값을 직렬화/역직렬화하는 RedisSerializer 구현체 설정

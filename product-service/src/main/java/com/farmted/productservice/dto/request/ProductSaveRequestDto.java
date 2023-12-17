@@ -24,9 +24,9 @@ public class ProductSaveRequestDto {
 
     private String boardUuid;
 
-    private String productType;
+    private ProductType productType;
 
-    public Product toEntity(String memberUuid, ProductType productType){
+    public Product toEntity(String memberUuid){
         return Product.builder()
                 .name(this.getName())
                 .stock(this.getStock())

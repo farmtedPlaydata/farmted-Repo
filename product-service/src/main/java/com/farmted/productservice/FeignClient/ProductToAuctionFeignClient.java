@@ -20,5 +20,5 @@ public interface ProductToAuctionFeignClient {
     public List<ResponseAuctionEndVo> endAuctionFromProduct();
 
     @GetMapping("/{productUuid}/auctions")
-    public ResponseAuctionGetVo getAuctionIng(@PathVariable String productUuid);
+    public List<ResponseAuctionGetVo> getAuctionIng();
 }

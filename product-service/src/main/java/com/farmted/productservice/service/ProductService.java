@@ -21,9 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.farmted.productservice.enums.ProductType.PRODUCT;
@@ -38,27 +36,18 @@ public class ProductService {
     private final ProductToAuctionFeignClient productToAuctionFeignClient;
 
     // 상품 DB 등록
-    public void saveProduct(String memberUuid,ProductSaveRequestDto productSaveRequestDto){
-        System.out.println("productSaveRequestDto"+productSaveRequestDto.getProductType());
+    public String saveProduct(String memberUuid,ProductSaveRequestDto productSaveRequestDto){
 
-        ProductType productType = Arrays.stream(ProductType.values())
-                .filter(c -> c.getTypeEn().equals(productSaveRequestDto.getProductType()))
-                .findAny().orElseThrow(() -> new RuntimeException("Invalid ProductType"));
-
-        Product saveProduct = productSaveRequestDto.toEntity(memberUuid,productType);
+        // only SALE인 경우
+        Product saveProduct = productSaveRequestDto.toEntity(memberUuid);
         productRepository.save(saveProduct);
-
-        //TODO: 상품 생성 시 경매 생성
-
-        String typeEn = saveProduct.getProductType().getTypeEn();
-        if(("Product").equals(typeEn)){
-            createProductToAuction(saveProduct.getUuid());
-        }
+        return saveProduct.getUuid();
 
     }
 
 
     // 상품 DB 전체 수정
+    // 경매는 수정 불가
     public void modifyProduct(String boardUuid, ProductUpdateRequestDto productUpdateRequestDto, String memberUuid){
         // 상품 판매자만  수정 가능
         Product product = productRepository.findProductByBoardUuidAndAuctionStatusFalse(boardUuid)
@@ -67,7 +56,8 @@ public class ProductService {
         if(!product.getMemberUuid().equals(memberUuid))
             throw new SellerException();
 
-        if(!product.isAuctionStatus()){ // 경매 중이 아닌(상태값이 false) 경우만 가격 수정 가능
+        // 경매 중이 아닌(상태값이 false) 경우만 가격 수정 가능
+        if(!product.isAuctionStatus()){
             product.modifyProduct(productUpdateRequestDto);
         }else{
             throw new ProductException(product.isAuctionStatus());
@@ -95,42 +85,17 @@ public class ProductService {
       return new ProductResponseDto(productDetail);
     }
 
-    // 전체 상품 조회
+    // 전체 only 상품 조회
     @Transactional(readOnly = true)
-    public List<ProductResponseDto> getListProduct(int pageNo) {
+    public List<ProductAuctionResponseDto> getListProduct(int pageNo) {
         Slice<Product> productList = productRepository.findProductByProductType(SALE,PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
 
         return productList.stream()
-                .map(ProductResponseDto::new)
+                .map(ProductAuctionResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-    //TODO: 게시글 요청에 따라 경매 정보를 조합해서 목록 반환
-    @Transactional(readOnly = true)
-    public List<ProductAuctionResponseDto> getListProductAuction(int pageNo) {
-        List<ProductAuctionResponseDto> productAuctionResponseDtoList= new ArrayList<>();
-        Slice<Product> productList = productRepository.findProductByProductType(PRODUCT,PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
-        for (Product product : productList) {
-            ResponseAuctionGetVo auctionIng = productToAuctionFeignClient.getAuctionIng(product.getUuid());
-            ProductAuctionResponseDto productAuctionResponseDto = new ProductAuctionResponseDto(product, auctionIng);
-            productAuctionResponseDtoList.add(productAuctionResponseDto);
-        }
-        return productAuctionResponseDtoList;
-    }
 
-
-    // feign 통신: 경매 생성
-    public void createProductToAuction(String productUuid){
-        // 상품DB에서 가격과 생성시간을 가져옵니다.
-        Product product = productRepository.findProductByUuid(productUuid)
-                // 해당 상품이 있는지 확인
-                .orElseThrow(ProductException::new);
-        // 엔티티를 VO로 변환줍니다.
-        RequestAuctionCreateVo auctionCreateVo = new RequestAuctionCreateVo(product);
-        // 페인 통신 진행
-        productToAuctionFeignClient.createProductToAuctionFeign(product.getMemberUuid(),auctionCreateVo);
-
-    }
 
     // feign 통신: 경매 종료
     public void endAuctionFromProduct(){
