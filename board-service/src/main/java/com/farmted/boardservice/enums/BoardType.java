@@ -14,8 +14,8 @@ public enum BoardType {
     NOTICE("Notice", "공지사항"),
     CUSTOMER_SERVICE("CustomerService", "고객센터");
 
-    private String typeEn;
-    private String typeKo;
+    private final String typeEn;
+    private final String typeKo;
 
     BoardType(String typeEn, String typeKo) {
         this.typeEn = typeEn;

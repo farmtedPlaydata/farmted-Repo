@@ -1,4 +1,4 @@
-package com.farmted.boardservice.util.feignConverter;
+package com.farmted.boardservice.util;
 
 import com.farmted.boardservice.enums.ExceptionType;
 import com.farmted.boardservice.enums.FeignDomainType;

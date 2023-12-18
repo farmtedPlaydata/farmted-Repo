@@ -1,10 +1,8 @@
 package com.farmted.boardservice.util;
 
-import com.farmted.boardservice.domain.Board;
 import com.farmted.boardservice.dto.response.listDomain.ResponseGetBoardDto;
 import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.repository.BoardRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
-@ActiveProfiles({"test","testConfig"}) // Eureka Discovery Client 등록을 해제하기 위한 프로필
+@ActiveProfiles("test") // Eureka Discovery Client 등록을 해제하기 위한 프로필
 @DisplayName("1페이지 캐시 스케줄러 테스트 코드")
 public class SchedulerTest {
     @Autowired
@@ -36,7 +34,7 @@ public class SchedulerTest {
         Page<ResponseGetBoardDto> paging = boardRepository.findByBoardType(BoardType.PRODUCT,
                 PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createdAt")));
         // page1에 값이 생길 때까지 최대 2초 대기
-        await().atMost(1500, MILLISECONDS).untilAsserted(
+        await().atMost(2000, MILLISECONDS).untilAsserted(
                 () -> {
                     assertThat(board1PageCache.getPage1()).isNotNull();
                     assertThat(board1PageCache.getPage1().getTotalElements()).isGreaterThan(1);

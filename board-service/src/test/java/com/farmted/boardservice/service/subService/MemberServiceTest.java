@@ -2,7 +2,7 @@ package com.farmted.boardservice.service.subService;
 
 import com.farmted.boardservice.feignClient.MemberFeignClient;
 import com.farmted.boardservice.util.GlobalResponseDto;
-import com.farmted.boardservice.util.feignConverter.FeignConverter;
+import com.farmted.boardservice.util.FeignConverter;
 import com.farmted.boardservice.vo.MemberVo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

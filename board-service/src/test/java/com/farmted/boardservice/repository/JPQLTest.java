@@ -5,7 +5,9 @@ import com.farmted.boardservice.domain.Board;
 import com.farmted.boardservice.dto.request.RequestCreateBoardDto;
 import com.farmted.boardservice.dto.response.listDomain.ResponseGetBoardDto;
 import com.farmted.boardservice.enums.BoardType;
+import com.farmted.boardservice.util.JasyptConfig;
 import com.farmted.boardservice.vo.MemberVo;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.farmted.boardservice.config.InitDB.MEMBER_UUID;
@@ -25,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 // 해당 어노테이션은 @DataJpaTest에 내장되어 있으며, 이 어노테이션은 '내장된 메모리 데이터베이스'로 테스트를 진행
 // 설정을 통해 내장된 메모리 데이터베이스로 변경하지 못하도록 막기
 @Import(InitDB.class)
+@ActiveProfiles("test")
 @DisplayName("JPQL 테스트 코드")
 class JPQLTest {
     @Autowired
