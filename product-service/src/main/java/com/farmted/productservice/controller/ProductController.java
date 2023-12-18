@@ -29,10 +29,23 @@ public class ProductController {
             @RequestBody ProductSaveRequestDto productSaveRequestDto,
             @RequestHeader("UUID") String uuid // 멤버
     ) {
-        productTypeFactory.createBoard(uuid,productSaveRequestDto);
+        productTypeFactory.createProduct(uuid,productSaveRequestDto);
         //productService.saveProduct(uuid,productSaveRequestDto);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
+
+    // 판매자 전체 수정
+    @PutMapping("/products/{board_uuid}/boards")
+    public ResponseEntity<?> modifyProduct(
+            @PathVariable (value = "board_uuid") String boardUuid ,
+            @RequestHeader("UUID") String memberUuid, // 멤버
+            @RequestBody ProductUpdateRequestDto productUpdateRequestDto
+    )
+    {
+        productService.modifyProduct(boardUuid, productUpdateRequestDto,memberUuid);
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
+    }
+
 
     // 판매자 등록 전체 상품 조회
     @GetMapping("/products/seller/{member_uuid}")
@@ -45,27 +58,17 @@ public class ProductController {
     }
 
 
-    // 판매자 전체 수정
-    @PutMapping("/products/{board_uuid}/boards")
-    public ResponseEntity<?> modifyProduct(
-            @PathVariable (value = "board_uuid") String boardUuid ,
-            @RequestHeader("UUID") String memberUuid, // 멤버
-            @RequestBody ProductUpdateRequestDto productUpdateRequestDto
-            )
-    {
-        productService.modifyProduct(boardUuid, productUpdateRequestDto,memberUuid);
-        return ResponseEntity.ok(GlobalResponseDto.of(true));
-    }
-
-    // 전체 상품 조회 -> Sale + 경매
+    // 전체 상품 조회 BoardType
     @GetMapping("/products")
     public ResponseEntity<?> getProductList(
-            @RequestParam ProductType productType,
+            @RequestParam ("BoardType")String productType,
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ){
+
         List<ProductAuctionResponseDto> listProduct = productTypeFactory.getList(productType, pageNo);
         return ResponseEntity.ok(GlobalResponseDto.listOf(listProduct));
     }
+
 
     // 상품 상세 조회
     @GetMapping("/products/{board_uuid}/boards")

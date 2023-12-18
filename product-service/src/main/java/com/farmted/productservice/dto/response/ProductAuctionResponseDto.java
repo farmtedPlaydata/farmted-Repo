@@ -3,9 +3,14 @@ package com.farmted.productservice.dto.response;
 import com.farmted.productservice.domain.Product;
 import com.farmted.productservice.vo.ResponseAuctionGetVo;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 
 import java.time.LocalDate;
-
+@Getter
+@Setter
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class ProductAuctionResponseDto {
     private String name;
     private int stock;
