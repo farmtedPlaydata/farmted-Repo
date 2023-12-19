@@ -23,7 +23,7 @@ public class ProductTypeFacade {
     public void createProduct(String memberUuid, ProductSaveRequestDto productSaveRequestDto) {
         String saved = productService.saveProduct(memberUuid, productSaveRequestDto);
 
-        switch (productSaveRequestDto.getProductType()){
+        switch (productSaveRequestDto.productType()){
             case SALE: //판매
                 break;
 
@@ -38,16 +38,25 @@ public class ProductTypeFacade {
     // 목록 조회
     // productType에 따라 적절한 List조회 구현 메서드를 선택
     public List<ProductAuctionResponseDto> getList(ProductType productType, int pageNo){
-        System.out.println("#####"+productType);
+
         switch (productType){
             case SALE:
                 return productService.getListProduct(pageNo);
             case PRODUCT:
                 return auctionService.getListProductAuction(pageNo);
         }
-
         throw new ProductException(productType);
     }
 
     // 판매자 등록 목록 조회
+    public List<ProductAuctionResponseDto> getListMember(ProductType productType, String memberUuid,int pageNo){
+        switch (productType){
+            case SALE:
+                productService.getListProductSeller(memberUuid,pageNo);
+            case PRODUCT:
+                auctionService.getListMemberProductAuction(memberUuid,pageNo);
+
+        }
+        throw new ProductException(productType);
+    }
 }

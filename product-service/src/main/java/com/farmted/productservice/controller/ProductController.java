@@ -53,9 +53,10 @@ public class ProductController {
     @GetMapping("/products/seller/{member_uuid}")
     public ResponseEntity<?> getProductListSeller(
             @PathVariable (value = "member_uuid") String memberUuid,
+            @RequestParam ("category") ProductType productType,
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ) {
-        List<ProductResponseDto> listProductSeller = productService.getListProductSeller(memberUuid,pageNo);
+        List<ProductAuctionResponseDto> listProductSeller = productTypeFactory.getListMember(productType,memberUuid,pageNo);
         return  ResponseEntity.ok(GlobalResponseDto.listOf(listProductSeller));
     }
 
@@ -63,7 +64,7 @@ public class ProductController {
 // 전체 상품 조회 BoardType
     @GetMapping("/products")
     public ResponseEntity<?> getProductList(
-            @RequestParam ("BoardType") ProductType productType,
+            @RequestParam ("category") ProductType productType,
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ){
 
@@ -81,6 +82,10 @@ public class ProductController {
     }
 
 // 상품 삭제
+//    @DeleteMapping("/products/{board_uuid}/board")
+//    public ResponseEntity<?> deleteProduct(@PathVariable (value = "board_uuid") String boardUuid){
+//
+//    }
 
 }
 

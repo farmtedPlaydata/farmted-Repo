@@ -76,8 +76,8 @@ public class AuctionService {
     }
 
 // 경매 상세 조회
-    public AuctionGetResponseDto getAuctionDetail(String productUuid){
-        Auction getAuction = auctionRepository.findAuctionByProductUuid(productUuid);
+    public AuctionGetResponseDto getAuctionDetail(String boardUuid){
+        Auction getAuction = auctionRepository.findAuctionByBoardUuid(boardUuid);
         return new AuctionGetResponseDto(getAuction);
     }
 

@@ -3,43 +3,26 @@ package com.farmted.productservice.dto.request;
 
 import com.farmted.productservice.domain.Product;
 import com.farmted.productservice.enums.ProductType;
-import lombok.*;
-
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class ProductSaveRequestDto {
-
-    private String name;
-
-    private int stock;
-
-    private int price;
-
-    private String source;
-
-    private String image;
-
-    private String boardUuid;
-
-    private ProductType productType;
-
+public record ProductSaveRequestDto(
+        String name,
+        int stock,
+        int price,
+        String source,
+        String image,
+        String boardUuid,
+        ProductType productType
+) {
     public Product toEntity(String memberUuid){
         return Product.builder()
-                .name(this.getName())
-                .stock(this.getStock())
-                .price(this.getPrice())
-                .source(this.getSource())
-                .image(this.getImage())
+                .name(this.name())
+                .stock(this.stock())
+                .price(this.price())
+                .source(this.source())
+                .image(this.image())
                 .memberUuid(memberUuid)
-                .boardUuid(this.getBoardUuid())
+                .boardUuid(this.boardUuid())
                 .productType(productType)
                 .build();
     }
-
-
-
 }
 

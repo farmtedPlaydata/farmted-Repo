@@ -4,6 +4,7 @@ import com.farmted.auctionservice.dto.responseAuctionDto.AuctionBuyerResponseDto
 import com.farmted.auctionservice.dto.responseAuctionDto.AuctionGetResponseDto;
 import com.farmted.auctionservice.dto.responseAuctionDto.AuctionSellerResponseDto;
 import com.farmted.auctionservice.service.AuctionService;
+import com.farmted.auctionservice.util.GlobalResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class AuctionController {
             @PathVariable String memberUuid
     ){
         List<AuctionBuyerResponseDto> auctionBuyerList = auctionService.auctionBuyerList(memberUuid);
-        return ResponseEntity.ok(auctionBuyerList);
+        return ResponseEntity.ok(GlobalResponseDto.listOf(auctionBuyerList));
     }
 
 // 구매자  ->  낙찰 내역 조회 -> auctionBuyer
@@ -36,13 +37,13 @@ public class AuctionController {
                 @PathVariable String auctionBuyer
     ){
         List<AuctionSellerResponseDto> auctionSellerList = auctionService.auctionTrueList(auctionBuyer);
-        return ResponseEntity.ok(auctionSellerList);
+        return ResponseEntity.ok(GlobalResponseDto.listOf(auctionSellerList));
     }
 
 // 경매 내역 상세 조회
-    @GetMapping("/{productUuid}/auctions")
-    public ResponseEntity<?> getAuctionDetail(@PathVariable String productUuid){
-        AuctionGetResponseDto auction = auctionService.getAuctionDetail(productUuid);
-        return ResponseEntity.ok(auction);
+    @GetMapping("/auction/{boardUuid}/board")
+    public ResponseEntity<?> getAuctionDetail(@PathVariable String boardUuid){
+        AuctionGetResponseDto auction = auctionService.getAuctionDetail(boardUuid);
+        return ResponseEntity.ok(GlobalResponseDto.of(auction));
     }
 }

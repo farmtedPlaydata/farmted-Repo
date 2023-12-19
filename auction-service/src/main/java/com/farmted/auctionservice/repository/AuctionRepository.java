@@ -15,7 +15,7 @@ public interface AuctionRepository extends JpaRepository<Auction,Long>{
     public List<Auction> findAuctionByMemberUuid(String memberUuid);
 
     // 특정 경매 조회
-    public Auction findAuctionByProductUuid(String productUuid);
+//    public Auction findAuctionByProductUuid(String productUuid);
 
     //특정 생성 시간에 대한 경매 조회
     public List<Auction> findAuctionByAuctionDeadline(LocalDate dateLine);

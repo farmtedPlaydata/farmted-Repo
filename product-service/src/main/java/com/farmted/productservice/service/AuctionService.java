@@ -52,7 +52,27 @@ public class AuctionService {
         return productList.stream()
                 .map(product -> {
                     Optional<ResponseAuctionGetVo> matchingAuction = auctionIng.stream()
-                            .filter(auction -> auction.getProductUuid().equals(product.getUuid()))
+                            .filter(auction -> auction.productUuid().equals(product.getUuid()))
+                            .findFirst();
+
+                    ProductAuctionResponseDto productAuctionResponseDto = new ProductAuctionResponseDto(product);
+                    matchingAuction.ifPresent(productAuctionResponseDto::mergeAuction);
+
+                    return productAuctionResponseDto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    //feign 통신: 전체 (상품 + 경매) 목록 조회
+    @Transactional(readOnly = true)
+    public List<ProductAuctionResponseDto> getListMemberProductAuction(String memberUuid,int pageNo) {
+        Slice<Product> productList = productRepository.findProductByMemberUuid(memberUuid,PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createAt")));
+        List<ResponseAuctionGetVo> auctionIng = productToAuctionFeignClient.auctionIng();
+
+        return productList.stream()
+                .map(product -> {
+                    Optional<ResponseAuctionGetVo> matchingAuction = auctionIng.stream()
+                            .filter(auction -> auction.productUuid().equals(product.getUuid()))
                             .findFirst();
 
                     ProductAuctionResponseDto productAuctionResponseDto = new ProductAuctionResponseDto(product);
@@ -64,14 +84,13 @@ public class AuctionService {
     }
 
 
-
     // feign 통신: 경매 종료
     public void endAuctionFromProduct(){
         List<ResponseAuctionEndVo> endAuctionVoList = productToAuctionFeignClient.endAuctionFromProduct();
         for (ResponseAuctionEndVo endAuction : endAuctionVoList) {
-            Product products = productRepository.findProductByUuid(endAuction.getProductUuid())
+            Product products = productRepository.findProductByUuid(endAuction.productUuid())
                     .orElseThrow(()-> new ProductException());
-            products.updateStatus(endAuction.getAuctionStatus());
+            products.updateStatus(endAuction.auctionStatus());
         }
     }
 

@@ -29,9 +29,9 @@ public class ProductAuctionResponseDto {
     private Boolean auctionStatus; // false: 경매중, true:  경매 종료
 
     public void mergeAuction(ResponseAuctionGetVo responseAuctionGetVo){
-        auctionPrice = responseAuctionGetVo.getAuctionPrice();
-        auctionDeadline = responseAuctionGetVo.getAuctionDeadline();
-        auctionStatus = responseAuctionGetVo.isAuctionStatus();
+        auctionPrice = responseAuctionGetVo.auctionPrice();
+        auctionDeadline = responseAuctionGetVo.auctionDeadline();
+        auctionStatus = responseAuctionGetVo.auctionStatus();
 
     }
 
