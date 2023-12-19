@@ -18,11 +18,14 @@ public enum ProductType {
     @JsonCreator
     public static ProductType fromLabel(String checkType){
         for(ProductType type :ProductType.values()){
-            if(type.typeKo.equalsIgnoreCase(checkType)){
+            if(type.typeKo.equals(checkType)){
                 return type;
             }
         }
-        throw new RuntimeException(checkType);
+        throw new IllegalArgumentException("Invalid ProductType label: " + checkType);
+        //throw new RuntimeException(checkType);
     }
+
+
 
 }

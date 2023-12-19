@@ -17,14 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiController {
 
 
-    private final AuctionService auctionService;
-    private final ProductService productService;
+    AuctionService auctionService;
 
     // 경매 종료 상태로 변경
     @Scheduled(cron ="*/60 * * * * *")
     @GetMapping("/endAuctions")
     public ResponseEntity<?> endAuctionToProduct(){
-       productService.endAuctionFromProduct();
+       auctionService.endAuctionFromProduct();
        return ResponseEntity.ok().build();
     }
 

@@ -21,11 +21,10 @@ public class AuctionService {
 
     private final AuctionRepository auctionRepository;
 
-    // 경매 정보 생성 및 시작
+// 경매 정보 생성 및 시작
     public void createAuction(AuctionCreateRequestDto auctionCreateRequestDto, String memberUuid){
         // 시간 처리 로직
         LocalDate auctionDeadline = auctionCreateRequestDto.getAuctionDeadline().plusMonths(1);
-        System.out.println(auctionDeadline+"########");
         Auction createAuctionDto = auctionCreateRequestDto.toEntity(memberUuid,auctionDeadline);
         auctionRepository.save(createAuctionDto);
 
@@ -53,7 +52,7 @@ public class AuctionService {
     }
 
 
-    // 방안 2
+    // 실제 로직임.
 //    @Scheduled(cron ="*/60 * * * * *")
 //    public List<AuctionStatusResponseDto> changeAuction(){
 //        // 경매 종료 로직
@@ -68,15 +67,22 @@ public class AuctionService {
 //                .collect(Collectors.toList());
 //    }
 
-    // 경매 목록 조회
-    // TODO: 진행 종료 합쳐서 조회? 진행만 조회?
-    public AuctionGetResponseDto getAuctionList(String productUuid){
+// 경매 리스트 조회
+    public List<AuctionGetResponseDto> getAuctionIngList(){
+        List<Auction> auctionList = auctionRepository.findAll();
+        return auctionList.stream()
+                .map(AuctionGetResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+// 경매 상세 조회
+    public AuctionGetResponseDto getAuctionDetail(String productUuid){
         Auction getAuction = auctionRepository.findAuctionByProductUuid(productUuid);
         return new AuctionGetResponseDto(getAuction);
     }
 
 
-    // 판매자 -> 낙찰 목록 조회 -> 경매 종료 상태
+// 판매자 -> 낙찰 목록 조회 -> 경매 종료 상태
     public List<AuctionBuyerResponseDto> auctionBuyerList(String memberUuid){
         List<Auction> auctionByMemberList = auctionRepository.findAuctionByMemberUuid(memberUuid);
         return auctionByMemberList
@@ -85,7 +91,7 @@ public class AuctionService {
                 .collect(Collectors.toList());
     }
 
-    // 구매자 -> 낙찰 목록 조회 -> 경매 종료 상태
+// 구매자 -> 낙찰 목록 조회 -> 경매 종료 상태
     public List<AuctionSellerResponseDto> auctionTrueList(String auctionBuyer){
         List<Auction> auctionSellerList = auctionRepository.findAuctionByAuctionBuyer(auctionBuyer);
         return auctionSellerList.stream()

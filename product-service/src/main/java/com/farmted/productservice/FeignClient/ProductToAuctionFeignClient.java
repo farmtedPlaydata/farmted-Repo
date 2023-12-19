@@ -4,6 +4,7 @@ import com.farmted.productservice.vo.RequestAuctionCreateVo;
 import com.farmted.productservice.vo.ResponseAuctionEndVo;
 import com.farmted.productservice.vo.ResponseAuctionGetVo;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,6 @@ public interface ProductToAuctionFeignClient {
     @GetMapping("/products/auctions")
     public List<ResponseAuctionEndVo> endAuctionFromProduct();
 
-    @GetMapping("/{productUuid}/auctions")
-    public List<ResponseAuctionGetVo> getAuctionIng();
+    @GetMapping(value ="/products/auctions")
+    public List<ResponseAuctionGetVo> auctionIng();
 }

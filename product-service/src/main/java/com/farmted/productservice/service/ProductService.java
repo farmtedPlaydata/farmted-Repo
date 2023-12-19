@@ -35,7 +35,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductToAuctionFeignClient productToAuctionFeignClient;
 
-    // 상품 DB 등록
+// 상품 DB 등록
     public String saveProduct(String memberUuid,ProductSaveRequestDto productSaveRequestDto){
 
         // only SALE인 경우
@@ -46,7 +46,7 @@ public class ProductService {
     }
 
 
-    // 상품 DB 전체 수정
+// 상품 DB 전체 수정
     // 경매는 수정 불가
     public void modifyProduct(String boardUuid, ProductUpdateRequestDto productUpdateRequestDto, String memberUuid){
         // 상품 판매자만  수정 가능
@@ -65,7 +65,7 @@ public class ProductService {
     }
 
 
-    // 판매자 등록한 전체 상품 조회
+ // 판매자 등록한 전체 상품 조회
     @Transactional(readOnly = true)
     public List<ProductResponseDto> getListProductSeller(String memberUuid,int pageNo){
         // 해당 판매자가 존재하는 지 확인
@@ -77,34 +77,22 @@ public class ProductService {
 
     }
 
-    // 상품 상세 조회
-    @Transactional(readOnly = true)
-    public ProductResponseDto getProductDetail(String boardUuid){
-      Product productDetail = productRepository.findProductByBoardUuid(boardUuid)
-              .orElseThrow(()-> new ProductException());
-      return new ProductResponseDto(productDetail);
-    }
-
-    // 전체 only 상품 조회
+// 전체 only 상품 조회
     @Transactional(readOnly = true)
     public List<ProductAuctionResponseDto> getListProduct(int pageNo) {
-        Slice<Product> productList = productRepository.findProductByProductType(SALE,PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
+        Slice<Product> productList = productRepository.findAll(PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
 
         return productList.stream()
                 .map(ProductAuctionResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-
-
-    // feign 통신: 경매 종료
-    public void endAuctionFromProduct(){
-        List<ResponseAuctionEndVo> endAuctionVoList = productToAuctionFeignClient.endAuctionFromProduct();
-        for (ResponseAuctionEndVo endAuction : endAuctionVoList) {
-            Product products = productRepository.findProductByUuid(endAuction.getProductUuid())
-                    .orElseThrow(()-> new ProductException());
-            products.updateStatus(endAuction.getAuctionStatus());
-        }
+// 상품 상세 조회
+    @Transactional(readOnly = true)
+    public ProductResponseDto getProductDetail(String boardUuid){
+      Product productDetail = productRepository.findProductByBoardUuid(boardUuid)
+              .orElseThrow(()-> new ProductException());
+      return new ProductResponseDto(productDetail);
     }
 
 }

@@ -4,8 +4,9 @@ import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
 import com.farmted.productservice.dto.response.ProductAuctionResponseDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
-import com.farmted.productservice.enums.ProductType;
 import com.farmted.productservice.Facade.ProductTypeFacade;
+import com.farmted.productservice.enums.ProductType;
+import com.farmted.productservice.service.AuctionService;
 import com.farmted.productservice.service.ProductService;
 import com.farmted.productservice.util.GlobalResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,10 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final AuctionService auctionService;
     private final ProductTypeFacade productTypeFactory;
 
-    // 판매자 상품 등록
+// 판매자 상품 등록
     // TODO: 단순 상품, 경매 상품 구분
     @PostMapping("/products/boards")
     public ResponseEntity<?>  saveProduct(
@@ -34,7 +36,7 @@ public class ProductController {
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
-    // 판매자 전체 수정
+// 판매자 전체 수정
     @PutMapping("/products/{board_uuid}/boards")
     public ResponseEntity<?> modifyProduct(
             @PathVariable (value = "board_uuid") String boardUuid ,
@@ -47,7 +49,7 @@ public class ProductController {
     }
 
 
-    // 판매자 등록 전체 상품 조회
+ // 판매자 등록 전체 상품 조회 BoardType
     @GetMapping("/products/seller/{member_uuid}")
     public ResponseEntity<?> getProductListSeller(
             @PathVariable (value = "member_uuid") String memberUuid,
@@ -58,10 +60,10 @@ public class ProductController {
     }
 
 
-    // 전체 상품 조회 BoardType
+// 전체 상품 조회 BoardType
     @GetMapping("/products")
     public ResponseEntity<?> getProductList(
-            @RequestParam ("BoardType")String productType,
+            @RequestParam ("BoardType") ProductType productType,
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ){
 
@@ -70,13 +72,15 @@ public class ProductController {
     }
 
 
-    // 상품 상세 조회
+// 상품 상세 조회
     @GetMapping("/products/{board_uuid}/boards")
     public ResponseEntity<?> getProductDetail(@PathVariable (value = "board_uuid") String boardUuid){
         ProductResponseDto productDetail = productService.getProductDetail(boardUuid);
         return ResponseEntity.ok(GlobalResponseDto.of(productDetail));
 
     }
+
+// 상품 삭제
 
 }
 

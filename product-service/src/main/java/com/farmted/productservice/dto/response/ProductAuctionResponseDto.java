@@ -28,16 +28,11 @@ public class ProductAuctionResponseDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean auctionStatus; // false: 경매중, true:  경매 종료
 
-    public ProductAuctionResponseDto(Product product, ResponseAuctionGetVo responseAuctionGetVo){
-        this.name = product.getName();
-        this.stock = product.getStock();
-        this.price = product.getPrice();
-        this.source = product.getSource();
-        this.image = product.getImage();
-        this.status = product.isStatus();
-        this.auctionStatus = product.isAuctionStatus();
-        this.auctionDeadline =responseAuctionGetVo.getAuctionDeadline();
-        this.auctionPrice = responseAuctionGetVo.getAuctionPrice();
+    public void mergeAuction(ResponseAuctionGetVo responseAuctionGetVo){
+        auctionPrice = responseAuctionGetVo.getAuctionPrice();
+        auctionDeadline = responseAuctionGetVo.getAuctionDeadline();
+        auctionStatus = responseAuctionGetVo.isAuctionStatus();
+
     }
 
     public ProductAuctionResponseDto(Product product) {

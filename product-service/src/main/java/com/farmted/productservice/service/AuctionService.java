@@ -3,11 +3,10 @@ package com.farmted.productservice.service;
 import com.farmted.productservice.FeignClient.ProductToAuctionFeignClient;
 import com.farmted.productservice.domain.Product;
 import com.farmted.productservice.dto.response.ProductAuctionResponseDto;
-import com.farmted.productservice.dto.response.ProductResponseDto;
-import com.farmted.productservice.enums.ProductType;
 import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.repository.ProductRepository;
 import com.farmted.productservice.vo.RequestAuctionCreateVo;
+import com.farmted.productservice.vo.ResponseAuctionEndVo;
 import com.farmted.productservice.vo.ResponseAuctionGetVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -19,8 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static com.farmted.productservice.enums.ProductType.PRODUCT;
+import static com.farmted.productservice.enums.ProductType.AUCTION;
 
 @Service
 @RequiredArgsConstructor
@@ -43,29 +43,37 @@ public class AuctionService {
 
     }
 
-    // 전체 (상품 + 경매) 조회
+//feign 통신: 전체 (상품 + 경매) 목록 조회
     @Transactional(readOnly = true)
     public List<ProductAuctionResponseDto> getListProductAuction(int pageNo) {
-        List<ProductAuctionResponseDto> productAuctionResponseDtoList= new ArrayList<>();
+        Slice<Product> productList = productRepository.findAll(PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createAt")));
+        List<ResponseAuctionGetVo> auctionIng = productToAuctionFeignClient.auctionIng();
 
-        Slice<Product> productList = productRepository.findProductByProductType(PRODUCT,PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
-        List<ResponseAuctionGetVo> auctionIng = productToAuctionFeignClient.getAuctionIng();
+        return productList.stream()
+                .map(product -> {
+                    Optional<ResponseAuctionGetVo> matchingAuction = auctionIng.stream()
+                            .filter(auction -> auction.getProductUuid().equals(product.getUuid()))
+                            .findFirst();
 
-        for (Product product : productList) {
-            // productList에서 현재 순회 중인 product의 productId와 동일한 ResponseAuctionGetVo 찾기
-            Optional<ResponseAuctionGetVo> matchingAuction = auctionIng.stream()
-                    .filter(auction -> auction.getProductUuid().equals(product.getUuid()))
-                    .findFirst();
+                    ProductAuctionResponseDto productAuctionResponseDto = new ProductAuctionResponseDto(product);
+                    matchingAuction.ifPresent(productAuctionResponseDto::mergeAuction);
 
-            // ResponseAuctionGetVo가 존재하면 합치고, 없으면 Product만 사용
-            ProductAuctionResponseDto mergedDto = matchingAuction.map(auction -> new ProductAuctionResponseDto(product, auction))
-                    .orElse(new ProductAuctionResponseDto(product));
-
-            productAuctionResponseDtoList.add(mergedDto);
-        }
-        return productAuctionResponseDtoList;
+                    return productAuctionResponseDto;
+                })
+                .collect(Collectors.toList());
     }
 
+    
+
+    // feign 통신: 경매 종료
+    public void endAuctionFromProduct(){
+        List<ResponseAuctionEndVo> endAuctionVoList = productToAuctionFeignClient.endAuctionFromProduct();
+        for (ResponseAuctionEndVo endAuction : endAuctionVoList) {
+            Product products = productRepository.findProductByUuid(endAuction.getProductUuid())
+                    .orElseThrow(()-> new ProductException());
+            products.updateStatus(endAuction.getAuctionStatus());
+        }
+    }
 
 
 }

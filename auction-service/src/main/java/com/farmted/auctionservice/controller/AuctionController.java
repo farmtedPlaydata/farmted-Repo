@@ -1,6 +1,7 @@
 package com.farmted.auctionservice.controller;
 
 import com.farmted.auctionservice.dto.responseAuctionDto.AuctionBuyerResponseDto;
+import com.farmted.auctionservice.dto.responseAuctionDto.AuctionGetResponseDto;
 import com.farmted.auctionservice.dto.responseAuctionDto.AuctionSellerResponseDto;
 import com.farmted.auctionservice.service.AuctionService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class AuctionController {
     private final AuctionService auctionService;
 
 
-    // 판매자 -> 낙찰 내역 조회 -> memberUuid
+// 판매자 -> 낙찰 내역 조회 -> memberUuid
     @GetMapping("/seller/{memberUuid}/board")
     public ResponseEntity<?> findAuctionToSeller(
             @PathVariable String memberUuid
@@ -29,7 +30,7 @@ public class AuctionController {
         return ResponseEntity.ok(auctionBuyerList);
     }
 
-    // 구매자  ->  낙찰 내역 조회 -> auctionBuyer
+// 구매자  ->  낙찰 내역 조회 -> auctionBuyer
     @GetMapping("/{auctionBuyer}/board")
         public ResponseEntity<?> findAuctionTrue(
                 @PathVariable String auctionBuyer
@@ -38,4 +39,10 @@ public class AuctionController {
         return ResponseEntity.ok(auctionSellerList);
     }
 
+// 경매 내역 상세 조회
+    @GetMapping("/{productUuid}/auctions")
+    public ResponseEntity<?> getAuctionDetail(@PathVariable String productUuid){
+        AuctionGetResponseDto auction = auctionService.getAuctionDetail(productUuid);
+        return ResponseEntity.ok(auction);
+    }
 }
