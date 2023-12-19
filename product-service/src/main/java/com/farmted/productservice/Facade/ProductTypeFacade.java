@@ -38,7 +38,7 @@ public class ProductTypeFacade {
     // 목록 조회
     // productType에 따라 적절한 List조회 구현 메서드를 선택
     public List<ProductAuctionResponseDto> getList(ProductType productType, int pageNo){
-
+        System.out.println("#####"+productType);
         switch (productType){
             case SALE:
                 return productService.getListProduct(pageNo);

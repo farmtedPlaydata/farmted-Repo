@@ -80,7 +80,7 @@ public class ProductService {
 // 전체 only 상품 조회
     @Transactional(readOnly = true)
     public List<ProductAuctionResponseDto> getListProduct(int pageNo) {
-        Slice<Product> productList = productRepository.findAll(PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
+        Slice<Product> productList = productRepository.findProductByProductType(SALE,PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
 
         return productList.stream()
                 .map(ProductAuctionResponseDto::new)

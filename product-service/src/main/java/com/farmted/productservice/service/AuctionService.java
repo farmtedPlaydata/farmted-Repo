@@ -63,7 +63,7 @@ public class AuctionService {
                 .collect(Collectors.toList());
     }
 
-    
+
 
     // feign 통신: 경매 종료
     public void endAuctionFromProduct(){
