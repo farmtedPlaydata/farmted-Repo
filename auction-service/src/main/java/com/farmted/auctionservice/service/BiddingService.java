@@ -4,8 +4,10 @@ import com.farmted.auctionservice.domain.Auction;
 import com.farmted.auctionservice.domain.Bidding;
 import com.farmted.auctionservice.dto.ResponseBiddingDto.BiddingResponseDto;
 import com.farmted.auctionservice.dto.requestBiddingDto.BiddingCreateRequestDto;
+import com.farmted.auctionservice.feignClient.AuctionToProductFeignClient;
 import com.farmted.auctionservice.repository.AuctionRepository;
 import com.farmted.auctionservice.repository.BiddingRepository;
+import com.farmted.auctionservice.vo.ProductVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +30,7 @@ import static java.rmi.server.LogStream.log;
 public class BiddingService {
     private final BiddingRepository biddingRepository;
     private final AuctionRepository auctionRepository;
+    private final AuctionToProductFeignClient feignClient;
     private final RedissonClient redissonClient;
     private final String PREFIX = "Auction-Bidding::";
 
@@ -83,12 +87,17 @@ public class BiddingService {
     }
 
     // 입찰 내역 조회
-    public List<BiddingResponseDto> getBiddingList(String memberUuid){
-       List<Bidding> biddingByMemberUuid = biddingRepository.findBiddingByMemberUuid(memberUuid);
-       return biddingByMemberUuid.stream()
-               .map(BiddingResponseDto::new)
-               .toList();
-   }
+    public List<BiddingResponseDto> getBiddingList(String memberUuid) {
+        List<Bidding> biddingList = biddingRepository.findBiddingByMemberUuid(memberUuid);
+        List<BiddingResponseDto> createBiddingList = new ArrayList<>();
+        for (Bidding bidding : biddingList) {
+            ProductVo productDetail = feignClient.getProductDetail(bidding.getBoardUuid());
+            BiddingResponseDto biddingDetailList = new BiddingResponseDto(bidding,productDetail);
+            createBiddingList.add(biddingDetailList);
+        }
+        return createBiddingList;
+
+    }
 
 
 

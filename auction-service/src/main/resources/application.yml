@@ -12,10 +12,10 @@ spring:
     name: auction-service
 
   datasource:
-    driver-class-name: "${driverName}"
-    url: "${dbURL}"
-    username: "${dbName}"
-    password: "${dbPwd}"
+    driver-class-name: ${driverName}
+    url: ${dbURL}
+    username: ${dbName}
+    password: ${dbPwd}
 
   jpa:
     properties:
@@ -28,7 +28,7 @@ spring:
 
 
 server:
-  port: 8082
+  port: 8086
 
 eureka:
   client:
@@ -43,6 +43,6 @@ eureka:
 
 ## 스케줄러 세팅
 schedules:
-  cron: "*/60 * * * * *"  # 1초마다 스케줄러 실행
+  cron: "*/60 * * * * *"  # 1분마다
 
 

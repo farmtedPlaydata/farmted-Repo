@@ -3,10 +3,11 @@ spring:
     name: product-service
 
   datasource:
-    driver-class-name: "${driverName}"
-    url: "${dbURL}"
-    username: "${dbName}"
-    password: "${dbPwd}"
+    driver-class-name: ${driverName}
+    url: ${dbURL}
+    username: ${dbName}
+    password: ${dbPwd}
+
 
   jpa:
     properties:
