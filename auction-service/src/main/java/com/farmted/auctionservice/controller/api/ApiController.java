@@ -32,7 +32,7 @@ public class ApiController {
 // 경매 종료 전달
     @GetMapping(value = "/endAuctions")
     public ResponseEntity<?> endAuction(){
-        List<AuctionStatusResponseDto> auctionStatusResponseDtoList = auctionService.endAuctions();
+        List<AuctionStatusResponseDto> auctionStatusResponseDtoList = auctionService.changeAuction();
         return ResponseEntity.ok(auctionStatusResponseDtoList);
     }
 

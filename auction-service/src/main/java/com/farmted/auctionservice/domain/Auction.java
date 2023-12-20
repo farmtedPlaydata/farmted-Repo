@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public class Auction extends TimeStamp{
     @Column(unique = true)
     private String auctionUuid;
 
-    private Integer auctionPrice; // 가격
+    private BigDecimal auctionPrice; // 가격
 
     private String auctionBuyer;  // 낙찰자
 
@@ -45,7 +46,7 @@ public class Auction extends TimeStamp{
         auctionStatus = true;
     }
 
-    public void setBiddingTop(Integer auctionPrice,String auctionBuyer){
+    public void setBiddingTop(BigDecimal auctionPrice,String auctionBuyer){
         this.auctionPrice=auctionPrice;
         this.auctionBuyer =auctionBuyer;
     }

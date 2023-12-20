@@ -15,12 +15,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.farmted.productservice.enums.ProductType.AUCTION;
 
 @Service
 @RequiredArgsConstructor
@@ -63,7 +60,7 @@ public class AuctionService {
                 .collect(Collectors.toList());
     }
 
-    //feign 통신: 전체 (상품 + 경매) 목록 조회
+    //feign 통신: 판매자가 등록한 전체 (상품 + 경매) 목록 조회
     @Transactional(readOnly = true)
     public List<ProductAuctionResponseDto> getListMemberProductAuction(String memberUuid,int pageNo) {
         Slice<Product> productList = productRepository.findProductByMemberUuid(memberUuid,PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createAt")));

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 public class
 
 AuctionBoardResponseDto {
-    private int auctionPrice; // 가격
+    private BigDecimal auctionPrice; // 가격
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String auctionBuyer;  // 낙찰자
@@ -29,6 +30,5 @@ AuctionBoardResponseDto {
         this.auctionPrice=auction.getAuctionPrice();
         this.auctionDeadline=auction.getAuctionDeadline();
         this.auctionStatus =auction.getAuctionStatus();
-        //this.memberUuid =auction.getMemberUuid();
     }
 }

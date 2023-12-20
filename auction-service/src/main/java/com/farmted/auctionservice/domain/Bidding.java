@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,7 +18,7 @@ public class Bidding extends TimeStamp {
     private Long biddingId;
     private String biddingUuid;
 
-    private Integer biddingPrice; // 일반 입찰
+    private BigDecimal biddingPrice; // 일반 입찰
     private Integer biddingAutoPrice; // 자동 입찰
     private LocalDateTime biddingTime; // 응찰 시간
 

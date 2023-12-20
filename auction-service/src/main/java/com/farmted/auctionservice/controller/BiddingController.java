@@ -19,11 +19,12 @@ public class BiddingController {
     private final BiddingService biddingService;
 
     // 입찰 신청
-    @PostMapping("/bid")
+    @PostMapping("/bid/{board_uuid}")
     public ResponseEntity<?> createBidding(
             @RequestBody BiddingCreateRequestDto biddingCreateRequestDto,
             @RequestHeader ("UUID") String memberUuid,
-            @RequestHeader String boardUuid){
+            @PathVariable ("board_uuid") String boardUuid
+            ){
         biddingService.createBidding(biddingCreateRequestDto,boardUuid,memberUuid);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }

@@ -6,13 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter @Builder @AllArgsConstructor @NoArgsConstructor
 public class AuctionCreateRequestDto {
 
-    private Integer auctionPrice; // 가격
-
+    private BigDecimal auctionPrice; // 가격
     private LocalDate auctionDeadline; // 경매 종료 시간
     private String boardUuid;
     private String productUuid;

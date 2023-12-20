@@ -24,8 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.farmted.productservice.enums.ProductType.PRODUCT;
-import static com.farmted.productservice.enums.ProductType.SALE;
+import static com.farmted.productservice.enums.ProductType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -96,6 +95,13 @@ public class ProductService {
     }
 
 // 상품 삭제
+    public void deleteProduct(String boardUuid){
+        Product productDetail = productRepository.findProductByBoardUuid(boardUuid)
+                .orElseThrow(()-> new ProductException());
+        if(productDetail.getProductType().equals(SALE))
+            productRepository.delete(productDetail);
+    }
+
 
 
 }

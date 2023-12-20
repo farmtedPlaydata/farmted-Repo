@@ -1,10 +1,13 @@
 package com.farmted.auctionservice.repository;
 
 import com.farmted.auctionservice.domain.Auction;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -27,6 +30,9 @@ public interface AuctionRepository extends JpaRepository<Auction,Long>{
 
     // 게시글에 따른 경매 조회
     public Auction findAuctionByBoardUuid(String boardUuid);
+
+    @Query("SELECT MAX(a.auctionPrice) FROM Auction a WHERE a.boardUuid = :boardUuid")
+    BigDecimal findMaxAuctionPrice(@Param("board_uuid") String boardUuid);
 
 
 }

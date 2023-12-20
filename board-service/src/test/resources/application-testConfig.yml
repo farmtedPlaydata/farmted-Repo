@@ -1,4 +1,4 @@
-dbURL: jdbc:mysql://localhost:3306/msa_db
+dbURL: jdbc:mysql://localhost:3306/farmted
 dbName: root
 dbPwd: 1234
 driverName: com.mysql.cj.jdbc.Driver
