@@ -20,10 +20,21 @@ module.exports = {
           loader: 'ts-loader',
         },
       },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
     ],
   },
   devServer: {
     port: 3000,
     open: true,
+    proxy: {
+      '/api/': {
+        target: 'http://localhost:2299', // 실제 서버 주소
+        pathRewrite: { '/api': '' }, // proxy path 를 제거하도록 다시 쓴다
+        changeOrigin: true,
+      },
+    },
   },
 };
