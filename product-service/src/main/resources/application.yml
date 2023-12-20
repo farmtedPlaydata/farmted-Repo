@@ -3,10 +3,10 @@ spring:
     name: product-service
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/farmted
-    username: root
-    password: 1234
+    driver-class-name: "${driverName}"
+    url: "${dbURL}"
+    username: "${dbName}"
+    password: "${dbPwd}"
 
   jpa:
     properties:
