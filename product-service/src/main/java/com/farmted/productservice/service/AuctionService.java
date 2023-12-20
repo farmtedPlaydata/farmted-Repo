@@ -6,7 +6,6 @@ import com.farmted.productservice.dto.response.ProductAuctionResponseDto;
 import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.repository.ProductRepository;
 import com.farmted.productservice.vo.RequestAuctionCreateVo;
-import com.farmted.productservice.vo.ResponseAuctionEndVo;
 import com.farmted.productservice.vo.ResponseAuctionGetVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -44,26 +43,17 @@ public class AuctionService {
     @Transactional(readOnly = true)
     public List<ProductAuctionResponseDto> getListProductAuction(int pageNo) {
         Slice<Product> productList = productRepository.findAll(PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createAt")));
-        List<ResponseAuctionGetVo> auctionIng = productToAuctionFeignClient.auctionProductList();
-
-        return productList.stream()
-                .map(product -> {
-                    Optional<ResponseAuctionGetVo> matchingAuction = auctionIng.stream()
-                            .filter(auction -> auction.productUuid().equals(product.getUuid()))
-                            .findFirst();
-
-                    ProductAuctionResponseDto productAuctionResponseDto = new ProductAuctionResponseDto(product);
-                    matchingAuction.ifPresent(productAuctionResponseDto::mergeAuction);
-
-                    return productAuctionResponseDto;
-                })
-                .collect(Collectors.toList());
+        return getProductAuctionResponseDtos(productList);
     }
 
     //feign 통신: 판매자가 등록한 전체 (상품 + 경매) 목록 조회
     @Transactional(readOnly = true)
     public List<ProductAuctionResponseDto> getListMemberProductAuction(String memberUuid,int pageNo) {
         Slice<Product> productList = productRepository.findProductByMemberUuid(memberUuid,PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createAt")));
+        return getProductAuctionResponseDtos(productList);
+    }
+
+    private List<ProductAuctionResponseDto> getProductAuctionResponseDtos(Slice<Product> productList) {
         List<ResponseAuctionGetVo> auctionIng = productToAuctionFeignClient.auctionProductList();
 
         return productList.stream()
@@ -80,16 +70,10 @@ public class AuctionService {
                 .collect(Collectors.toList());
     }
 
-
-    // feign 통신: 경매 종료
-    public void endAuctionFromProduct(){
-        List<ResponseAuctionEndVo> endAuctionVoList = productToAuctionFeignClient.endAuctionFromProduct();
-        for (ResponseAuctionEndVo endAuction : endAuctionVoList) {
-            Product products = productRepository.findProductByUuid(endAuction.productUuid())
-                    .orElseThrow(()-> new ProductException());
-            products.updateStatus(endAuction.auctionStatus());
-        }
+    public  void endAuctionFromProduct(String productUuid){
+        Product closedProduct = productRepository.findProductByUuid(productUuid)
+                .orElseThrow(ProductException::new);
+        closedProduct.closedStatus();
     }
-
 
 }

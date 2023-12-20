@@ -8,20 +8,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor @NoArgsConstructor
 @Builder @Getter
 public class RequestAuctionCreateVo {
     // @JsonProperty로 vo, dto 전달명 통일
     private @JsonProperty("auctionPrice") int price;
-    private @JsonProperty("auctionDeadline") LocalDate startPeriod;
+    private @JsonProperty("auctionDeadline") LocalDateTime startPeriod;
     private String boardUuid;
     private String productUuid;
 
 
     public RequestAuctionCreateVo(Product product){
         price = product.getPrice();
-        startPeriod = product.getCreateAt().toLocalDate();
+        startPeriod = product.getCreateAt();
         boardUuid=product.getBoardUuid();
         productUuid = product.getUuid();
     }

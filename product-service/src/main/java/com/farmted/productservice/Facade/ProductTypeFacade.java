@@ -59,4 +59,7 @@ public class ProductTypeFacade {
         }
         throw new ProductException(productType);
     }
+
+    // 구매 내역 조회
+
 }

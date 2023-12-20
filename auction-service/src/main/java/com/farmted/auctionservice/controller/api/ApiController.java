@@ -2,15 +2,14 @@ package com.farmted.auctionservice.controller.api;
 
 import com.farmted.auctionservice.dto.requestAuctionDto.AuctionCreateRequestDto;
 import com.farmted.auctionservice.dto.responseAuctionDto.AuctionGetResponseDto;
-import com.farmted.auctionservice.dto.responseAuctionDto.AuctionStatusResponseDto;
 import com.farmted.auctionservice.service.AuctionService;
-import com.farmted.auctionservice.util.GlobalResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 // Api는 product관련
@@ -32,14 +31,6 @@ public class ApiController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-
-// 경매 종료 전달
-    @GetMapping(value = "/endAuctions")
-    @Operation(summary = "경매 종료 상태 전달", description = "경매 종료 상태를 product-service가 주기적으로 체크하면서 해당 API를 호출합니다.")
-    public ResponseEntity<?> endAuction(){
-        List<AuctionStatusResponseDto> auctionStatusResponseDtoList = auctionService.changeAuction();
-        return ResponseEntity.ok(auctionStatusResponseDtoList);
-    }
 
 // 경매 내역 전달용 API
     @GetMapping(value ="/products/auctions")

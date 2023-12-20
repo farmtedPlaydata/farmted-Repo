@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AuctionRepository extends JpaRepository<Auction,Long>{
@@ -23,7 +24,7 @@ public interface AuctionRepository extends JpaRepository<Auction,Long>{
     public Auction findAuctionByProductUuid(String productUuid);
 
     //특정 생성 시간에 대한 경매 조회
-    public List<Auction> findAuctionByAuctionDeadline(LocalDate dateLine);
+    public List<Auction> findAuctionByAuctionDeadline(LocalDateTime dateLine);
 
     // 상태값에 따른 경매 조회
     public List<Auction> findAuctionByAuctionStatus(boolean auctionStatus);

@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +22,7 @@ AuctionBoardResponseDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String auctionBuyer;  // 낙찰자
 
-    private LocalDate auctionDeadline; // 경매 종료 시간
+    private LocalDateTime auctionDeadline; // 경매 종료 시간
 
     private Boolean auctionStatus; // 0: 경매중, 1:  경매 종료
 

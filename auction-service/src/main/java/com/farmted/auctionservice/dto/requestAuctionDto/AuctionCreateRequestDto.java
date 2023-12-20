@@ -8,17 +8,18 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter @Builder @AllArgsConstructor @NoArgsConstructor
 public class AuctionCreateRequestDto {
 
     private BigDecimal auctionPrice; // 가격
-    private LocalDate auctionDeadline; // 경매 종료 시간
+    private LocalDateTime auctionDeadline; // 경매 종료 시간
     private String boardUuid;
     private String productUuid;
 
 
-    public Auction toEntity(String memberUuid,LocalDate actionDeadline){
+    public Auction toEntity(String memberUuid,LocalDateTime actionDeadline){
         return Auction.builder()
                 .auctionPrice(this.auctionPrice)
                 .auctionDeadline(actionDeadline)

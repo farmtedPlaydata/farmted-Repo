@@ -6,13 +6,9 @@ import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
 import com.farmted.productservice.dto.response.ProductAuctionResponseDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
-import com.farmted.productservice.enums.ProductType;
 import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.exception.SellerException;
 import com.farmted.productservice.repository.ProductRepository;
-import com.farmted.productservice.vo.RequestAuctionCreateVo;
-import com.farmted.productservice.vo.ResponseAuctionEndVo;
-import com.farmted.productservice.vo.ResponseAuctionGetVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -20,11 +16,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.farmted.productservice.enums.ProductType.*;
+import static com.farmted.productservice.enums.ProductType.SALE;
 
 @Service
 @RequiredArgsConstructor

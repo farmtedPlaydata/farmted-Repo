@@ -67,7 +67,7 @@ public class Product extends TimeStamp{
         this.image = productUpdateRequestDto.image();
     }
 
-    public void updateStatus(boolean auctionStatus){
+    public void closedStatus(){
         this.auctionStatus=true;
     }
 

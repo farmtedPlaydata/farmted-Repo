@@ -90,6 +90,7 @@ public class ProductController {
     @DeleteMapping("/products/{board_uuid}/board")
     @Operation(summary = "상품 삭제", description = "판매 상품만 삭제 가능, 경매 진행 중인 상품은 삭제 불가능, 경매 삭제는 관리자만 가능")
     public ResponseEntity<?> deleteProduct(@PathVariable (value = "board_uuid") String boardUuid){
+        productService.deleteProduct(boardUuid);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 

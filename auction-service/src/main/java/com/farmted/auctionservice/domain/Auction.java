@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -26,7 +27,7 @@ public class Auction extends TimeStamp{
 
     private String auctionBuyer;  // 낙찰자
 
-    private LocalDate auctionDeadline; // 경매 종료 시간
+    private LocalDateTime auctionDeadline; // 경매 종료 시간
 
     private Boolean auctionStatus; // false 0: 경매중, true 1:  경매 종료
 

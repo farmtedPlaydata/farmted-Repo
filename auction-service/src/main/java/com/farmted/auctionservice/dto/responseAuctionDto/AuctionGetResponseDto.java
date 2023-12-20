@@ -9,11 +9,12 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter @AllArgsConstructor @NoArgsConstructor @Builder
 public class AuctionGetResponseDto {
     private BigDecimal auctionPrice; // 경매 가격
-    private LocalDate auctionDeadline; // 경매 종료
+    private LocalDateTime auctionDeadline; // 경매 종료
     private String productUuid;
     private boolean auctionStatus;
 
