@@ -50,7 +50,7 @@ public class AuctionService {
         LocalDateTime current = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
         log("종료 시간 체크 "+current);
         List<Auction> auctionDeadline = auctionRepository.findAuctionByAuctionDeadline(current);
-        log("경매 상태 확인 중");
+        System.out.println("경매 상태 확인 중");
         for (Auction auction : auctionDeadline) {
             auction.setAuctionDeadlineForStatus();
             // 경매 상태 변경 이벤트 발행
@@ -83,8 +83,8 @@ public List<AuctionBoardResponseDto> getAuctionList(int pageNo){
             .collect(Collectors.toList());
 }
 
-// 판매자 -> 낙찰/전체 목록 조회 -> 경매 중/종료 ->
-    public List<AuctionBoardResponseDto> auctionBuyerList(String memberUuid,int pageNo){
+// Seller 판매자 -> 낙찰/전체 목록 조회 -> 경매 중/종료 ->
+    public List<AuctionBoardResponseDto> auctionSellerList(String memberUuid,int pageNo){
         Slice<Auction> auctionByMemberList = auctionRepository.findAuctionByMemberUuid(memberUuid,PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.ASC, "auctionDeadline")));
         return auctionByMemberList
                 .stream()
@@ -92,9 +92,9 @@ public List<AuctionBoardResponseDto> getAuctionList(int pageNo){
                 .collect(Collectors.toList());
     }
 
-// 구매자 -> 낙찰 목록/ 최고가 조회 -> 경매 중 + 경매 종료
-    public List<AuctionGetResponseDto> auctionBuyerList(String auctionBuyer){
-        List<Auction> auctionSellerList = auctionRepository.findAuctionByAuctionBuyer(auctionBuyer);
+// Buyer 구매자 -> 낙찰 목록/ 최고가 조회 -> 경매 중 + 경매 종료
+    public List<AuctionGetResponseDto> auctionBuyerList(String auctionSeller){
+        List<Auction> auctionSellerList = auctionRepository.findAuctionByAuctionBuyer(auctionSeller);
         return auctionSellerList.stream()
                 .map(AuctionGetResponseDto::new)
                 .collect(Collectors.toList());

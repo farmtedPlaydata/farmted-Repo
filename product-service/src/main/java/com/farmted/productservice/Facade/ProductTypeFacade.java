@@ -2,7 +2,8 @@ package com.farmted.productservice.Facade;
 
 
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
-import com.farmted.productservice.dto.response.ProductAuctionResponseDto;
+import com.farmted.productservice.dto.response.SaleAuctionTypeResponseDto;
+import com.farmted.productservice.dto.response.SaleProductTypeResponseDto;
 import com.farmted.productservice.enums.ProductType;
 import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.service.AuctionService;
@@ -37,7 +38,7 @@ public class ProductTypeFacade {
 
     // 목록 조회
     // productType에 따라 적절한 List조회 구현 메서드를 선택
-    public List<ProductAuctionResponseDto> getList(ProductType productType, int pageNo){
+    public List<SaleProductTypeResponseDto> getList(ProductType productType, int pageNo){
 
         switch (productType){
             case SALE:
@@ -49,11 +50,11 @@ public class ProductTypeFacade {
     }
 
     // 판매자 등록 목록 조회
-    public List<ProductAuctionResponseDto> getListMember(ProductType productType, String memberUuid,int pageNo){
+    public List<SaleProductTypeResponseDto> getListBuyer(ProductType productType, String memberUuid, int pageNo){
         switch (productType){
-            case SALE:
+            case SALE ->
                 productService.getListProductSeller(memberUuid,pageNo);
-            case PRODUCT:
+            case PRODUCT ->
                 auctionService.getListMemberProductAuction(memberUuid,pageNo);
 
         }
@@ -61,5 +62,13 @@ public class ProductTypeFacade {
     }
 
     // 구매 내역 조회
+    public List<SaleAuctionTypeResponseDto> getListSeller(ProductType productType, String memberUuid, int pageNo){
+        switch (productType){
+            case AUCTION ->
+                auctionService.getMemberListAuction(memberUuid,pageNo);
+
+        }
+        throw new ProductException(productType);
+    }
 
 }

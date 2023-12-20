@@ -41,7 +41,7 @@ public class ApiController {
     }
 
 // 구매자  ->  낙찰 내역 조회 -> auctionBuyer -> 마이페이지에서 조회(상품 정보 필요함)
-    @GetMapping("/{auctionBuyer}/board")
+    @GetMapping("/{auctionBuyer}")
     @Operation(summary = "구매자 낙찰 내역 조회", description = "구매자가 낙찰한 내역을 product-service에게 전달합니다.")
     public ResponseEntity<?> findAuctionBuyer(
             @PathVariable String auctionBuyer

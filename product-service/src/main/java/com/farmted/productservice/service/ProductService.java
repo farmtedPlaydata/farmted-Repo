@@ -4,7 +4,7 @@ import com.farmted.productservice.FeignClient.ProductToAuctionFeignClient;
 import com.farmted.productservice.domain.Product;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
-import com.farmted.productservice.dto.response.ProductAuctionResponseDto;
+import com.farmted.productservice.dto.response.SaleProductTypeResponseDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.exception.ProductException;
 import com.farmted.productservice.exception.SellerException;
@@ -73,11 +73,11 @@ public class ProductService {
 
 // 전체 only 상품 조회
     @Transactional(readOnly = true)
-    public List<ProductAuctionResponseDto> getListProduct(int pageNo) {
+    public List<SaleProductTypeResponseDto> getListProduct(int pageNo) {
         Slice<Product> productList = productRepository.findProductByProductType(SALE,PageRequest.of(pageNo,3, Sort.by(Sort.Direction.DESC,"createAt")));
 
         return productList.stream()
-                .map(ProductAuctionResponseDto::new)
+                .map(SaleProductTypeResponseDto::new)
                 .collect(Collectors.toList());
     }
 

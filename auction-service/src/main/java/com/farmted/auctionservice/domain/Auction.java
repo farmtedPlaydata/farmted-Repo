@@ -31,7 +31,7 @@ public class Auction extends TimeStamp{
 
     private Boolean auctionStatus; // false 0: 경매중, true 1:  경매 종료
 
-    private String memberUuid;
+    private String memberUuid; // 판매자
 
     private String boardUuid;
 

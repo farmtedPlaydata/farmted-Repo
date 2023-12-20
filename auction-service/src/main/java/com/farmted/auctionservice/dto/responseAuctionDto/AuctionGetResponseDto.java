@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Getter @AllArgsConstructor @NoArgsConstructor @Builder
 public class AuctionGetResponseDto {
-    private BigDecimal auctionPrice; // 경매 가격
+    private BigDecimal auctionPrice; // 경매 가격 == 낙찰 가격
     private LocalDateTime auctionDeadline; // 경매 종료
     private String productUuid;
     private boolean auctionStatus;

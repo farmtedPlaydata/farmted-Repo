@@ -29,7 +29,7 @@ public class AuctionController {
             @PathVariable String memberUuid,
             @RequestParam int pageNo
     ){
-        List<AuctionBoardResponseDto> auctionBuyerList = auctionService.auctionBuyerList(memberUuid,pageNo);
+        List<AuctionBoardResponseDto> auctionBuyerList = auctionService.auctionSellerList(memberUuid,pageNo);
         return ResponseEntity.ok(GlobalResponseDto.listOf(auctionBuyerList));
     }
 

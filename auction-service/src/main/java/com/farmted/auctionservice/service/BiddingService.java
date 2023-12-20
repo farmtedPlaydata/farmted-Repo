@@ -82,8 +82,7 @@ public class BiddingService {
 
     }
 
-
-
+    // 입찰 내역 조회
     public List<BiddingResponseDto> getBiddingList(String memberUuid){
        List<Bidding> biddingByMemberUuid = biddingRepository.findBiddingByMemberUuid(memberUuid);
        return biddingByMemberUuid.stream()

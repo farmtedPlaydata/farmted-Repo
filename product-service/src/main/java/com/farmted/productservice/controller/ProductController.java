@@ -3,7 +3,8 @@ package com.farmted.productservice.controller;
 import com.farmted.productservice.Facade.ProductTypeFacade;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
-import com.farmted.productservice.dto.response.ProductAuctionResponseDto;
+import com.farmted.productservice.dto.response.SaleAuctionTypeResponseDto;
+import com.farmted.productservice.dto.response.SaleProductTypeResponseDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.enums.ProductType;
 import com.farmted.productservice.service.ProductService;
@@ -59,7 +60,7 @@ public class ProductController {
             @RequestParam ("category") ProductType productType,
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ) {
-        List<ProductAuctionResponseDto> listProductSeller = productTypeFactory.getListMember(productType,memberUuid,pageNo);
+        List<SaleProductTypeResponseDto> listProductSeller = productTypeFactory.getListBuyer(productType,memberUuid,pageNo);
         return  ResponseEntity.ok(GlobalResponseDto.listOf(listProductSeller));
     }
 
@@ -72,7 +73,7 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
     ){
 
-        List<ProductAuctionResponseDto> listProduct = productTypeFactory.getList(productType, pageNo);
+        List<SaleProductTypeResponseDto> listProduct = productTypeFactory.getList(productType, pageNo);
         return ResponseEntity.ok(GlobalResponseDto.listOf(listProduct));
     }
 
@@ -84,6 +85,17 @@ public class ProductController {
         ProductResponseDto productDetail = productService.getProductDetail(boardUuid);
         return ResponseEntity.ok(GlobalResponseDto.of(productDetail));
 
+    }
+
+// 구매 내역 조회
+    @GetMapping("/products/buyer/{member_uuid}")
+    @Operation(summary = "구매자가 구매한 상품 조회", description = "판매,경매로 상품 종류 구분")
+    public ResponseEntity<?> getProductListBuyer(
+            @PathVariable (value = "member_uuid") String memberUuid,
+            @RequestParam ("category") ProductType productType,
+            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo){
+        List<SaleAuctionTypeResponseDto> listSeller = productTypeFactory.getListSeller(productType, memberUuid, pageNo);
+        return ResponseEntity.ok(GlobalResponseDto.listOf(listSeller));
     }
 
 // 상품 삭제
