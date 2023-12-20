@@ -12,6 +12,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,11 +20,13 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AuctionService {
 
     private final AuctionRepository auctionRepository;
 
 // 경매 정보 생성 및 시작
+    @Transactional
     public void createAuction(AuctionCreateRequestDto auctionCreateRequestDto, String memberUuid){
         // 시간 처리 로직
         LocalDate auctionDeadline = auctionCreateRequestDto.getAuctionDeadline().plusMonths(1);
@@ -55,6 +58,7 @@ public class AuctionService {
 
 
     // 실제 로직임.
+    @Transactional
     @Scheduled(cron ="${schedules.cron}")
     public List<AuctionStatusResponseDto> changeAuction(){
         // 경매 종료 로직
@@ -102,7 +106,7 @@ public List<AuctionBoardResponseDto> getAuctionList(int pageNo){
     }
 
 // 구매자 -> 낙찰 목록/ 최고가 조회 -> 경매 중 + 경매 종료
-    public List<AuctionGetResponseDto> auctionTrueList(String auctionBuyer){
+    public List<AuctionGetResponseDto> auctionBuyerList(String auctionBuyer){
         List<Auction> auctionSellerList = auctionRepository.findAuctionByAuctionBuyer(auctionBuyer);
         return auctionSellerList.stream()
                 .map(AuctionGetResponseDto::new)

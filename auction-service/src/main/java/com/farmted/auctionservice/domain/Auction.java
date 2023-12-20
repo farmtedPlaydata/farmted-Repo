@@ -28,7 +28,7 @@ public class Auction extends TimeStamp{
 
     private LocalDate auctionDeadline; // 경매 종료 시간
 
-    private Boolean auctionStatus; // false0: 경매중, true 1:  경매 종료
+    private Boolean auctionStatus; // false 0: 경매중, true 1:  경매 종료
 
     private String memberUuid;
 

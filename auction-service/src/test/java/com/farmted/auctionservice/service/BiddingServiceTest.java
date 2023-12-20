@@ -14,13 +14,13 @@ import java.util.concurrent.Executors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-
+@SpringBootTest
 public class BiddingServiceTest {
 
-        @Mock
+        @Autowired
         private BiddingService biddingService;
 
-        @Mock AuctionRepository auctionRepository;
+        @Autowired AuctionRepository auctionRepository;
 
         @Test
         public void testConcurrentBidding() throws InterruptedException {

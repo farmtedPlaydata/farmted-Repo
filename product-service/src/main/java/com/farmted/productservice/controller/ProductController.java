@@ -1,12 +1,11 @@
 package com.farmted.productservice.controller;
 
+import com.farmted.productservice.Facade.ProductTypeFacade;
 import com.farmted.productservice.dto.request.ProductSaveRequestDto;
 import com.farmted.productservice.dto.request.ProductUpdateRequestDto;
 import com.farmted.productservice.dto.response.ProductAuctionResponseDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
-import com.farmted.productservice.Facade.ProductTypeFacade;
 import com.farmted.productservice.enums.ProductType;
-import com.farmted.productservice.service.AuctionService;
 import com.farmted.productservice.service.ProductService;
 import com.farmted.productservice.util.GlobalResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
