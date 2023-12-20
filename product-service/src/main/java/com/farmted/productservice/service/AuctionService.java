@@ -47,7 +47,7 @@ public class AuctionService {
     @Transactional(readOnly = true)
     public List<ProductAuctionResponseDto> getListProductAuction(int pageNo) {
         Slice<Product> productList = productRepository.findAll(PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createAt")));
-        List<ResponseAuctionGetVo> auctionIng = productToAuctionFeignClient.auctionIng();
+        List<ResponseAuctionGetVo> auctionIng = productToAuctionFeignClient.auctionProductList();
 
         return productList.stream()
                 .map(product -> {
@@ -67,7 +67,7 @@ public class AuctionService {
     @Transactional(readOnly = true)
     public List<ProductAuctionResponseDto> getListMemberProductAuction(String memberUuid,int pageNo) {
         Slice<Product> productList = productRepository.findProductByMemberUuid(memberUuid,PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.DESC, "createAt")));
-        List<ResponseAuctionGetVo> auctionIng = productToAuctionFeignClient.auctionIng();
+        List<ResponseAuctionGetVo> auctionIng = productToAuctionFeignClient.auctionProductList();
 
         return productList.stream()
                 .map(product -> {

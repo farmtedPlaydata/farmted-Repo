@@ -21,5 +21,5 @@ public interface ProductToAuctionFeignClient {
     public List<ResponseAuctionEndVo> endAuctionFromProduct();
 
     @GetMapping(value ="/products/auctions")
-    public List<ResponseAuctionGetVo> auctionIng();
+    public List<ResponseAuctionGetVo> auctionProductList();
 }

@@ -38,8 +38,8 @@ public class ApiController {
 
 // 경매 내역 전달용 API
     @GetMapping(value ="/products/auctions")
-    public ResponseEntity<?> auctionIng(){
-        List<AuctionGetResponseDto> auctionGetResponse = auctionService.getAuctionIngList();
+    public ResponseEntity<?> auctionProductList(){
+        List<AuctionGetResponseDto> auctionGetResponse = auctionService.getAuctionProductList();
         return ResponseEntity.ok(auctionGetResponse);
     }
 

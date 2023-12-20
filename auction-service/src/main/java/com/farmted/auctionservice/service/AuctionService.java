@@ -2,12 +2,14 @@ package com.farmted.auctionservice.service;
 
 import com.farmted.auctionservice.domain.Auction;
 import com.farmted.auctionservice.dto.requestAuctionDto.AuctionCreateRequestDto;
-import com.farmted.auctionservice.dto.responseAuctionDto.AuctionBuyerResponseDto;
+import com.farmted.auctionservice.dto.responseAuctionDto.AuctionBoardResponseDto;
 import com.farmted.auctionservice.dto.responseAuctionDto.AuctionGetResponseDto;
-import com.farmted.auctionservice.dto.responseAuctionDto.AuctionSellerResponseDto;
 import com.farmted.auctionservice.dto.responseAuctionDto.AuctionStatusResponseDto;
 import com.farmted.auctionservice.repository.AuctionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -68,34 +70,42 @@ public class AuctionService {
 //    }
 
 // 경매 리스트 조회
-    public List<AuctionGetResponseDto> getAuctionIngList(){
+    public List<AuctionGetResponseDto> getAuctionProductList(){
         List<Auction> auctionList = auctionRepository.findAll();
         return auctionList.stream()
                 .map(AuctionGetResponseDto::new)
                 .collect(Collectors.toList());
     }
 
+
 // 경매 상세 조회
-    public AuctionGetResponseDto getAuctionDetail(String boardUuid){
+    public AuctionBoardResponseDto getAuctionDetail(String boardUuid){
         Auction getAuction = auctionRepository.findAuctionByBoardUuid(boardUuid);
-        return new AuctionGetResponseDto(getAuction);
+        return new AuctionBoardResponseDto(getAuction);
     }
 
+// 경매 목록 조회- board용
+public List<AuctionBoardResponseDto> getAuctionList(int pageNo){
+    Slice<Auction> auctionList = auctionRepository.findAll(PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.ASC, "auctionDeadline")));
+    return auctionList.stream()
+            .map(AuctionBoardResponseDto::new)
+            .collect(Collectors.toList());
+}
 
-// 판매자 -> 낙찰 목록 조회 -> 경매 종료 상태
-    public List<AuctionBuyerResponseDto> auctionBuyerList(String memberUuid){
-        List<Auction> auctionByMemberList = auctionRepository.findAuctionByMemberUuid(memberUuid);
+// 판매자 -> 낙찰/전체 목록 조회 -> 경매 중/종료 ->
+    public List<AuctionBoardResponseDto> auctionBuyerList(String memberUuid,int pageNo){
+        Slice<Auction> auctionByMemberList = auctionRepository.findAuctionByMemberUuid(memberUuid,PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.ASC, "auctionDeadline")));
         return auctionByMemberList
                 .stream()
-                .map(AuctionBuyerResponseDto::new)
+                .map(AuctionBoardResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-// 구매자 -> 낙찰 목록 조회 -> 경매 종료 상태
-    public List<AuctionSellerResponseDto> auctionTrueList(String auctionBuyer){
+// 구매자 -> 낙찰 목록/ 최고가 조회 -> 경매 중 + 경매 종료
+    public List<AuctionGetResponseDto> auctionTrueList(String auctionBuyer){
         List<Auction> auctionSellerList = auctionRepository.findAuctionByAuctionBuyer(auctionBuyer);
         return auctionSellerList.stream()
-                .map(AuctionSellerResponseDto::new)
+                .map(AuctionGetResponseDto::new)
                 .collect(Collectors.toList());
     }
 
