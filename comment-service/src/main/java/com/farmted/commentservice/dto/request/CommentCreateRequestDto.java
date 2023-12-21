@@ -30,7 +30,7 @@ public class CommentCreateRequestDto {
         .commentUuid(UUID.randomUUID().toString())
         .memberUuid(memberUUID)
         .boardUuid(boardUUID)
-        .memberName(memberVo.memberName())
+//        .memberName(memberVo.memberName())
         .memberImage(memberVo.memberImage())
                 .build();
     }
