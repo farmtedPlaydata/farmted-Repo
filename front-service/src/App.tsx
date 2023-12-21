@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components"
 import Board from "./components/board/Board";
+import Login from "./Login";
 const GlobalStyle = createGlobalStyle`
     body{
         background: #e9ecef;
@@ -9,9 +10,11 @@ const GlobalStyle = createGlobalStyle`
     }
 `
 const App = () => (
-    <>  
-        <GlobalStyle/>
-        <Board/>
+    <>
+        <Login/>
+        {/*<GlobalStyle/>*/}
+        {/*<Board/>*/}
+
     </>
 );
 
