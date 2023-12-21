@@ -10,6 +10,9 @@ spring:
 
   application:
     name: auction-service
+  profiles:
+    active: private
+
 
   datasource:
     driver-class-name: ${driverName}

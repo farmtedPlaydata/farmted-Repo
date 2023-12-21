@@ -1,6 +1,8 @@
 spring:
   application:
     name: product-service
+  profiles:
+    active: private
 
   datasource:
     driver-class-name: ${driverName}

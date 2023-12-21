@@ -2,6 +2,7 @@ package com.farmted.auctionservice.service;
 
 import com.farmted.auctionservice.domain.Auction;
 import com.farmted.auctionservice.repository.AuctionRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,6 +56,11 @@ class AuctionServiceTest {
         // 저장
         auctionRepository.save(auction1);
         auctionRepository.save(auction2);
+    }
+
+    @AfterEach
+    public void delete(){
+        auctionRepository.deleteAll();
     }
 
     @Test

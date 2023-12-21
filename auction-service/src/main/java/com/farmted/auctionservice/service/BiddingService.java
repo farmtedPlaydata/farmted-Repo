@@ -47,6 +47,8 @@ public class BiddingService {
             isLockAcquired = lock.tryLock(10,1, TimeUnit.SECONDS); //높은 값 사용 (예: 10초 이상): 락을 획득하기까지 대기하는 시간이 길지만 락 획득 경우가 많음
             Bidding savedBidding = biddingCreateRequestDto.toEntity(boardUuid, memberUuid);
 
+            // 입찰 신청 내역은 무조건 저장
+            biddingRepository.save(savedBidding);
 
             BigDecimal biddingPrice = savedBidding.getBiddingPrice();
             Auction auction = auctionRepository.findAuctionByBoardUuid(boardUuid);
@@ -75,7 +77,7 @@ public class BiddingService {
                         break;
                 }
             }
-            biddingRepository.save(savedBidding);
+            System.out.println(biddingRepository.save(savedBidding).getBiddingPrice());
         }catch (InterruptedException e){
             log("락을 획득하지 못했습니다");
         }
