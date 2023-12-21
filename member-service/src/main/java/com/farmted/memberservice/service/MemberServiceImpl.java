@@ -13,6 +13,7 @@ import com.farmted.memberservice.feignclient.PassFeignClient;
 import com.farmted.memberservice.global.GlobalResponseDto;
 import com.farmted.memberservice.repository.MemberRepository;
 import com.farmted.memberservice.util.ProfileManager;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -48,7 +49,7 @@ public class MemberServiceImpl implements MemberService {
                 Object dataField = responseMap.get("data");
                 String uuid = dataField.toString();
                 dto.setMemberRole(RoleEnums.USER);
-                dto.setUuid(uuid);
+                dto.setMemberUuid(uuid);
 
                 // 프로필 사진
                 String imageUrl = profileManager.uploadImageToS3(image[0]);
@@ -56,6 +57,8 @@ public class MemberServiceImpl implements MemberService {
 
                 Member member = dto.toEntity();
                 memberRepository.save(member);
+
+                passFeignClient.reIssue(uuid);
             } else {
                 // data 값을 가져올 수 없을 경우
                 throw new MemberException("MemberService - createMember : Failed to createdMember");

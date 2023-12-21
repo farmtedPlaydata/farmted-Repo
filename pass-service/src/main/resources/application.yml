@@ -24,15 +24,12 @@ spring:
       client:
         registration:
           google:
-            client-id: 103819284407-g161ugj2ams4u5aosrgqvaq6lqlnimg2.apps.googleusercontent.com
-            client-secret: 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
+            client-id: ${oauth-client-id}
+            client-secret: ${oauth-client-secret}
             scope:
               - email
               - profile
-  mvc:
-    view:
-      prefix: /resources/static/**
-      suffix: .html
+
   application:
     name: pass-service
 server:
@@ -44,9 +41,9 @@ server:
 spring:
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
-      password: 5986
+      host: ${redis-host}
+      port: ${redis-port}
+      password: ${redis-password}
 
 eureka:
   client:

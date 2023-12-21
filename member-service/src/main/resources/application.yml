@@ -1,3 +1,5 @@
+
+
 spring:
   profiles:
     active: private, local
@@ -41,3 +43,6 @@ cloud:
     credentials:
       secret-key: ${secret}
       access-key: ${access}
+
+server:
+  port: 0

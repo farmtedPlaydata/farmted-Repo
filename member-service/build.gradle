@@ -36,8 +36,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	// mysql-connector-j
 	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.33'
-	// spring-security-core
-	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.1.2'
 	// validation
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.1.5'
 	// QueryDSL

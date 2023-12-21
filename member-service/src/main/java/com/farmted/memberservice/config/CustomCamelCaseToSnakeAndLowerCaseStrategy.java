@@ -14,5 +14,4 @@ public class CustomCamelCaseToSnakeAndLowerCaseStrategy extends CamelCaseToUnder
         }
         return new Identifier( name, quoted );
     }
-
 }

@@ -7,6 +7,7 @@ import com.farmted.memberservice.dto.request.SearchMemberParam;
 import com.farmted.memberservice.dto.response.MemberNameImageDto;
 import com.farmted.memberservice.dto.response.ResponsePagingToListDto;
 import com.farmted.memberservice.enums.RoleEnums;
+import com.farmted.memberservice.feignclient.PassFeignClient;
 import com.farmted.memberservice.global.GlobalResponseDto;
 import com.farmted.memberservice.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;

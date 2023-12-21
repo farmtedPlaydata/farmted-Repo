@@ -6,8 +6,8 @@ import lombok.Setter;
 
 @Getter @Setter
 public class SearchMemberDto extends PagingDto {
-    private Boolean status;
-    private String uuid;
+    private Boolean memberStatus;
+    private String memberUuid;
     private String memberName;
     private RoleEnums memberRole;
 }

@@ -19,13 +19,13 @@ public class RequestCreateMemberDto {
     private String memberAddressDetail;
     @NotBlank
     private String memberPhone;
-    private String uuid;
+    private String memberUuid;
     private String memberProfile;
     private String email;
 
     public Member toEntity() {
         return Member.builder()
-                .memberUuid(this.uuid)
+                .memberUuid(this.memberUuid)
                 .memberAddress(this.memberAddress)
                 .memberName(this.memberName)
                 .memberBalance(10000L)

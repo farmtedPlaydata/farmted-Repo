@@ -9,20 +9,20 @@ import lombok.Setter;
 @Getter @Setter
 public class MemberResponseDto {
 
-    private String uuid;
+    private String memberUuid;
     private String memberName;
-    private RoleEnums role;
+    private RoleEnums memberRole;
 
     public MemberResponseDto(Member member) {
-        this.uuid = member.getMemberUuid();
+        this.memberUuid = member.getMemberUuid();
         this.memberName = member.getMemberName();
-        this.role = member.getMemberRole();
+        this.memberRole = member.getMemberRole();
     }
 
     @QueryProjection
-    public MemberResponseDto(String uuid, String memberName, RoleEnums role) {
-        this.uuid = uuid;
+    public MemberResponseDto(String memberUuid, String memberName, RoleEnums memberRole) {
+        this.memberUuid = memberUuid;
         this.memberName = memberName;
-        this.role = role;
+        this.memberRole = memberRole;
     }
 }

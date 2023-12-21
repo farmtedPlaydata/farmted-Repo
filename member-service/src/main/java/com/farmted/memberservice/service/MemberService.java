@@ -7,6 +7,7 @@ import com.farmted.memberservice.dto.response.MemberNameImageDto;
 import com.farmted.memberservice.dto.response.MemberResponseDto;
 import com.farmted.memberservice.dto.response.ResponsePagingToListDto;
 import com.farmted.memberservice.enums.RoleEnums;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 

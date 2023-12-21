@@ -13,7 +13,7 @@ public class SearchMemberParam {
 
     public static SearchMemberParam valueOf(SearchMemberDto dto) {
         return SearchMemberParam.builder()
-                .memberStatus(dto.getStatus())
+                .memberStatus(dto.getMemberStatus())
                 .memberName(dto.getMemberName())
                 .memberRole(dto.getMemberRole())
                 .build();

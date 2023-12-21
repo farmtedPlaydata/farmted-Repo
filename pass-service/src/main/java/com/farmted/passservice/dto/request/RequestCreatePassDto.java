@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
 import java.util.UUID;
@@ -16,7 +17,7 @@ public class RequestCreatePassDto {
 
     @NotBlank @Email
     private String email;
-    @NotBlank @Range(min = 4, max = 20)
+    @NotBlank @Length(min = 4, max = 20)
     private String password;
     private RoleEnums role;
     private Boolean status;

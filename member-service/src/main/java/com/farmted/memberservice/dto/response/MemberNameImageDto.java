@@ -9,11 +9,11 @@ import lombok.Setter;
 public class MemberNameImageDto {
 
     private String memberName;
-    private String memberImage;
+    private String memberProfileImage;
 
     @Builder
-    public MemberNameImageDto(String memberName, String memberImage) {
+    public MemberNameImageDto(String memberName, String memberProfileImage) {
         this.memberName = memberName;
-        this.memberImage = memberImage;
+        this.memberProfileImage = memberProfileImage;
     }
 }

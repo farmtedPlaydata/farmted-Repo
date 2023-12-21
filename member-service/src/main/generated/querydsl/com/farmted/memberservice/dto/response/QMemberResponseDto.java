@@ -13,8 +13,8 @@ public class QMemberResponseDto extends ConstructorExpression<MemberResponseDto>
 
     private static final long serialVersionUID = 111292855L;
 
-    public QMemberResponseDto(com.querydsl.core.types.Expression<String> uuid, com.querydsl.core.types.Expression<String> memberName, com.querydsl.core.types.Expression<com.farmted.memberservice.enums.RoleEnums> role) {
-        super(MemberResponseDto.class, new Class<?>[]{String.class, String.class, com.farmted.memberservice.enums.RoleEnums.class}, uuid, memberName, role);
+    public QMemberResponseDto(com.querydsl.core.types.Expression<String> memberUuid, com.querydsl.core.types.Expression<String> memberName, com.querydsl.core.types.Expression<com.farmted.memberservice.enums.RoleEnums> memberRole) {
+        super(MemberResponseDto.class, new Class<?>[]{String.class, String.class, com.farmted.memberservice.enums.RoleEnums.class}, memberUuid, memberName, memberRole);
     }
 
 }
