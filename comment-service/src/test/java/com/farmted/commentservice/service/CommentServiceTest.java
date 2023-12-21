@@ -68,13 +68,13 @@ class CommentServiceTest {
     @Test
     @Transactional
     void updateComment() {
-//         Given
+        // Given
         Comment updatedComment = commentRepository.findAll().get(0);
         String commentUuid = updatedComment.getCommentUuid();
         CommentUpdateRequestDto updateRequestDto = new CommentUpdateRequestDto();
         updateRequestDto.setCommentUuid(commentUuid);
         updateRequestDto.setContent("수정된 내용");
-//        // When
+        // When
         commentService.updateComment(updateRequestDto);
 
         // Then
@@ -96,13 +96,6 @@ class CommentServiceTest {
         // Verify that the comment with the given UUID is deleted
         int afterCommentCount = commentService.getAllComments().size();
         Assertions.assertThat(afterCommentCount).isEqualTo(beforeCommentCount - 1);
-//
-//        // Ensure that the deleted comment is not present in the list
-//        Comment deletedComment = commentService.getCommentById(commentUuid);
-//        Assertions.assertThat(deletedComment).isNull();
-
-
+        
+        }
     }
-    }
-
-
