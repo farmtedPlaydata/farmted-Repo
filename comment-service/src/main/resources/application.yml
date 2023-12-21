@@ -23,6 +23,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  application:
+    name: comment-service
+  profiles:
+    active: private
+
 
 eureka:
   client:
