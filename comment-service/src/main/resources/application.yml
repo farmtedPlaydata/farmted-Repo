@@ -1,18 +1,19 @@
 server:
   port: 9090
 
-# Swagger
+
 spring:
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
+  profiles:
+    active:
+      private
+    # Swagger
 
   # Database
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/msa_db
-    username: root
-    password: 12341234
+    driver-class-name: ${driver-class-name}
+    url: ${url}
+    username: ${username_}
+    password: ${password}
     # Uncomment the line below if you want to set a different password
     # password: 001112
 
@@ -23,6 +24,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  application:
+    name: comment-service
 
 eureka:
   client:

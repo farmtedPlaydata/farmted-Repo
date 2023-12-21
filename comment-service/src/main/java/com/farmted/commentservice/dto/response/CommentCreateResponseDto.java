@@ -16,7 +16,6 @@ public class CommentCreateResponseDto {
     private Date createdDate;
     private Date lastModifiedDate;
 
-
     public CommentCreateResponseDto(String content, String name, Date createdDate, Date lastModifiedDate) {
 
         this.content = content;
