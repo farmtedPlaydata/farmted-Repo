@@ -8,6 +8,7 @@ import com.farmted.passservice.global.GlobalResponseDto;
 import com.farmted.passservice.repository.PassRepository;
 import com.farmted.passservice.service.PassService;
 import com.farmted.passservice.util.cookies.CookieUtil;
+import com.farmted.passservice.vo.MemberVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -91,6 +92,14 @@ public class PassController {
     @PutMapping("/change-role/{uuid}")
     public ResponseEntity<?> changeRoleByMemberService(@PathVariable String uuid) {
         passService.changeRoleByMemberService(uuid);
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
+    }
+
+    @Operation(summary = "회원 상세 정보 작성", description = "Feign - Member-Service에서 회원상세정보 작성 후 권한 재조정 및 토큰 재발급")
+    @PutMapping("/update-role/{uuid}")
+    public ResponseEntity<?> updateRole(@PathVariable String uuid,
+                                        @RequestBody MemberVo memberVo) {
+        passService.updateRole(memberVo);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 }

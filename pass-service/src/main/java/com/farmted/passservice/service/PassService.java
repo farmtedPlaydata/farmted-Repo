@@ -1,13 +1,10 @@
 package com.farmted.passservice.service;
 
-import com.farmted.passservice.domain.Pass;
 import com.farmted.passservice.dto.request.RequestCreatePassDto;
 import com.farmted.passservice.dto.request.RequestLoginDto;
 import com.farmted.passservice.dto.response.ResponseListDto;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
+import com.farmted.passservice.vo.MemberVo;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface PassService {
@@ -20,4 +17,5 @@ public interface PassService {
     String reIssue(String uuid);
     void changeRoleByMemberService(String uuid);
     String setRole(RequestLoginDto dto);
+    void updateRole(MemberVo memberVo);
 }

@@ -12,6 +12,7 @@ import com.farmted.passservice.repository.PassRepository;
 import com.farmted.passservice.util.jwt.JwtProvider;
 import com.farmted.passservice.util.redis.RedisRepository;
 import com.farmted.passservice.util.redis.RefreshToken;
+import com.farmted.passservice.vo.MemberVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -107,6 +108,35 @@ public class PassServiceImpl implements PassService {
                 .orElseThrow(() -> new PassException("PassService - reIssue : 사용자를 찾을 수 없습니다."));
 
         return jwtProvider.createToken(uuid, pass.getRole(), TokenType.ACCESS);
+    }
+
+    @Override
+    @Transactional
+    public void updateRole(MemberVo memberVo) {
+        Pass findPass = passRepository.findByUuid(memberVo.getMemberUuid())
+                .orElseThrow(() -> new PassException("PassService - memberCreateFeignMemberService"));
+
+        try {
+
+            switch (memberVo.getMemberRole()) {
+                case "USER":
+                    findPass.updateRole(RoleEnums.USER);
+                    break;
+                case "ADMIN":
+                    findPass.updateRole(RoleEnums.ADMIN);
+                    break;
+                case "MASTER":
+                    findPass.updateRole(RoleEnums.MASTER);
+                    break;
+            }
+
+            passRepository.save(findPass);
+            String refreshTokenInfo = jwtProvider.createToken(findPass.getUuid(), findPass.getRole(), TokenType.REFRESH);
+            jwtProvider.saveRefreshToken(findPass.getUuid(), refreshTokenInfo);
+            reIssue(findPass.getUuid());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

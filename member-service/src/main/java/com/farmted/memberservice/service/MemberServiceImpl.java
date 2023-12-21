@@ -13,6 +13,7 @@ import com.farmted.memberservice.feignclient.PassFeignClient;
 import com.farmted.memberservice.global.GlobalResponseDto;
 import com.farmted.memberservice.repository.MemberRepository;
 import com.farmted.memberservice.util.ProfileManager;
+import com.farmted.memberservice.vo.PassVo;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,13 +53,22 @@ public class MemberServiceImpl implements MemberService {
                 dto.setMemberUuid(uuid);
 
                 // 프로필 사진
-                String imageUrl = profileManager.uploadImageToS3(image[0]);
-                dto.setMemberProfile(imageUrl);
+                if (dto.getMemberProfile() != null) {
+                    String imageUrl = profileManager.uploadImageToS3(image[0]);
+                    dto.setMemberProfile(imageUrl);
+                }
+                else {
+                    dto.setMemberProfile("https://framted-product.s3.ap-northeast-2.amazonaws.com/profile.png");
+                }
 
                 Member member = dto.toEntity();
                 memberRepository.save(member);
 
-                passFeignClient.reIssue(uuid);
+                PassVo passVo = new PassVo();
+                passVo.setEmail(dto.getEmail());
+                passVo.setMemberRole(dto.getMemberRole().toString());
+                passVo.setMemberUuid(uuid);
+                passFeignClient.updateRole(passVo);
             } else {
                 // data 값을 가져올 수 없을 경우
                 throw new MemberException("MemberService - createMember : Failed to createdMember");

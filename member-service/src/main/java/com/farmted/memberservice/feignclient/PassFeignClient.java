@@ -1,12 +1,9 @@
 package com.farmted.memberservice.feignclient;
 
-import jakarta.servlet.http.HttpServletResponse;
+import com.farmted.memberservice.vo.PassVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "pass-service", path = "/pass-service")
 public interface PassFeignClient {
@@ -19,4 +16,7 @@ public interface PassFeignClient {
 
     @PostMapping("/reissue/{uuid}")
     ResponseEntity<?> reIssue(@PathVariable String uuid);
+
+    @PutMapping("/update-role")
+    ResponseEntity<?> updateRole(@RequestBody PassVo passVo);
 }
