@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +23,7 @@ public class BoardController {
 
     private final BoardFacade boardFacade;
 
-    @PostMapping(value = "/boards")
+    @PostMapping(value = "/boards", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "게시글 작성", description = "카테고리별 게시글의 등록 요청")
     public ResponseEntity<GlobalResponseDto<?>> createBoard(
             @Valid @RequestPart("CREATE") RequestCreateBoardDto productBoardDto,
@@ -47,7 +48,7 @@ public class BoardController {
         ));
     }
 
-    @GetMapping(value = "/boards/{board_uuid}/auctions")
+    @GetMapping(value = "/boards/{board_uuid}")
     @Operation(summary = "경매 게시글 상세 조회", description = "개별 경매 게시글에 대한 단일 조회 요청")
     public ResponseEntity<GlobalResponseDto<?>> getAuctionBoard(@PathVariable(value = "board_uuid") String boardUuid){
         return ResponseEntity.ok(
@@ -71,7 +72,7 @@ public class BoardController {
     }
 
 
-    @PutMapping(value = "/boards/{board_uuid}/auctions")
+    @PutMapping(value = "/boards/{board_uuid}")
     @Operation(summary = "특정 게시글 수정", description = "개별 경매 게시글에 대한 수정 요청")
     public ResponseEntity<GlobalResponseDto<?>> updateAuctionBoard(@PathVariable(value= "board_uuid") String boardUuid,
                                                 @Valid @RequestBody RequestUpdateProductBoardDto updateDTO,
@@ -82,7 +83,7 @@ public class BoardController {
         );
     }
 
-    @DeleteMapping(value = "/boards/{board_uuid}/auctions")
+    @DeleteMapping(value = "/boards/{board_uuid}")
     @Operation(summary = "개별 경매 게시글 삭제", description = "개별 경매 게시글에 대한 삭제 요청")
     public ResponseEntity<GlobalResponseDto<?>> deleteAuctionBoard(@PathVariable(value = "board_uuid") String boardUuid,
                                                 @RequestHeader("UUID") String uuid) {

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from "styled-components"
 import BoardItem from './boardItem/BoardItem';
+import { BoardType } from '../boardHead/boardUtil/BoardType';
 
 interface Props {
     boardList: Board[];
@@ -21,15 +22,11 @@ interface Board{
     buyerUUID?: string;
 }
 
-// 게시글 카테고리
-enum BoardType{
-    AUCTION = "경매",
-    COMMISTION = "구매요청",
-    SALE = "판매",
-    NOTICE = "공지사항",
-    CUSTOMER_SERVICE = "고객센터",
-    PRODUCT = "상품"
-}
+
+const BoardListTable = styled.table`
+    width: 100%;
+    border-collapse: collapse;
+`
 
 const BoardListDiv = styled.div`
     flex: 1;
@@ -42,10 +39,13 @@ const BoardListDiv = styled.div`
 const BoardList = (props:Props) => {
     return (
         <BoardListDiv>
-            {props.boardList
-                .map((board)=>
-                    <BoardItem board={board}/>
-        )}
+            <BoardListTable>
+                <tbody>
+                    {props.boardList.map((board) => (
+                        <BoardItem key={board.boardUuid} board={board} />
+                    ))}
+                </tbody>
+            </BoardListTable>
         </BoardListDiv>
     )
 }

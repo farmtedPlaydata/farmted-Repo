@@ -1,6 +1,6 @@
-import React, { createContext, useState } from 'react';
+import React from 'react';
 import styled from "styled-components"
-import BoardList from "./boardList/BoardList";
+import { Outlet } from 'react-router-dom';
 
 const BoardBodyDiv = styled.div`
     width: 1312px;
@@ -16,10 +16,13 @@ const BoardBodyDiv = styled.div`
     margin-bottom: 32px;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 `
-const BoardBody = (props:{children: React.ReactNode}) => {
+const BoardBody = () => {
     return(
-        <BoardBodyDiv>{props.children}</BoardBodyDiv>
+        <BoardBodyDiv>
+            <Outlet />
+        </BoardBodyDiv>
     );
 }
 

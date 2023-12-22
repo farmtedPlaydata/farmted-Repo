@@ -1,6 +1,8 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components"
-import Board from "./components/board/Board";
+import { BrowserRouter } from 'react-router-dom';
+import Main from "./components/Main";
+
 const GlobalStyle = createGlobalStyle`
     body{
         background: #e9ecef;
@@ -9,10 +11,10 @@ const GlobalStyle = createGlobalStyle`
     }
 `
 const App = () => (
-    <>  
+    <BrowserRouter>
         <GlobalStyle/>
-        <Board/>
-    </>
+        <Main/>
+    </BrowserRouter>
 );
 
 export default App;
