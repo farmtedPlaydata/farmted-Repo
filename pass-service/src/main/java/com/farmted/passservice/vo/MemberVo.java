@@ -7,9 +7,9 @@ import lombok.Setter;
 @Getter @Setter
 public class MemberVo {
 
-    @JsonProperty("uuid")
+    @JsonProperty("memberUuid")
     private String memberUuid;
-    @JsonProperty("role")
+    @JsonProperty("memberRole")
     private String memberRole;
     @JsonProperty("email")
     private String email;

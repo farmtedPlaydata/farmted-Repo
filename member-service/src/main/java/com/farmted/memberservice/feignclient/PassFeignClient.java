@@ -17,6 +17,7 @@ public interface PassFeignClient {
     @PostMapping("/reissue/{uuid}")
     ResponseEntity<?> reIssue(@PathVariable String uuid);
 
-    @PutMapping("/update-role")
-    ResponseEntity<?> updateRole(@RequestBody PassVo passVo);
+    @PostMapping("/update-role/{uuid}")
+    ResponseEntity<?> updateRole(@PathVariable String uuid,
+                                 @RequestBody PassVo passVo);
 }

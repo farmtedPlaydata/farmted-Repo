@@ -17,5 +17,5 @@ public interface PassService {
     String reIssue(String uuid);
     void changeRoleByMemberService(String uuid);
     String setRole(RequestLoginDto dto);
-    void updateRole(MemberVo memberVo);
+    void updateRole(String uuid, MemberVo memberVo);
 }

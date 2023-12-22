@@ -96,10 +96,10 @@ public class PassController {
     }
 
     @Operation(summary = "회원 상세 정보 작성", description = "Feign - Member-Service에서 회원상세정보 작성 후 권한 재조정 및 토큰 재발급")
-    @PutMapping("/update-role/{uuid}")
+    @PostMapping("/update-role/{uuid}")
     public ResponseEntity<?> updateRole(@PathVariable String uuid,
                                         @RequestBody MemberVo memberVo) {
-        passService.updateRole(memberVo);
+        passService.updateRole(uuid, memberVo);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 }
