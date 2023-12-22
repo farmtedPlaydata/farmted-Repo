@@ -117,8 +117,10 @@ public class PassServiceImpl implements PassService {
                 .orElseThrow(() -> new PassException("PassService - memberCreateFeignMemberService"));
 
         try {
-
             switch (memberVo.getMemberRole()) {
+                case "GUEST":
+                    findPass.updateRole(RoleEnums.GUEST);
+                    break;
                 case "USER":
                     findPass.updateRole(RoleEnums.USER);
                     break;

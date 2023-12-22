@@ -64,10 +64,7 @@ public class MemberServiceImpl implements MemberService {
                 Member member = dto.toEntity();
                 memberRepository.save(member);
 
-                PassVo passVo = new PassVo();
-                passVo.setEmail(dto.getEmail());
-                passVo.setMemberRole(dto.getMemberRole().toString());
-                passVo.setMemberUuid(uuid);
+                PassVo passVo = new PassVo(dto.getEmail(), member.getMemberRole().toString(), dto.getMemberUuid());
                 passFeignClient.updateRole(passVo);
             } else {
                 // data 값을 가져올 수 없을 경우
