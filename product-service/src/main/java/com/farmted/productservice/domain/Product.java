@@ -29,7 +29,7 @@ public class Product extends TimeStamp{
     private int stock;
 
     @NotNull
-    private int price;
+    private Integer price;
 
     @NotNull
     private String source;
@@ -67,7 +67,7 @@ public class Product extends TimeStamp{
         this.image = productUpdateRequestDto.image();
     }
 
-    public void updateStatus(boolean auctionStatus){
+    public void closedStatus(){
         this.auctionStatus=true;
     }
 

@@ -11,7 +11,7 @@ import lombok.*;
 public class ProductResponseDto {
     private String name;
     private int stock;
-    private int price;
+    private Integer price;
     private String source;
     private String image;
     private boolean status;

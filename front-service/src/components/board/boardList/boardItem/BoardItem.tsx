@@ -1,20 +1,14 @@
-import React from "react"
+import React, {useEffect, useState} from "react"
 import styled, { css } from "styled-components";
-import { LocalDateTime, DateTimeFormatter } from "@js-joda/core";
+import { Link } from "react-router-dom";
+import { LiaStopwatchSolid } from "react-icons/lia";
+import { GrView } from "react-icons/gr";
+import { BoardType } from "../../boardHead/boardUtil/BoardType";
 
 interface Props{
     board:Board;
 }
 
-// 게시글 카테고리
-enum BoardType{
-    AUCTION = "경매",
-    COMMISTION = "구매요청",
-    SALE = "판매",
-    NOTICE = "공지사항",
-    CUSTOMER_SERVICE = "고객센터",
-    PRODUCT = "상품"
-}
 
 interface Board{
     memberName: string;
@@ -43,43 +37,170 @@ function parseLocalDateTime(localDateTimeString: string): Date {
     return new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10), parseInt(hour, 10), parseInt(minute, 10), parseInt(second, 10));
   }
 
-const BoardItemBlockDiv = styled.div<{status:boolean}>`
-    display: flex;
+const BoardItemBlockTr = styled.tr`
+    display: inline-flex;
     align-items: center;
     padding-top: 12px;
     padding-bottom: 12px;
+    border-radius: 8px;
+    border-bottom: 1px solid #20c997;
+    width: 100%;
     &:hover { /* 해당 블록에 마우스가 올라가면 */
-        background: #F0F0F0;
-    }
-    ${ ({status}) =>/* 경매가 종료되었다면 색변환*/
-        !status && css`
-            background: #ced4da; */
-        `
+        background: #d7ffea;
     }
 `;
-const TextDiv = styled.div`
-    flex: 1;
+const ListHeadTd = styled.td`
+  font-size: 16px;
+  margin-right: 10px;
+  color: #20c997;
+  width: 50px;
+`;
+
+const ListCategory = styled.div`
+  font-size: 14px;
+  color: #000000;
+`;
+
+const ListTitle = styled.div`
+  font-size: 18px;
+  color: #000000;
+`;
+
+const ListWriter = styled.div`
+  font-size: 14px;
+  color: #000000;
+`;
+
+const ListTime = styled.td`
+    font-size: 14px;
+    color: #000000;
+    text-align: right;
+`;
+
+const TextTd = styled.td`
     font-size: 21px;
     color: #495057;
+    margin-left: 20px;
+    margin-right: 20px;
+`;
+const FlexContainer = styled.td`
+    display: inline-table;
+    flex: 1;
+    margin-left: 20px;
+`;
+const RemainingTimeDiv = styled.div`
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #495755;
+    margin-left: auto;
 `;
 
 const BoardItem = (props:Props) => {
     const { board } = props;
+    const productName = board.productName ? <p>상품명: {board.productName}</p> : null;
+    const productPrice = board.productPrice ? <p>상품 가격: {board.productPrice}</p> : null;
+    const auctionPrice = board.auctionPrice ? <p>경매 가격: {board.auctionPrice}</p> : null;
+    const productImage = board.productImage ? 
+    <img src={board.productImage} alt="Product" style={{ maxHeight: '100px', width: 'auto' }} /> : null;
+  
     // LocalDateTime이 현재 시간보다 이전인지 여부를 판단하여 status 설정
     // + auctionDeadline이 없는 값이라면(경매가 아닌 경우) true 설정
-    const auctionStatus = board.auctionDeadline ? new Date() < parseLocalDateTime(board.auctionDeadline) : true;
-    console.log("경매상태"+auctionStatus);
+    let auctionStatus = true;
+    if(board.auctionDeadline) auctionStatus = new Date() < parseLocalDateTime(board.auctionDeadline);
+    const cratedAt = parseLocalDateTime(board.createAt ?? '');
+
+    let timeComponent;
+
+    if (board.auctionDeadline && auctionStatus) {
+        // 경매가 진행 중인 경우
+        const parsedDateTime = parseLocalDateTime(board.auctionDeadline);
+        if (parsedDateTime) {
+        const timeDiff = parsedDateTime.getTime() - new Date().getTime();
+        const secondsRemaining = Math.floor(timeDiff / 1000);
+        timeComponent = (
+            <RemainingTimeDiv style={{ color: 'red' }}>
+            <LiaStopwatchSolid />
+            {`남은 시간: ${secondsRemaining}초`}
+            </RemainingTimeDiv>
+        );
+        }
+    } else {
+        // 경매가 종료된 경우
+        timeComponent = (
+        <RemainingTimeDiv>
+            <LiaStopwatchSolid />
+            경매 종료
+        </RemainingTimeDiv>
+        );
+    }
+
+    // 날짜 계산
+    const detailDate = (a: Date): string => {
+        const milliSeconds = new Date().getTime() - a.getTime();
+        const seconds = milliSeconds / 1000;
+        if (seconds < 60) {return `방금 전`;}
+        const minutes = seconds / 60;
+        if (minutes < 60) {return `${Math.floor(minutes)}분 전`;}
+        const hours = minutes / 60;
+        if (hours < 24) {return `${Math.floor(hours)}시간 전`;}
+        const days = hours / 24;
+        if (days < 7) {return `${Math.floor(days)}일 전`;}
+        const weeks = days / 7;
+        if (weeks < 5) {return `${Math.floor(weeks)}주 전`;}
+        const months = days / 30;
+        if (months < 12) {return `${Math.floor(months)}개월 전`;}
+        const years = days / 365;return `${Math.floor(years)}년 전`;
+      };
+
+      const [secondsRemaining, setSecondsRemaining] = useState<number | null>(null);
+
+      useEffect(() => {
+        if (board.auctionDeadline && auctionStatus) {
+          const timer = setInterval(() => {
+            const timeDiff =
+              parseLocalDateTime(board.auctionDeadline!).getTime() -
+              new Date().getTime();
+            const secondsRemaining = Math.floor(timeDiff / 1000);
+            setSecondsRemaining(secondsRemaining);
+          }, 1000);
+    
+          return () => clearInterval(timer);
+        }
+      }, [auctionStatus, board.auctionDeadline]);
+
     return(
-        <BoardItemBlockDiv id={board.boardUuid} status={auctionStatus}>
-            <TextDiv>
-                <h3>게시글 제목 : {board.boardTitle}</h3>
-                <p>상품명 : {board.productName}</p>
-                <p>판매자 : {board.memberName}</p>
-                <p>카테고리 : {board.boardType}</p>
-                <p>조회수 : {board.viewCount}</p>
-                <p>생성일 : {board.createAt}</p>
-            </TextDiv>
-        </BoardItemBlockDiv>
+        <Link to={`/boards/${board.boardUuid}`}  style={{ textDecoration: 'none' }}>
+            <BoardItemBlockTr id={board.boardUuid}>
+                <ListHeadTd>
+                    <GrView />
+                    <span>{board.viewCount}</span>
+                </ListHeadTd>
+                {productImage}
+                <TextTd>
+                    {productName}
+                    {productPrice}
+                    {auctionPrice}
+                </TextTd>
+                <FlexContainer>
+                    <ListCategory>
+                        <span className="category" style={{ color: "#000000" }}>
+                            {board.boardType}
+                        </span>
+                    </ListCategory>
+                    <ListTitle>
+                        {board.boardTitle}
+                    </ListTitle>
+                    <ListWriter>
+                        {board.memberName}
+                    </ListWriter>
+                </FlexContainer>
+                <ListTime>
+                    {detailDate(cratedAt)}
+                    {timeComponent}
+                </ListTime>
+            </BoardItemBlockTr>
+        </Link>
     )
 }
 export default BoardItem
