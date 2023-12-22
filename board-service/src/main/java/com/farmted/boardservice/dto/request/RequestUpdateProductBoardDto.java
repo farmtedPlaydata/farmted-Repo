@@ -18,10 +18,15 @@ public record RequestUpdateProductBoardDto(
         @JsonProperty("boardContent") @NotBlank String boardContent,
         @JsonProperty("boardTitle") @NotBlank String boardTitle,
         // 아이템용 정보
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         @JsonProperty("productName") String productName,
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         @JsonProperty("productStock") int productStock,
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         @JsonProperty("productPrice") long productPrice,
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         @JsonProperty("productSource") String productSource,
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         @JsonProperty("productImage") String productImage
 ){
     // 상품 전용 데이터 생성 - 전송용 VO

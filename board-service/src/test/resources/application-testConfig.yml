@@ -1,11 +1,11 @@
-dbURL: jdbc:mysql://localhost:3306/farmted
-dbName: root
-dbPwd: 1234
-driverName: com.mysql.cj.jdbc.Driver
+dbURL: ENC(myqelJp8Y/SmgHyDvfvOTZAhtykXOsuqmfmF1vBxkcXl+K9PuegJ0P25MJfrvIATAr2jbts9hLAX/nUwWFcR2hWdyZ3A9jbXMlrAOnxeaDUgQZGPk/i4Tw==)
+dbName: ENC(Wt6Ag+sWOVVT/vbTtFuctg==)
+dbPwd: ENC(O4LCGF7HLo4/rw1FGSJ9f9XkhrH/HRWl)
+driverName: ENC(2yCFOiu4DSWkCrxznu0Hy3CKQrMxXISYBBCVnTuKhPLE8zFRlcBTGg==)
 
 namingRoute: com.farmted.boardservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
 
-regionLocation: ap-northeast-2
+regionLocation: ENC(OxSWHMLLPWnGN5xY6h3R6LB7nVwp5ohH)
 bucketName: farm
 secret: secret
 access: access

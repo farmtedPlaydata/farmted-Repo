@@ -29,6 +29,7 @@ public class ResponseGetCombinationListDto {
         this.page = PagingInfo.builder()
                         .pageNo(currenPage)
                         .totalPage(pageList.getTotalPages())
+                        .totalElements(pageList.getTotalElements())
                         .build();
     }
 }
