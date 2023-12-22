@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class SaleProductTypeResponseDto {
     private String name;
     private int stock;
-    private int price;
+    private Integer price;
     private String source;
     private String image;
     private Boolean status;

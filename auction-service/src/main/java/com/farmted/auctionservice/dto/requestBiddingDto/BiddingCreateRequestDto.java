@@ -2,6 +2,7 @@ package com.farmted.auctionservice.dto.requestBiddingDto;
 
 import com.farmted.auctionservice.domain.Bidding;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class BiddingCreateRequestDto {
 
     @NotNull(message = "입찰 희망 가격은 필수 입력값 입니다.")
-    @PositiveOrZero(message = "입찰 희망 가격은 0 이상이어야 합니다.")
+    @DecimalMin(value = "0", inclusive = true, message = "입찰 희망 가격은 0원 이상이어야 합니다.")
     private BigDecimal biddingPrice;
 
     private Integer memberPrice; // 사용자 잔고

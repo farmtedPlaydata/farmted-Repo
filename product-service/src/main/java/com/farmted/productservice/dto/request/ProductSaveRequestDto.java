@@ -3,36 +3,39 @@ package com.farmted.productservice.dto.request;
 
 import com.farmted.productservice.domain.Product;
 import com.farmted.productservice.enums.ProductType;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public record ProductSaveRequestDto(
+@Getter @Builder @AllArgsConstructor @NoArgsConstructor
+public class ProductSaveRequestDto{
         @NotBlank(message = "상품명은 필수 입력 값입니다.")
-        String name,
-        @Positive(message = "수량은 양수 값만 가능합니다..")
-        int stock,
+        String name;
+        @Positive(message = "수량은 양수 값만 가능합니다.")
+        int stock;
+        @DecimalMin(value = "0", inclusive = true, message = "상품 가격은 0원 이상이어야 합니다.")
         @NotNull(message = "상품 가격은 필수 입력값 입니다.")
-        @PositiveOrZero(message = "상품 가격은 0 이상이어야 합니다.")
-        int price,
+        Integer price;
         @NotBlank(message = "원산지는 필수 입력 값입니다.")
-        String source,
-        String image,
-        String boardUuid,
-        ProductType productType
-) {
+        String source;
+        String image;
+        String boardUuid;
+        ProductType productType;
+
     public Product toEntity(String memberUuid){
         return Product.builder()
-                .name(this.name())
-                .stock(this.stock())
-                .price(this.price())
-                .source(this.source())
-                .image(this.image())
+                .name(name)
+                .stock(stock)
+                .price(price)
+                .source(source)
+                .image(image)
                 .memberUuid(memberUuid)
-                .boardUuid(this.boardUuid())
+                .boardUuid(boardUuid)
                 .productType(productType)
                 .build();
     }
+
 }
 

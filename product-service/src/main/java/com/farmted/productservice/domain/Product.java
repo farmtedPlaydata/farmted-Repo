@@ -29,7 +29,7 @@ public class Product extends TimeStamp{
     private int stock;
 
     @NotNull
-    private int price;
+    private Integer price;
 
     @NotNull
     private String source;

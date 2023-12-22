@@ -4,7 +4,7 @@ package com.farmted.productservice.dto.request;
 public record ProductUpdateRequestDto (
     String name,
     int stock,
-    int price,
+    Integer price,
     String source,
     String image
 ){}

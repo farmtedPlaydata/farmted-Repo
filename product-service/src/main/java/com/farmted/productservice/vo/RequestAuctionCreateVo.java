@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder @Getter
 public class RequestAuctionCreateVo {
     // @JsonProperty로 vo, dto 전달명 통일
-    private @JsonProperty("auctionPrice") int price;
+    private @JsonProperty("auctionPrice") Integer price;
     private @JsonProperty("auctionDeadline") LocalDateTime startPeriod;
     private String boardUuid;
     private String productUuid;

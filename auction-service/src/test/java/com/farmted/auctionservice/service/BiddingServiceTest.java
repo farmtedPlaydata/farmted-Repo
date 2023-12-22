@@ -60,7 +60,7 @@ public class BiddingServiceTest {
                 int index = i; // 가변적인 상태로 변수 선언
                 executorService.submit(() -> {
                     try {
-                        BiddingCreateRequestDto dto = new BiddingCreateRequestDto(BigDecimal.valueOf(1000+index), 0);
+                        BiddingCreateRequestDto dto = new BiddingCreateRequestDto(BigDecimal.valueOf(1000+index),100,0);
                         biddingService.createBidding(dto, "board123", "member");
                     } catch (Exception e) {
                         // 예외 처리 로직 추가

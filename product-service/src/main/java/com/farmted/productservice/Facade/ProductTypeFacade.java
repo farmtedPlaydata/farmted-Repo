@@ -24,7 +24,7 @@ public class ProductTypeFacade {
     public void createProduct(String memberUuid, ProductSaveRequestDto productSaveRequestDto) {
         String saved = productService.saveProduct(memberUuid, productSaveRequestDto);
 
-        switch (productSaveRequestDto.productType()){
+        switch (productSaveRequestDto.getProductType()){
             case SALE: //판매
                 break;
 
