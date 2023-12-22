@@ -4,6 +4,7 @@ import com.farmted.auctionservice.dto.ResponseBiddingDto.BiddingResponseDto;
 import com.farmted.auctionservice.dto.requestBiddingDto.BiddingCreateRequestDto;
 import com.farmted.auctionservice.service.BiddingService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class BiddingController {
     // 입찰 신청
     @PostMapping("/bid/{board_uuid}")
     public ResponseEntity<?> createBidding(
-            @RequestBody BiddingCreateRequestDto biddingCreateRequestDto,
+            @Valid @RequestBody BiddingCreateRequestDto biddingCreateRequestDto,
             @RequestHeader ("UUID") String memberUuid,
             @PathVariable ("board_uuid") String boardUuid
             ){

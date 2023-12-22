@@ -1,6 +1,8 @@
 package com.farmted.auctionservice.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,20 +23,27 @@ public class Auction extends TimeStamp{
     private Long auction_id;
 
     @Column(unique = true)
+    @NotNull
     private String auctionUuid;
 
+    @PositiveOrZero
     private BigDecimal auctionPrice; // 가격
 
     private String auctionBuyer;  // 낙찰자
 
+    @NotNull
     private LocalDateTime auctionDeadline; // 경매 종료 시간
 
+    @NotNull
     private Boolean auctionStatus; // false 0: 경매중, true 1:  경매 종료
 
+    @NotNull
     private String memberUuid; // 판매자
 
+    @NotNull
     private String boardUuid;
 
+    @NotNull
     private String productUuid;
 
     @PrePersist

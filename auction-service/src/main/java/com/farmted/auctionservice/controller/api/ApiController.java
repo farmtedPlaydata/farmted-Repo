@@ -5,6 +5,7 @@ import com.farmted.auctionservice.dto.responseAuctionDto.AuctionGetResponseDto;
 import com.farmted.auctionservice.service.AuctionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class ApiController {
     @Operation(summary = "경매 정보 생성 및 시작", description = "product-service 통신으로 경매 정보가 생성되고 경매가 바로 시작됩니다.")
     public ResponseEntity<?> createAuction(
             @RequestHeader("UUID") String memberUuid,
-            @RequestBody AuctionCreateRequestDto auctionCreateRequestDto){
+            @Valid @RequestBody AuctionCreateRequestDto auctionCreateRequestDto){
         auctionService.createAuction(auctionCreateRequestDto,memberUuid);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

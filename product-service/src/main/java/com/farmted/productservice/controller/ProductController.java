@@ -11,6 +11,7 @@ import com.farmted.productservice.service.ProductService;
 import com.farmted.productservice.util.GlobalResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class ProductController {
     @PostMapping("/products/boards")
     @Operation(summary = "상품 등록", description = "판매,경매로 상품 종류 구분")
     public ResponseEntity<?>  saveProduct(
-            @RequestBody ProductSaveRequestDto productSaveRequestDto,
+            @Valid @RequestBody ProductSaveRequestDto productSaveRequestDto,
             @RequestHeader("UUID") String uuid // 멤버
     ) {
         productTypeFactory.createProduct(uuid,productSaveRequestDto);
