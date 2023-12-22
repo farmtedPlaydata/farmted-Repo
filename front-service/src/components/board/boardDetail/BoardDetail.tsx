@@ -182,7 +182,7 @@ const BoardDetail = () => {
           )}
           {/* 현재 사용자가 작성자인 경우에만 삭제 및 수정 버튼을 표시 */}
           {isCurrentUser && (
-            <ButtonContainer>
+            <ButtonContainer> 
               <PrimaryButton onClick={handleDelete}>삭제</PrimaryButton>
               <Link to={`/boards/modify/${boardUUID}`}>
                 <PrimaryButton>수정</PrimaryButton>
