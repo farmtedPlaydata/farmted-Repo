@@ -49,7 +49,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles({"test","test-private"})
 @TestMethodOrder(MethodOrderer.Random.class)
 @DisplayName("Board-Service 통합 테스트 코드")
 class BoardFacadeTest {

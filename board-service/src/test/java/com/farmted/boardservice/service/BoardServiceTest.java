@@ -54,6 +54,7 @@ class BoardServiceTest {
     static List<Board> DUMMY_BOARD_LIST = new ArrayList<>();
     static String DUMMY_BOARD_UUID;
     static Pageable PAGE_INFO;
+
     @BeforeAll
     static void beforeAll() {
         String memberUuid = "member-uuid";

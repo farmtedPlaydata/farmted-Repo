@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
-@ActiveProfiles("test") // Eureka Discovery Client 등록을 해제하기 위한 프로필
+@ActiveProfiles({"test","test-private"}) // Eureka Discovery Client 등록을 해제하기 위한 프로필
 @DisplayName("1페이지 캐시 스케줄러 테스트 코드")
 public class SchedulerTest {
     @Autowired

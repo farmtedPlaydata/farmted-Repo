@@ -61,12 +61,14 @@ public class Board extends TimeStamp {
     // 엔티티 최초 생성 시 자동 초기화할 값
     // UUID, Status, viewCount
     @PrePersist
-    public void createUuid(){
+    private void createUuid(){
         boardUuid = UUID.randomUUID().toString();
         boardStatus = true;
         viewCount = 0;
     }
     ////////////////////////////////////////////////
+    // 조회수 상승 로직
+    public void increaseViewCount() {viewCount += 1;}
     // 게시글 비활성화 로직
     public void deactiveStatus(){
         boardStatus = false;
