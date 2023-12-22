@@ -67,6 +67,35 @@ const ListButton = styled.button`
   float: right;
 `;
 
+const ProductInfoContainer = styled.div`
+  margin-top: 20px;
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+
+    td {
+      padding: 8px;
+      border: 1px solid #ddd;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 5px;
+    }
+  }
+`;
+
 const BoardWrite: React.FC = () => {
   const onEditorChange = (value: string) => {
     setContent(value);
@@ -76,6 +105,12 @@ const BoardWrite: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<BoardType | undefined>(undefined);
+  const [productInfo, setProductInfo] = useState({
+    productName: '',
+    productStock: '',
+    productPrice: '',
+    productSource: '',
+  });
 
   const navigate = useNavigate();
 
@@ -83,7 +118,9 @@ const BoardWrite: React.FC = () => {
     // 이전 페이지로 이동
     navigate(-1);
   };
-
+  const handleProductChange = (key: string, value: string) => {
+    setProductInfo((prev) => ({ ...prev, [key]: value }));
+  };
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     setFile(selectedFile || null);
@@ -143,10 +180,10 @@ const BoardWrite: React.FC = () => {
       boardType: selectedType,
       boardContent: content,
       boardTitle: title,
-      productName: selectedType === BoardType.AUCTION || selectedType === BoardType.SALE ? "상품명" : undefined,
-      productStock: selectedType === BoardType.AUCTION || selectedType === BoardType.SALE ? "20" : undefined,
-      productPrice: selectedType === BoardType.AUCTION || selectedType === BoardType.SALE ? "12345" : undefined,
-      productSource: selectedType === BoardType.AUCTION || selectedType === BoardType.SALE ? "머구" : undefined,
+      productName: selectedType === BoardType.AUCTION || selectedType === BoardType.SALE ? productInfo.productName : undefined,
+      productStock: selectedType === BoardType.AUCTION || selectedType === BoardType.SALE ? productInfo.productStock : undefined,
+      productPrice: selectedType === BoardType.AUCTION || selectedType === BoardType.SALE ? productInfo.productPrice : undefined,
+      productSource: selectedType === BoardType.AUCTION || selectedType === BoardType.SALE ? productInfo.productSource : undefined,
     };
     const data = new Blob([JSON.stringify(createData)], {type: "application/json"})
     formData.append("CREATE", data);
@@ -191,6 +228,55 @@ const BoardWrite: React.FC = () => {
           />
         </TitleGroup>
         <Editor value={content} onChange={onEditorChange} />
+        {selectedType === BoardType.AUCTION || selectedType === BoardType.SALE ? (
+          <ProductInfoContainer>
+            <h3>제품 정보</h3>
+            <table>
+              <tbody>
+                <tr>
+                  <td>상품명</td>
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="상품명"
+                      onChange={(event) => handleProductChange('productName', event.target.value)}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>재고</td>
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="재고"
+                      onChange={(event) => handleProductChange('productStock', event.target.value)}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>가격</td>
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="가격"
+                      onChange={(event) => handleProductChange('productPrice', event.target.value)}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>원산지</td>
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="원산지"
+                      onChange={(event) => handleProductChange('productSource', event.target.value)}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </ProductInfoContainer>
+        ) : null}
         <UtilDiv className="form-group">
           <ImageDiv>
             {selectedType === BoardType.AUCTION || selectedType === BoardType.SALE ? (
