@@ -4,99 +4,102 @@ import com.farmted.auctionservice.domain.Auction;
 import com.farmted.auctionservice.domain.Bidding;
 import com.farmted.auctionservice.dto.ResponseBiddingDto.BiddingResponseDto;
 import com.farmted.auctionservice.dto.requestBiddingDto.BiddingCreateRequestDto;
+import com.farmted.auctionservice.feignClient.AuctionToProductFeignClient;
 import com.farmted.auctionservice.repository.AuctionRepository;
 import com.farmted.auctionservice.repository.BiddingRepository;
+import com.farmted.auctionservice.vo.ProductVo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
-import org.redisson.api.RMap;
-import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+
+import static java.rmi.server.LogStream.log;
 
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BiddingService {
     private final BiddingRepository biddingRepository;
     private final AuctionRepository auctionRepository;
+    private final AuctionToProductFeignClient feignClient;
     private final RedissonClient redissonClient;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final String PREFIX = "Auction-Bidding::";
 
-    private final String PREFIX = "Auction-BIDDING::";
 
-    public void createBidding(BiddingCreateRequestDto biddingCreateRequestDto, String boardUuid, String memberUuid) {
-        Bidding savedBidding = biddingCreateRequestDto.toEntity(boardUuid, memberUuid);
-
-        // Redis 비동기 큐에 이벤트 추가
-        String queueName = "auctionQueue:" + savedBidding.getBoardUuid();
-        redisTemplate.opsForList().rightPush(queueName, savedBidding);
-
-        // 여러 클라이언트가 메시지를 처리하고 최상위 낙찰자 추출
-        processAuctionEvents(savedBidding.getBoardUuid());
-    }
-
-    private void processAuctionEvents(String boardUuid) {
+    @Transactional
+    public void createBidding(BiddingCreateRequestDto biddingCreateRequestDto,String boardUuid,String memberUuid) {
         String lockName = PREFIX + boardUuid;
 
         // Redis 분산 락 획득
         RLock lock = redissonClient.getLock(lockName);
-        lock.lock();
+        boolean isLockAcquired = false;
 
         try {
-            String queueName = "auctionQueue:" + boardUuid;
-            // Redis 비동기 큐에서 이벤트를 소비하고 처리하는 로직
-            while (redisTemplate.opsForList().size(queueName) > 0) {
-                Bidding topBid = (Bidding) redisTemplate.opsForList().leftPop(queueName);
-                updateTopBidder(topBid);
+            isLockAcquired = lock.tryLock(10,1, TimeUnit.SECONDS); //높은 값 사용 (예: 10초 이상): 락을 획득하기까지 대기하는 시간이 길지만 락 획득 경우가 많음
+            Bidding savedBidding = biddingCreateRequestDto.toEntity(boardUuid, memberUuid);
+
+            // 입찰 신청 내역은 무조건 저장
+            biddingRepository.save(savedBidding);
+
+            BigDecimal biddingPrice = savedBidding.getBiddingPrice();
+            Auction auction = auctionRepository.findAuctionByBoardUuid(boardUuid);
+
+            if (auction != null && auction.getAuctionBuyer() == null) {
+                auction.setBiddingTop(biddingPrice, memberUuid);
+
+            }else {
+                BigDecimal maxAuctionPrice = auctionRepository.findMaxAuctionPrice(boardUuid);
+                int comparisonResult = biddingPrice.compareTo(maxAuctionPrice);
+
+                switch (comparisonResult) {
+                    // 0 또는 음수: 현재 값이 데이터베이스의 최고값보다 작거나 같음으로 최고가가 갱신되지 않았습니다
+                    case 0:
+                    case -1:
+                        log("현재 값이 데이터베이스의 최고값보다 작거나 같음으로 최고가가 갱신되지 않았습니다");
+                        break;
+
+                    // 양수: 현재 값이 데이터베이스의 최고값보다 큼으로 최고가를 저장하고 로그를 출력할 수 있습니다
+                    case 1:
+                        auction.setBiddingTop(biddingPrice, memberUuid);
+                        break;
+                    default:
+                        // 비정상적인 상황 등에 대한 처리
+                        log("비정상적인 상황이 발생했습니다");
+                        break;
+                }
             }
-        } finally {
+            System.out.println(biddingRepository.save(savedBidding).getBiddingPrice());
+        }catch (InterruptedException e){
+            log("락을 획득하지 못했습니다");
+        }
+        finally {
             // Redis 분산 락 해제
             lock.unlock();
         }
+
     }
 
-    private void updateTopBidder(Bidding savedBidding) {
-        String boardUuid = savedBidding.getBoardUuid();
-        String lockName = "auctionLock:" + boardUuid;
-        RScoredSortedSet<Long> topBidders = redissonClient.getScoredSortedSet("topBidders");
-
-        // Redis 분산 락 획득
-        RLock lock = redissonClient.getLock(lockName);
-        lock.lock();
-
-        try {
-            topBidders.add(savedBidding.getBiddingPrice(), savedBidding.getBiddingId());
-            while (topBidders.size() > 1) {
-                topBidders.pollFirst();
-            }
-
-            // 최상위 낙찰자 1명만을 Auction DB에 저장
-            if (savedBidding.getBiddingId() == topBidders.first()) {
-                Auction auctionByBoardUuid = auctionRepository.findAuctionByBoardUuid(savedBidding.getBoardUuid());
-                auctionByBoardUuid.setBiddingTop(savedBidding.getBiddingPrice(),savedBidding.getMemberUuid());
-            }
-
-            // 데이터베이스 업데이트는 비동기로 처리
-            CompletableFuture.runAsync(() -> {
-                biddingRepository.save(savedBidding);
-            });
-        } finally {
-            // Redis 분산 락 해제
-            lock.unlock();
+    // 입찰 내역 조회
+    public List<BiddingResponseDto> getBiddingList(String memberUuid) {
+        List<Bidding> biddingList = biddingRepository.findBiddingByMemberUuid(memberUuid);
+        List<BiddingResponseDto> createBiddingList = new ArrayList<>();
+        for (Bidding bidding : biddingList) {
+            ProductVo productDetail = feignClient.getProductDetail(bidding.getBoardUuid());
+            BiddingResponseDto biddingDetailList = new BiddingResponseDto(bidding,productDetail);
+            createBiddingList.add(biddingDetailList);
         }
+        return createBiddingList;
+
     }
-
-
-    public List<BiddingResponseDto> getBiddingList(String memberUuid){
-       List<Bidding> biddingByMemberUuid = biddingRepository.findBiddingByMemberUuid(memberUuid);
-       return biddingByMemberUuid.stream()
-               .map(BiddingResponseDto::new)
-               .toList();
-   }
 
 
 

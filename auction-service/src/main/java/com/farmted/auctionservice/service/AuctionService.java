@@ -2,30 +2,41 @@ package com.farmted.auctionservice.service;
 
 import com.farmted.auctionservice.domain.Auction;
 import com.farmted.auctionservice.dto.requestAuctionDto.AuctionCreateRequestDto;
-import com.farmted.auctionservice.dto.responseAuctionDto.AuctionBuyerResponseDto;
+import com.farmted.auctionservice.dto.responseAuctionDto.AuctionBoardResponseDto;
 import com.farmted.auctionservice.dto.responseAuctionDto.AuctionGetResponseDto;
-import com.farmted.auctionservice.dto.responseAuctionDto.AuctionSellerResponseDto;
-import com.farmted.auctionservice.dto.responseAuctionDto.AuctionStatusResponseDto;
 import com.farmted.auctionservice.repository.AuctionRepository;
+import com.farmted.auctionservice.observer.AuctionClosedEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.rmi.server.LogStream.log;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
+@Transactional(readOnly = true)
 public class AuctionService {
 
     private final AuctionRepository auctionRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    // 경매 정보 생성 및 시작
+// 경매 정보 생성 및 시작
+    @Transactional
     public void createAuction(AuctionCreateRequestDto auctionCreateRequestDto, String memberUuid){
         // 시간 처리 로직
-        LocalDate auctionDeadline = auctionCreateRequestDto.getAuctionDeadline().plusMonths(1);
-        System.out.println(auctionDeadline+"########");
+        LocalDateTime auctionDeadline = auctionCreateRequestDto.getAuctionDeadline().plusMonths(1).truncatedTo(ChronoUnit.MINUTES);
         Auction createAuctionDto = auctionCreateRequestDto.toEntity(memberUuid,auctionDeadline);
         auctionRepository.save(createAuctionDto);
 
@@ -34,62 +45,58 @@ public class AuctionService {
     // 방안1
     // 경매 종료 스케쥴링
     @Scheduled(cron ="${schedules.cron}")
-    public void changeAuction(){
+    public List<Auction> changeAuction(){
         // 경매 종료 로직
-        LocalDate current = LocalDate.now();
+        LocalDateTime current = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+        log("종료 시간 체크 "+current);
         List<Auction> auctionDeadline = auctionRepository.findAuctionByAuctionDeadline(current);
-         System.out.println("경매 상태 확인 중");
+        System.out.println("경매 상태 확인 중");
         for (Auction auction : auctionDeadline) {
             auction.setAuctionDeadlineForStatus();
+            // 경매 상태 변경 이벤트 발행
+            eventPublisher.publishEvent(new AuctionClosedEvent(auction));
         }
-
+        return auctionDeadline;
     }
 
-    public List<AuctionStatusResponseDto> endAuctions(){
-        List<Auction> auctionStatusTrue = auctionRepository.findAuctionByAuctionStatus(true);
-        return auctionStatusTrue.stream()
-                .map(AuctionStatusResponseDto::new)
+
+// 경매 리스트 조회
+    public List<AuctionGetResponseDto> getAuctionProductList(){
+        List<Auction> auctionList = auctionRepository.findAll();
+        return auctionList.stream()
+                .map(AuctionGetResponseDto::new)
                 .collect(Collectors.toList());
     }
 
 
-    // 방안 2
-//    @Scheduled(cron ="*/60 * * * * *")
-//    public List<AuctionStatusResponseDto> changeAuction(){
-//        // 경매 종료 로직
-//        LocalDate current = LocalDate.now();
-//        List<Auction> auctionDeadline = auctionRepository.findAuctionByAuctionDeadline(current);
-//        System.out.println("경매 상태 확인 중");
-//        for (Auction auction : auctionDeadline) {
-//            auction.setAuctionDeadlineForStatus();
-//        }
-//        return auctionDeadline.stream()
-//                .map(AuctionStatusResponseDto::new)
-//                .collect(Collectors.toList());
-//    }
-
-    // 경매 목록 조회
-    // TODO: 진행 종료 합쳐서 조회? 진행만 조회?
-    public AuctionGetResponseDto getAuctionList(String productUuid){
-        Auction getAuction = auctionRepository.findAuctionByProductUuid(productUuid);
-        return new AuctionGetResponseDto(getAuction);
+// 경매 상세 조회
+    public AuctionBoardResponseDto getAuctionDetail(String boardUuid){
+        Auction getAuction = auctionRepository.findAuctionByBoardUuid(boardUuid);
+        return new AuctionBoardResponseDto(getAuction);
     }
 
+// 경매 목록 조회- board용
+public List<AuctionBoardResponseDto> getAuctionList(int pageNo){
+    Slice<Auction> auctionList = auctionRepository.findAll(PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.ASC, "auctionDeadline")));
+    return auctionList.stream()
+            .map(AuctionBoardResponseDto::new)
+            .collect(Collectors.toList());
+}
 
-    // 판매자 -> 낙찰 목록 조회 -> 경매 종료 상태
-    public List<AuctionBuyerResponseDto> auctionBuyerList(String memberUuid){
-        List<Auction> auctionByMemberList = auctionRepository.findAuctionByMemberUuid(memberUuid);
+// Seller 판매자 -> 낙찰/전체 목록 조회 -> 경매 중/종료 ->
+    public List<AuctionBoardResponseDto> auctionSellerList(String memberUuid,int pageNo){
+        Slice<Auction> auctionByMemberList = auctionRepository.findAuctionByMemberUuid(memberUuid,PageRequest.of(pageNo, 3, Sort.by(Sort.Direction.ASC, "auctionDeadline")));
         return auctionByMemberList
                 .stream()
-                .map(AuctionBuyerResponseDto::new)
+                .map(AuctionBoardResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-    // 구매자 -> 낙찰 목록 조회 -> 경매 종료 상태
-    public List<AuctionSellerResponseDto> auctionTrueList(String auctionBuyer){
-        List<Auction> auctionSellerList = auctionRepository.findAuctionByAuctionBuyer(auctionBuyer);
+// Buyer 구매자 -> 낙찰 목록/ 최고가 조회 -> 경매 중 + 경매 종료
+    public List<AuctionGetResponseDto> auctionBuyerList(String auctionSeller){
+        List<Auction> auctionSellerList = auctionRepository.findAuctionByAuctionBuyer(auctionSeller);
         return auctionSellerList.stream()
-                .map(AuctionSellerResponseDto::new)
+                .map(AuctionGetResponseDto::new)
                 .collect(Collectors.toList());
     }
 

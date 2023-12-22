@@ -29,6 +29,18 @@ spring:
             - Path=/member-service/**
           filters:
             - JwtTokenFilter
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/product-service/**
+          filters:
+            - CustomFilter
+        - id: auction-service
+          uri: lb://auction-service
+          predicates:
+            - Path=/auction-service/**
+          filters:
+            - CustomFilter
 
 eureka:
   client:
