@@ -105,4 +105,18 @@ public class MemberController {
     public ResponseEntity<?> updateRole(@PathVariable String uuid) {
         return ResponseEntity.ok(GlobalResponseDto.of(memberService.updateRole(uuid)));
     }
+
+    @Operation(summary = "입찰", description = "입찰 시 잔고 변화")
+    @PutMapping("/after-bid/{uuid}")
+    public ResponseEntity<?> afterBidBalance(@PathVariable String uuid, @RequestBody int balance) {
+        memberService.afterBid(uuid, balance);
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
+    }
+
+    @Operation(summary = "낙찰 실패", description = "낙찰 실패 시 잔고 변화")
+    @PutMapping("/after-bid/{uuid}")
+    public ResponseEntity<?> failedBidBalance(@PathVariable String uuid, int balance) {
+        memberService.failedBid(uuid, balance);
+        return ResponseEntity.ok(GlobalResponseDto.of(true));
+    }
 }

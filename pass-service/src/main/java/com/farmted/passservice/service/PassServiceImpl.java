@@ -116,32 +116,24 @@ public class PassServiceImpl implements PassService {
         Pass findPass = passRepository.findByUuid(uuid)
                 .orElseThrow(() -> new PassException("PassService - memberCreateFeignMemberService"));
 
-        try {
-            switch (memberVo.getMemberRole()) {
-                case "GUEST":
-                    findPass.updateRole(RoleEnums.GUEST);
-                    passRepository.save(findPass);
-                    break;
-                case "USER":
-                    findPass.updateRole(RoleEnums.USER);
-                    passRepository.save(findPass);
-                    break;
-                case "ADMIN":
-                    findPass.updateRole(RoleEnums.ADMIN);
-                    passRepository.save(findPass);
-                    break;
-                case "MASTER":
-                    findPass.updateRole(RoleEnums.MASTER);
-                    passRepository.save(findPass);
-                    break;
-            }
 
-            String refreshTokenInfo = jwtProvider.createToken(findPass.getUuid(), findPass.getRole(), TokenType.REFRESH);
-            jwtProvider.saveRefreshToken(findPass.getUuid(), refreshTokenInfo);
-            reIssue(findPass.getUuid());
-        } catch (Exception e) {
-            e.printStackTrace();
+        switch (memberVo.getMemberRole()) {
+            case "GUEST":
+                findPass.updateRole(RoleEnums.GUEST);
+                break;
+            case "USER":
+                findPass.updateRole(RoleEnums.USER);
+                break;
+            case "ADMIN":
+                findPass.updateRole(RoleEnums.ADMIN);
+                break;
+            case "MASTER":
+                findPass.updateRole(RoleEnums.MASTER);
+                break;
         }
+        passRepository.save(findPass);
+        reIssue(findPass.getUuid());
+
     }
 
     @Override

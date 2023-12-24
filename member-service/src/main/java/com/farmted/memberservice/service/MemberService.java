@@ -26,4 +26,6 @@ public interface MemberService {
     void checkIn(String uuid);
     String updateRole(String uuid);
     void expelMember(String role, String uuid);
+    void afterBid(String uuid, int balance);
+    void failedBid(String uuid, int balance);
 }

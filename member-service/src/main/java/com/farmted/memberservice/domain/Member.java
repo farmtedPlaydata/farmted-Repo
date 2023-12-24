@@ -66,6 +66,14 @@ public class Member extends TimeStamp implements Serializable {
         this.memberRole = this.memberRole == roles ? RoleEnums.USER : roles;
     }
 
+    public void afterBidBalance(int balance) {
+        this.memberBalance -= balance;
+    }
+
+    public void failedBidBalance(int balance) {
+        this.memberBalance += balance;
+    }
+
     public void checkedIn(Member member) {
         this.checkIn = true;
         this.memberBalance += 1000L;

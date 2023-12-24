@@ -112,6 +112,23 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public void afterBid(String uuid, int balance) {
+        Member member = memberRepository.findByMemberUuid(uuid)
+                .orElseThrow(() -> new MemberException("MemberService - afterBid"));
+        member.afterBidBalance(balance);
+        memberRepository.save(member);
+    }
+
+    @Override
+    public void failedBid(String uuid, int balance) {
+        Member member = memberRepository.findByMemberUuid(uuid)
+                .orElseThrow(() -> new MemberException("MemberService - failedBid"));
+        member.failedBidBalance(balance);
+        memberRepository.save(member);
+    }
+
+
+    @Override
     public void grantRole(String uuid, RoleEnums role) {
         Member member = memberRepository.findByMemberUuid(uuid)
                 .orElseThrow(() -> new MemberException("MemberService - grantRole"));
