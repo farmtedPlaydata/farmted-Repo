@@ -30,8 +30,7 @@ public class BoardController {
             @RequestHeader("UUID") String uuid,
             @RequestHeader("ROLE") RoleEnums role,
             @RequestPart(value = "IMAGE", required = false) MultipartFile image){
-        boardFacade.createBoard(productBoardDto, uuid, role, image);
-        return ResponseEntity.ok(GlobalResponseDto.of(true));
+        return ResponseEntity.ok(GlobalResponseDto.of(boardFacade.createBoard(productBoardDto, uuid, role, image)));
     }
 
 // 전체 조회

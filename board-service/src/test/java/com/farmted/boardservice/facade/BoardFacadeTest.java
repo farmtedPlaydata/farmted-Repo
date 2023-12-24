@@ -275,6 +275,7 @@ class BoardFacadeTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("개별 경매 상품 상세 조회")
     void getBoard() {
         // given
@@ -300,6 +301,9 @@ class BoardFacadeTest {
         }
         // then
         assertThat(dtoList.size()).isEqualTo(BOARD_UUIDS.size());
+        for (ResponseGetCombinationDetailDto dto : dtoList) {
+            assertThat(dto.getBoardDetail().getViewCount()).isEqualTo(1);
+        }
         verify(productService, times(2)).getProductByBoardUuid(anyString());
         verify(auctionService, times(1)).getAuctionDetail(anyString());
     }

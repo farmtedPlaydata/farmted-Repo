@@ -152,7 +152,6 @@ class BoardServiceTest {
                 .thenReturn(Optional.of(DUMMY_DATA));
         // when
         ResponseGetCombinationDetailDto detailDTO = boardService.getBoard(boardUuid);
-
         // then
         assertThat(detailDTO.getBoardDetail().getBoardUuid()).isEqualTo(DUMMY_BOARD_UUID);
     }

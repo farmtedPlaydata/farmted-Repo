@@ -33,7 +33,7 @@ public class BoardFacade {
     private final ImageService imageService;
 
     @Transactional
-    public void createBoard(RequestCreateBoardDto boardDto,
+    public String createBoard(RequestCreateBoardDto boardDto,
                             String memberUuid, RoleEnums role,
                             MultipartFile... image){
         // 게시글을 작성하기 유효한 ROLE인지 확인
@@ -61,6 +61,7 @@ public class BoardFacade {
             case PRODUCT -> throw new BoardException(boardDto.boardType(), ExceptionType.SAVE);
         }
         // 이후에 보상 트랜잭션 추가 구현 필요 ( 상품저장이 성공했는데 게시글 저장 실패 )
+        return boardUuid;
     }
 
     // 전체 게시글 카테고리별 리스트 조회

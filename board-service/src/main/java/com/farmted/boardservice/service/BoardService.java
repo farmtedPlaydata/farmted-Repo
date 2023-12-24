@@ -77,14 +77,14 @@ public class BoardService {
 
     // 개별 경매 상품 상세 조회
     public ResponseGetCombinationDetailDto getBoard(String boardUuid) {
+        increaseViewCount(boardUuid);
         ResponseGetCombinationDetailDto combinationDetailDto = new ResponseGetCombinationDetailDto();
         // 해당하는 게시글 가져오기
         combinationDetailDto.setBoardDetail(boardRepository.findDetailByBoardUuid(boardUuid)
                 .orElseThrow(() -> new BoardException(ExceptionType.GET)));
-        increaseViewCount(boardUuid);
         return combinationDetailDto;
     }
-        // 게시글 조회시 조회수 상승
+    // 게시글 조회시 조회수 상승
     private void increaseViewCount(String boardUuid){
         boardRepository.findByBoardUuidAndBoardStatusTrue(boardUuid)
                 .orElseThrow(()-> new BoardException(ExceptionType.GET))

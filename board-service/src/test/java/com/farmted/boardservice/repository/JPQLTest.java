@@ -29,7 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 // 해당 어노테이션은 @DataJpaTest에 내장되어 있으며, 이 어노테이션은 '내장된 메모리 데이터베이스'로 테스트를 진행
 // 설정을 통해 내장된 메모리 데이터베이스로 변경하지 못하도록 막기
 @Import(InitDB.class)
-@ActiveProfiles("test")
 @DisplayName("JPQL 테스트 코드")
 class JPQLTest {
     @Autowired
