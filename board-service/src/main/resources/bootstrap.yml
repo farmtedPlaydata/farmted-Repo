@@ -1,0 +1,7 @@
+# bootstrap.yml
+spring:
+  cloud:
+    config:
+      uri: http://localhost:18888
+      name: config, s3, server
+# config

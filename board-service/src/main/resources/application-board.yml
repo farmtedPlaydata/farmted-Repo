@@ -1,0 +1,3 @@
+#driverName: ENC(2yCFOiu4DSWkCrxznu0Hy3CKQrMxXISYBBCVnTuKhPLE8zFRlcBTGg==)
+userName: board-service
+namingRoute: com.farmted.boardservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
