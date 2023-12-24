@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
     // 게시글UUID를 통해 데이터 요청만 할 예정이므로 게시글UUID를 넣지 않음
 @Builder
 public record AuctionVo(
-     @JsonProperty("price") int auctionPrice,
-     @JsonProperty("buyer") String auctionBuyer,
-     @JsonProperty("deadline") LocalDateTime auctionDeadline,
-     @JsonProperty("status") Boolean auctionStatus
+     @JsonProperty("auctionPrice") int auctionPrice,
+     @JsonProperty("auctionBuyer") String auctionBuyer,
+     @JsonProperty("auctionDeadline") LocalDateTime auctionDeadline,
+     @JsonProperty("auctionStatus") Boolean auctionStatus
     ){
 }

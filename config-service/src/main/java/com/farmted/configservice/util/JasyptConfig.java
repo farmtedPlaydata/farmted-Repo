@@ -1,4 +1,4 @@
-package com.farmted.boardservice.util;
+package com.farmted.configservice.util;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
