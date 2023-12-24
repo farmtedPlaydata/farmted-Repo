@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:mysql://localhost:3306/msa_db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="FARMTED" uuid="a2a8529d-bc9e-45d4-9ddb-a7c17edc6ede">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://board-db.cjwpre6nr8aq.ap-northeast-2.rds.amazonaws.com:3306</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

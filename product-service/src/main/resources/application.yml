@@ -1,12 +1,15 @@
 spring:
   application:
     name: product-service
+  profiles:
+    active: private
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/farmted
-    username: root
-    password: 1234
+    driver-class-name: ${driverName}
+    url: ${dbURL}product
+    username: ${dbName}
+    password: ${dbPwd}
+
 
   jpa:
     properties:
@@ -17,7 +20,7 @@ spring:
       ddl-auto: create
 
 server:
-  port: 8081
+  port: 8085
 
 eureka:
   client:

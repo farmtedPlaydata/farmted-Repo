@@ -5,7 +5,7 @@ import com.farmted.boardservice.dto.response.listDomain.ResponseGetAuctionDto;
 import com.farmted.boardservice.enums.ExceptionType;
 import com.farmted.boardservice.enums.FeignDomainType;
 import com.farmted.boardservice.feignClient.AuctionFeignClient;
-import com.farmted.boardservice.util.feignConverter.FeignConverter;
+import com.farmted.boardservice.util.FeignConverter;
 import com.farmted.boardservice.vo.AuctionVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

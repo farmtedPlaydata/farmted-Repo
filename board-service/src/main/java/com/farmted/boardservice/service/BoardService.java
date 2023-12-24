@@ -47,6 +47,7 @@ public class BoardService {
 
 // 전체 게시글 카테고리별 리스트 조회
     public ResponseGetCombinationListDto getBoardList(BoardType category, int pageNo) {
+        if (pageNo < 1) pageNo = 0;
         ResponseGetCombinationListDto combinationListDto = new ResponseGetCombinationListDto();
         // 게시글 리스트 담기
         combinationListDto.setPageList(
@@ -76,11 +77,18 @@ public class BoardService {
 
     // 개별 경매 상품 상세 조회
     public ResponseGetCombinationDetailDto getBoard(String boardUuid) {
+        increaseViewCount(boardUuid);
         ResponseGetCombinationDetailDto combinationDetailDto = new ResponseGetCombinationDetailDto();
         // 해당하는 게시글 가져오기
         combinationDetailDto.setBoardDetail(boardRepository.findDetailByBoardUuid(boardUuid)
                 .orElseThrow(() -> new BoardException(ExceptionType.GET)));
         return combinationDetailDto;
+    }
+    // 게시글 조회시 조회수 상승
+    private void increaseViewCount(String boardUuid){
+        boardRepository.findByBoardUuidAndBoardStatusTrue(boardUuid)
+                .orElseThrow(()-> new BoardException(ExceptionType.GET))
+                .increaseViewCount();
     }
 
     // 게시글 업데이트
@@ -103,7 +111,7 @@ public class BoardService {
             case NOTICE, COMMISSION, CUSTOMER_SERVICE -> {
                 if (updateBoard.getBoardType().equals(updateDTO.boardType())) {
                     updateBoard.updateBoardInfo(updateDTO);
-                    return true;
+                    return false;
                 }
             }
         }

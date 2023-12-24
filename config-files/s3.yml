@@ -1,0 +1,12 @@
+# S3.yml S3 세팅
+cloud:
+  aws:
+    region:
+      static: ENC(wqhCDJ9dx0FBBp7hKOeV2ZKR5P9dB2c1)
+    s3:
+      bucket: ENC(1LbmkoztxzLVHCy7CAyl55kXDxKl55Vr)
+    stack:
+      auto: false
+    credentials:
+      secret-key: ENC(vIFWjT26zjnOK7ppCAfxp80N3+kWu7Te/W6sf25BN+d9ZLZhMge/Yk+cKkrglubQA7Sqx31JmnQ=)
+      access-key: ENC(NP4ad3SSxOh9Ej/o4K8+hWJpZMxGNVdHAsPE7th2wZY=)

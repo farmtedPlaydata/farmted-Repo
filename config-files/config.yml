@@ -1,0 +1,23 @@
+# config.yml
+spring:
+  application:
+    name: ${userName}
+  datasource:
+    url: ${dbUrl}
+    username: ENC(Wt6Ag+sWOVVT/vbTtFuctg==)
+    password: ENC(O4LCGF7HLo4/rw1FGSJ9f9XkhrH/HRWl)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        physical_naming_strategy: ${namingRoute}
+    show-sql: true
+  #swagger
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+# ${userName}과 ${dbUrl}은 개별 MS에서 사용하는 정보
+# 드라이버는 암호화하니 아예 먹히지 않아서 그냥 씀

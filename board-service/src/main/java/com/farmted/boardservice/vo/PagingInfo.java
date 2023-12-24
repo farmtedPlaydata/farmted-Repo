@@ -6,6 +6,7 @@ import lombok.Builder;
 @Builder
 public record PagingInfo(
         @JsonProperty("pageNo") int pageNo,
-        @JsonProperty("totalPage") int totalPage
+        @JsonProperty("totalPage") int totalPage,
+        @JsonProperty("totalElements") long totalElements
 ) {
 }

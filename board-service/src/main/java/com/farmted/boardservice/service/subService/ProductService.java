@@ -7,7 +7,7 @@ import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.enums.ExceptionType;
 import com.farmted.boardservice.enums.FeignDomainType;
 import com.farmted.boardservice.feignClient.ProductFeignClient;
-import com.farmted.boardservice.util.feignConverter.FeignConverter;
+import com.farmted.boardservice.util.FeignConverter;
 import com.farmted.boardservice.vo.ProductVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

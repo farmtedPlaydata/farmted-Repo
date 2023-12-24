@@ -48,8 +48,8 @@ public class InitDB {
                                 case AUCTION, SALE ->
                                     Board.builder()
                                             .boardType(category) // 무작위 값으로 변경
-                                            .boardTitle("Random Board Title")
-                                            .boardContent("Random Board Content")
+                                            .boardTitle(category+" Board Title")
+                                            .boardContent(category+" Board Content")
                                             .viewCount(0) // 초기값
                                             .boardStatus(true) // 초기값
                                             .memberName("member-name")
@@ -61,8 +61,8 @@ public class InitDB {
                                 case NOTICE, COMMISSION, CUSTOMER_SERVICE ->
                                         Board.builder()
                                                 .boardType(category) // 무작위 값으로 변경
-                                                .boardTitle("Random Board Title")
-                                                .boardContent("Random Board Content")
+                                                .boardTitle(category+" Board Title")
+                                                .boardContent(category+" Board Content")
                                                 .viewCount(0) // 초기값
                                                 .boardStatus(true) // 초기값
                                                 .memberName("member-name")

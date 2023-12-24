@@ -11,5 +11,6 @@ import java.util.List;
 public interface BiddingRepository extends JpaRepository<Bidding,Long> {
     public List<Bidding> findBiddingByMemberUuid(String memberUuid);
 
-
+    // 테스트 용
+    public List<Bidding> findBiddingByBoardUuid(String boardUuid);
 }

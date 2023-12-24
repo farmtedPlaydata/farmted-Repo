@@ -16,17 +16,20 @@ import com.farmted.boardservice.enums.RoleEnums;
 import com.farmted.boardservice.exception.BoardException;
 import com.farmted.boardservice.exception.RoleTypeException;
 import com.farmted.boardservice.repository.BoardRepository;
-import com.farmted.boardservice.service.BoardService;
-import com.farmted.boardservice.service.subService.*;
+import com.farmted.boardservice.service.subService.AuctionService;
+import com.farmted.boardservice.service.subService.ImageService;
+import com.farmted.boardservice.service.subService.MemberService;
+import com.farmted.boardservice.service.subService.ProductService;
 import com.farmted.boardservice.util.Board1PageCache;
 import com.farmted.boardservice.vo.AuctionVo;
 import com.farmted.boardservice.vo.MemberVo;
 import com.farmted.boardservice.vo.ProductVo;
 import org.junit.jupiter.api.*;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,7 +49,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@ActiveProfiles({"test","testConfig"})
+@ActiveProfiles({"test","test-private"})
 @TestMethodOrder(MethodOrderer.Random.class)
 @DisplayName("Board-Service 통합 테스트 코드")
 class BoardFacadeTest {
@@ -193,8 +196,8 @@ class BoardFacadeTest {
     @DisplayName("전체 게시글 카테고리별 리스트 조회")
     void getBoardList() {
         // given
-        // page1에 값이 생길 때까지 최대 1.5초 대기
-        await().atMost(1500, MILLISECONDS).untilAsserted(
+        // page1에 값이 생길 때까지 최대 2초 대기
+        await().atMost(2000, MILLISECONDS).untilAsserted(
                 () -> {
                     assertThat(board1PageCache.getPage1()).isNotNull();
                     assertThat(board1PageCache.getPage1().getTotalElements()).isGreaterThan(1);
@@ -272,6 +275,7 @@ class BoardFacadeTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("개별 경매 상품 상세 조회")
     void getBoard() {
         // given
@@ -297,6 +301,9 @@ class BoardFacadeTest {
         }
         // then
         assertThat(dtoList.size()).isEqualTo(BOARD_UUIDS.size());
+        for (ResponseGetCombinationDetailDto dto : dtoList) {
+            assertThat(dto.getBoardDetail().getViewCount()).isEqualTo(1);
+        }
         verify(productService, times(2)).getProductByBoardUuid(anyString());
         verify(auctionService, times(1)).getAuctionDetail(anyString());
     }

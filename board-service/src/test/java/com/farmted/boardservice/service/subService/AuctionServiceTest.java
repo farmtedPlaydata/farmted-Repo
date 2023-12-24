@@ -4,7 +4,7 @@ import com.farmted.boardservice.dto.response.detailDomain.ResponseGetAuctionDeta
 import com.farmted.boardservice.dto.response.listDomain.ResponseGetAuctionDto;
 import com.farmted.boardservice.feignClient.AuctionFeignClient;
 import com.farmted.boardservice.util.GlobalResponseDto;
-import com.farmted.boardservice.util.feignConverter.FeignConverter;
+import com.farmted.boardservice.util.FeignConverter;
 import com.farmted.boardservice.vo.AuctionVo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

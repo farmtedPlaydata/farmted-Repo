@@ -6,7 +6,7 @@ import com.farmted.boardservice.dto.response.listDomain.ResponseGetProductDto;
 import com.farmted.boardservice.enums.BoardType;
 import com.farmted.boardservice.feignClient.ProductFeignClient;
 import com.farmted.boardservice.util.GlobalResponseDto;
-import com.farmted.boardservice.util.feignConverter.FeignConverter;
+import com.farmted.boardservice.util.FeignConverter;
 import com.farmted.boardservice.vo.ProductVo;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;

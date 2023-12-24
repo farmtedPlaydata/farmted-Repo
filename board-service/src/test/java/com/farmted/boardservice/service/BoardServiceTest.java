@@ -54,6 +54,7 @@ class BoardServiceTest {
     static List<Board> DUMMY_BOARD_LIST = new ArrayList<>();
     static String DUMMY_BOARD_UUID;
     static Pageable PAGE_INFO;
+
     @BeforeAll
     static void beforeAll() {
         String memberUuid = "member-uuid";
@@ -151,7 +152,6 @@ class BoardServiceTest {
                 .thenReturn(Optional.of(DUMMY_DATA));
         // when
         ResponseGetCombinationDetailDto detailDTO = boardService.getBoard(boardUuid);
-
         // then
         assertThat(detailDTO.getBoardDetail().getBoardUuid()).isEqualTo(DUMMY_BOARD_UUID);
     }
@@ -222,15 +222,11 @@ class BoardServiceTest {
         for(Board board : DUMMY_BOARD_LIST){
             try{
                 boolean updateCheck = boardService.updateBoard(updateDTO, board.getBoardUuid(), memberUuid);
-                switch (board.getBoardType()){
-                    // then
-                    // BoardType 변경의 경우, 판매와 경매(경매종료된)끼리의 변경만 가능
-                    case NOTICE, SALE, AUCTION, CUSTOMER_SERVICE
-                            -> assertThat(updateCheck)
+                // then
+                // BoardType 변경의 경우, 판매와 경매(경매종료된)끼리의 변경만 가능
+                if (COMMISSION.equals(board.getBoardType())) {
+                    assertThat(updateCheck)
                             .isEqualTo(false);
-                    case COMMISSION ->
-                            assertThat(updateCheck)
-                                .isEqualTo(true);
                 }
             } catch (Exception e){
                 assertThat(e).isInstanceOf(BoardException.class);
@@ -243,7 +239,7 @@ class BoardServiceTest {
     @DisplayName("게시글 삭제")
     void deleteBoard() {
         // given
-        String memberUuid = "member-uuid";
+        String memberUUID = "member-uuid";
         DUMMY_BOARD_LIST
                 .forEach(board ->
                         when(boardRepository.findByBoardUuidAndBoardStatusTrue(board.getBoardUuid()))
@@ -255,11 +251,10 @@ class BoardServiceTest {
             // 하나는 Exception 확인용으로 실패
             if(Objects.equals(board.getBoardUuid(), DUMMY_BOARD_UUID)){
                 Assertions.assertThrows(BoardException.class,
-                    () ->
-                        boardService.deleteBoard(board.getBoardUuid(), "123"));
+                    () -> boardService.deleteBoard(board.getBoardUuid(), "123"));
                 continue;
             }
-            boardService.deleteBoard(board.getBoardUuid(), memberUuid);
+            boardService.deleteBoard(board.getBoardUuid(), memberUUID);
         }
         // then
         for(Board board : DUMMY_BOARD_LIST) {

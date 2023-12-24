@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,15 +23,14 @@ public class BoardController {
 
     private final BoardFacade boardFacade;
 
-    @PostMapping(value = "/boards")
+    @PostMapping(value = "/boards", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "게시글 작성", description = "카테고리별 게시글의 등록 요청")
     public ResponseEntity<GlobalResponseDto<?>> createBoard(
             @Valid @RequestPart("CREATE") RequestCreateBoardDto productBoardDto,
             @RequestHeader("UUID") String uuid,
             @RequestHeader("ROLE") RoleEnums role,
-            @RequestPart("IMAGE") MultipartFile image){
-        boardFacade.createBoard(productBoardDto, uuid, role, image);
-        return ResponseEntity.ok(GlobalResponseDto.of(true));
+            @RequestPart(value = "IMAGE", required = false) MultipartFile image){
+        return ResponseEntity.ok(GlobalResponseDto.of(boardFacade.createBoard(productBoardDto, uuid, role, image)));
     }
 
 // 전체 조회
@@ -47,7 +47,7 @@ public class BoardController {
         ));
     }
 
-    @GetMapping(value = "/boards/{board_uuid}/auctions")
+    @GetMapping(value = "/boards/{board_uuid}")
     @Operation(summary = "경매 게시글 상세 조회", description = "개별 경매 게시글에 대한 단일 조회 요청")
     public ResponseEntity<GlobalResponseDto<?>> getAuctionBoard(@PathVariable(value = "board_uuid") String boardUuid){
         return ResponseEntity.ok(
@@ -55,20 +55,6 @@ public class BoardController {
                     boardFacade.getBoard(boardUuid)
         ));
     }
-
-//    // TODO: 여기도 Product, SALE, AUCTION 카테고리 다 만들까?
-//    @GetMapping(value = "/boards/buyer")
-//    @Operation(summary = "본인 낙찰 리스트 전체 조회", description = "본인이 입찰한 경매 리스트를 조회합니다.")
-//    public ResponseEntity<GlobalResponseDto<?>> getBoardListBuyer(
-//            @RequestHeader ("UUID") String uuid,
-//            @RequestParam(value="category") BoardType category,
-//            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo
-//    ){
-//        return ResponseEntity.ok(
-//                GlobalResponseDto.of(
-//                        boardService.getBuyerBoardList(category, pageNo-1, uuid)
-//                ));
-//    }
 
 // 작성자(판매자) 전용
     @GetMapping(value = "/boards/seller/{seller_uuid}")
@@ -85,7 +71,7 @@ public class BoardController {
     }
 
 
-    @PutMapping(value = "/boards/{board_uuid}/auctions")
+    @PutMapping(value = "/boards/{board_uuid}")
     @Operation(summary = "특정 게시글 수정", description = "개별 경매 게시글에 대한 수정 요청")
     public ResponseEntity<GlobalResponseDto<?>> updateAuctionBoard(@PathVariable(value= "board_uuid") String boardUuid,
                                                 @Valid @RequestBody RequestUpdateProductBoardDto updateDTO,
@@ -96,7 +82,7 @@ public class BoardController {
         );
     }
 
-    @DeleteMapping(value = "/boards/{board_uuid}/auctions")
+    @DeleteMapping(value = "/boards/{board_uuid}")
     @Operation(summary = "개별 경매 게시글 삭제", description = "개별 경매 게시글에 대한 삭제 요청")
     public ResponseEntity<GlobalResponseDto<?>> deleteAuctionBoard(@PathVariable(value = "board_uuid") String boardUuid,
                                                 @RequestHeader("UUID") String uuid) {

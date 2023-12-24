@@ -1,0 +1,11 @@
+dbURL: jdbc:mysql://board-db.cjwpre6nr8aq.ap-northeast-2.rds.amazonaws.com:3306/test
+dbName: root
+dbPwd: playdata
+driverName: com.mysql.cj.jdbc.Driver
+
+namingRoute: com.farmted.boardservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
+
+regionLocation: asia
+bucketName: farm
+secret: secret
+access: access

@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ef9efffa-6854-43fa-853a-8a50f38aca78" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/controller/MemberController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/domain/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/domain/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/java/com/farmted/memberservice/service/MemberServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pass-service/src/main/java/com/farmted/passservice/service/PassServiceImpl.java" afterDir="false" />
-    </list>
+    <list default="true" id="ef9efffa-6854-43fa-853a-8a50f38aca78" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -60,28 +53,28 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature#61&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/farmted-Repo/gateway-service&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "refactor/#66",
+    "last_opened_file_path": "C:/DevSoo/FarmtedProject/farmted-Repo/auction-service",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Global Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -128,7 +121,9 @@
       <workItem from="1702340352721" duration="6798000" />
       <workItem from="1702373642345" duration="765000" />
       <workItem from="1702445654374" duration="1773000" />
-      <workItem from="1703164164162" duration="629000" />
+      <workItem from="1702798016730" duration="605000" />
+      <workItem from="1702815016324" duration="6000" />
+      <workItem from="1703055895471" duration="4927000" />
     </task>
     <servers />
   </component>

@@ -11,24 +11,22 @@ service:
     url: "/member-service"
 # board-service 설정
 server:
-  port: 8080
+  port: 0
 spring:
-  profiles:
-    active: private
   application:
     name: board-service
   datasource:
-    url: ${dbURL}
-    username: ${dbName}
-    password: ${dbPwd}
-    driver-class-name: ${driverName}
+    url: ENC(0GVW2dA7FwZ/Uzdn9kZfvgwLtsTJzpZfGHB/jrciuXEOH5ME5cV7flFQkip5FyM3XeHuNArg9X336f0c/f8rftvZcCH4gJ3zL/GD48KqaS5EbkY3PBx8udlfoxEkjtDP)
+    username: ENC(Wt6Ag+sWOVVT/vbTtFuctg==)
+    password: ENC(O4LCGF7HLo4/rw1FGSJ9f9XkhrH/HRWl)
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
         format_sql: true
-        physical_naming_strategy: ${namingRoute}
+        physical_naming_strategy: com.farmted.boardservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
     show-sql: true
   #swagger
   mvc:
@@ -50,11 +48,15 @@ schedules:
 cloud:
   aws:
     region:
-      static: ${regionLocation}
+      static: ENC(wqhCDJ9dx0FBBp7hKOeV2ZKR5P9dB2c1)
     s3:
-      bucket: ${bucketName}
+      bucket: ENC(1LbmkoztxzLVHCy7CAyl55kXDxKl55Vr)
     stack:
       auto: false
     credentials:
-      secret-key: ${secret}
-      access-key: ${access}
+      secret-key: ENC(vIFWjT26zjnOK7ppCAfxp80N3+kWu7Te/W6sf25BN+d9ZLZhMge/Yk+cKkrglubQA7Sqx31JmnQ=)
+      access-key: ENC(NP4ad3SSxOh9Ej/o4K8+hWJpZMxGNVdHAsPE7th2wZY=)
+# jasyptStringEncryptor 빈을 Jasypt 암호화에 사용하도록 설정
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor

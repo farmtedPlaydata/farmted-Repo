@@ -10,12 +10,15 @@ spring:
 
   application:
     name: auction-service
+  profiles:
+    active: private
+
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/farmted
-    username: root
-    password: 1234
+    driver-class-name: ${driverName}
+    url: ${dbURL}auction
+    username: ${dbName}
+    password: ${dbPwd}
 
   jpa:
     properties:
@@ -28,7 +31,7 @@ spring:
 
 
 server:
-  port: 8082
+  port: 8086
 
 eureka:
   client:
@@ -43,6 +46,6 @@ eureka:
 
 ## 스케줄러 세팅
 schedules:
-  cron: "*/60 * * * * *"  # 1초마다 스케줄러 실행
+  cron: "*/60 * * * * *"  # 1분마다
 
 
