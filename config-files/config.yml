@@ -1,4 +1,4 @@
-# db.yml
+# config.yml
 spring:
   application:
     name: ${userName}

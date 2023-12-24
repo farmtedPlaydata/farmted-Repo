@@ -3,6 +3,8 @@ spring:
     config:
       server:
         git:
-          uri: file:///C:\codes\Final_Project\farmted-Repo\farmted-Repo\config-files
+          uri: https://github.com/farmtedPlaydata/farmted-Repo.git
+          default-label: fix68
+          search-paths: config-files/**
 server:
   port: 18888
