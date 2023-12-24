@@ -2,3 +2,22 @@ eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/msa_db
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+## S3 세팅
+cloud:
+  aws:
+    region:
+      static: asia
+    s3:
+      bucket: farm
+    stack:
+      auto: false
+    credentials:
+      secret-key: secret
+      access-key: access
