@@ -16,7 +16,7 @@ spring:
 
   datasource:
     driver-class-name: ${driverName}
-    url: ${dbURL}auction
+    url: ${dbURL}
     username: ${dbName}
     password: ${dbPwd}
 
