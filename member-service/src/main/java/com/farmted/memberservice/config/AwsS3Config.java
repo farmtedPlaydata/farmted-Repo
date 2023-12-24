@@ -10,14 +10,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AwsS3Config {
-
-    @Value("${access}")
+    @Value("${cloud.aws.credentials.access-key}")
     private String accessKey;
-
-    @Value("${secret}")
+    @Value("${cloud.aws.credentials.secret-key}")
     private String secretKey;
-
-    @Value("${regionLocation}")
+    @Value("${cloud.aws.region.static}")
     private String region;
 
     // 전달받은 AccessKey와 SecretKey로 아마존 서버스 실행 준비

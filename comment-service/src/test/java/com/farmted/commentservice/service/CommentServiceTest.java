@@ -4,17 +4,18 @@ import com.farmted.commentservice.domain.Comment;
 import com.farmted.commentservice.dto.request.CommentCreateRequestDto;
 import com.farmted.commentservice.dto.request.CommentUpdateRequestDto;
 import com.farmted.commentservice.repository.CommentRepository;
-import com.farmted.commentservice.util.InitDB;
+import com.farmted.commentservice.vo.MemberVo;
 import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class CommentServiceTest {
@@ -22,6 +23,25 @@ class CommentServiceTest {
     CommentService commentService;
     @Autowired
     CommentRepository commentRepository;
+
+    @BeforeEach
+    void setUp() {
+        commentRepository.deleteAll();
+        String memberUUID = "memberUUID";
+        String boardUUID = "boardUUID";
+        IntStream.rangeClosed(1, 5).forEach(i->
+                        commentRepository.save(
+                                new CommentCreateRequestDto(
+                                        "댓글작성했습니다."+i,
+                                        "이찬혁",
+                                        "comment"+i,
+                                        "user"+i,
+                                        "board"+i)
+                                            .toEntity(memberUUID, boardUUID,
+                                                    new MemberVo("memberName", "MemberImage")))
+        );
+
+    }
 
     @Test
     void getAllComments() {
@@ -45,8 +65,7 @@ class CommentServiceTest {
         Comment findComment = commentService.getCommentById(commentUuid);
 
         //then
-        Assertions.assertThat(findComment.getCommentMemberName()).isEqualTo("이찬혁");
-
+        Assertions.assertThat(findComment.getMemberName()).isEqualTo("이찬혁");
     }
 
     @Test

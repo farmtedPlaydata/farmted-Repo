@@ -1,5 +1,7 @@
+# bootstrap.yml
 spring:
   cloud:
     config:
       uri: http://localhost:9999
-      name: config, s3, server
+      name: config, server
+# config

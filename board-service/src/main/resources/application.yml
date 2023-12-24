@@ -18,12 +18,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        physical_naming_strategy: ${namingRoute}
     show-sql: true
 ## 스케줄러 세팅
 schedules:
   cron: "* * * * * *"  # 1초마다 스케줄러 실행
-# jasyptStringEncryptor 빈을 Jasypt 암호화에 사용하도록 설정
-jasypt:
-  encryptor:
-    bean: jasyptStringEncryptor
