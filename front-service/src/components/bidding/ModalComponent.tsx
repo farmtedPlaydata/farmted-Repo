@@ -21,13 +21,14 @@ const ModalWrapper = styled.div`
   transform: translate(-50%, -50%);
 `;
 
+
 const BiddingModal: React.FC<BiddingModalProps> = ({ boardUuid, memberUuid, onClose, isOpen, closeModal, modalContent }) => {
     const [biddingPrice, setBiddingPrice] = useState<number>();
-    const [memberPrice, setMemberPrice] = useState<number>(0);
+    const [memberPrice, setMemberPrice] = useState<number>(100);
     const [biddingAutoPrice, setBiddingAutoPrice] = useState<number | null>(null);
   const handleBiddingSubmit = async () => {
     try {
-      const response = await fetch(`/bid/${boardUuid}`, {
+        const response = await fetch(`/bidding-service/bidding-service/bid/${boardUuid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,8 +46,8 @@ const BiddingModal: React.FC<BiddingModalProps> = ({ boardUuid, memberUuid, onCl
         onClose();
       } else {
         // 에러 처리 로직을 추가하세요.
-        console.error('입찰 실패:', response.statusText);
-      }
+        console.error('입찰 실패:', response);
+      } 
     } catch (error) {
       // 네트워크 오류 또는 기타 예외 처리 로직을 추가하세요.
       console.error('네트워크 오류');

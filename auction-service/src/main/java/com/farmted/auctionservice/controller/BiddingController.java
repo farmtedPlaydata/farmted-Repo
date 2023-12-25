@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "bidding API", description = "사용자 입찰 부분 API+ Bidding-Service API")
+@CrossOrigin("*")
 public class BiddingController {
 
     private final BiddingService biddingService;

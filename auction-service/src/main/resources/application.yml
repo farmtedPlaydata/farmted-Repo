@@ -27,7 +27,7 @@ spring:
         show_sql: true
         physical_naming_strategy: com.farmted.auctionservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
 
 server:
