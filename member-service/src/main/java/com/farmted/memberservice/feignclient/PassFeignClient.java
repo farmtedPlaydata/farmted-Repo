@@ -14,9 +14,6 @@ public interface PassFeignClient {
     @GetMapping("/findbyemail/{email}")
     ResponseEntity<?> findByEmail(@PathVariable String email);
 
-    @PostMapping("/reissue/{uuid}")
-    ResponseEntity<?> reIssue(@PathVariable String uuid);
-
     @PostMapping("/update-role/{uuid}")
     ResponseEntity<?> updateRole(@PathVariable String uuid,
                                  @RequestBody PassVo passVo);
