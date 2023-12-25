@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -35,7 +34,7 @@ public class Auction extends TimeStamp{
     private LocalDateTime auctionDeadline; // 경매 종료 시간
 
     @NotNull
-    private Boolean auctionStatus; // false 0: 경매중, true 1:  경매 종료
+    private Boolean auctionStatus; // false 0: 경매 종료 , true 1: 경매중
 
     @NotNull
     private String memberUuid; // 판매자
@@ -49,11 +48,11 @@ public class Auction extends TimeStamp{
     @PrePersist
     public void createUuid(){
         auctionUuid = UUID.randomUUID().toString();
-        auctionStatus = false; // false: 경매중, true:  경매 종료
+        auctionStatus = true; // false:경매 종료 , true:  경매중
     }
 
     public void setAuctionDeadlineForStatus(){
-        auctionStatus = true;
+        auctionStatus = false;
     }
 
     public void setBiddingTop(BigDecimal auctionPrice,String auctionBuyer){

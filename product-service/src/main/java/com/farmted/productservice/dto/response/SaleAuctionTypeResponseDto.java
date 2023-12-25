@@ -4,7 +4,7 @@ import com.farmted.productservice.domain.Product;
 import com.farmted.productservice.vo.ResponseAuctionGetVo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class SaleAuctionTypeResponseDto {
     private String name;
@@ -18,7 +18,7 @@ public class SaleAuctionTypeResponseDto {
     private Integer auctionPrice; // 경매 가격
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private LocalDate auctionDeadline; // 경매 종료 시간
+    private LocalDateTime auctionDeadline; // 경매 종료 시간
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String auctionBuyer;  // 낙찰자

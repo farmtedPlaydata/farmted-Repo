@@ -55,7 +55,7 @@ public class Product extends TimeStamp{
     public void createUuid(){
         uuid = UUID.randomUUID().toString();
         status = true;
-        auctionStatus = false;
+        auctionStatus = true; // 1이 경매중=> true, 0이 경매 완료=> false
     }
 
 
@@ -68,7 +68,7 @@ public class Product extends TimeStamp{
     }
 
     public void closedStatus(){
-        this.auctionStatus=true;
+        this.auctionStatus=false;
     }
 
 
