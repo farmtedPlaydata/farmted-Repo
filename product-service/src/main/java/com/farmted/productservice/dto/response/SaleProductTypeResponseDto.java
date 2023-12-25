@@ -5,7 +5,8 @@ import com.farmted.productservice.vo.ResponseAuctionGetVo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -23,7 +24,7 @@ public class SaleProductTypeResponseDto {
     private Integer auctionPrice; // 경매 가격
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private LocalDate auctionDeadline; // 경매 종료 시간
+    private LocalDateTime auctionDeadline; // 경매 종료 시간
 
 //    @JsonInclude(JsonInclude.Include.NON_NULL)
 //    private Boolean auctionStatus; // false: 경매중, true:  경매 종료

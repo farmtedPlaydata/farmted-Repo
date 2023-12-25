@@ -43,7 +43,7 @@ public class ProductTypeFacade {
         switch (productType){
             case SALE:
                 return productService.getListProduct(pageNo);
-            case PRODUCT:
+            case AUCTION,PRODUCT:
                 return auctionService.getListProductAuction(pageNo);
         }
         throw new ProductException(productType);

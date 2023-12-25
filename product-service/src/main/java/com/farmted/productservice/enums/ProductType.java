@@ -1,5 +1,6 @@
 package com.farmted.productservice.enums;
 
+import com.farmted.productservice.exception.ProductException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,14 +17,13 @@ public enum ProductType {
 
     // String -> enum
     @JsonCreator
-    public static ProductType fromLabel(String checkType){
-        for(ProductType type :ProductType.values()){
-            if(type.typeKo.equals(checkType)){
+    public static ProductType fromLabel(String checkType) {
+        for (ProductType type : ProductType.values()) {
+            if (type.typeKo.equalsIgnoreCase(checkType)||type.typeEn.equalsIgnoreCase(checkType)) {
                 return type;
             }
         }
-        throw new IllegalArgumentException("Invalid ProductType label: " + checkType);
-        //throw new RuntimeException(checkType);
+        throw new ProductException();
     }
 
 
