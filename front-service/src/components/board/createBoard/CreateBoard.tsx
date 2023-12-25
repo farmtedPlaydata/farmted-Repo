@@ -156,7 +156,7 @@ const BoardWrite: React.FC = () => {
   // 저장하기
   const handleSubmit = async () => {
     var myHeaders = new Headers();
-    myHeaders.append("UUID", "3653ad30-6dec-4852-bea6-bd55606c0152");
+    myHeaders.append("UUID", "f8c6c6b5-dd13-4ccb-a043-1462d1f11426");
     myHeaders.append("ROLE", "ROLE_USER");
   
     const formData = new FormData();

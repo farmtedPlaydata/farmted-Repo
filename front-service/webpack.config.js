@@ -31,9 +31,14 @@ module.exports = {
     open: true,
     proxy: {
       '/api/': {
-        target: 'http://localhost:8852', // 실제 서버 주소
+        target: 'http://localhost:8000', // 실제 서버 주소
         pathRewrite: { '/api': '' }, // proxy path 를 제거하도록 다시 쓴다
         changeOrigin: true,
+      },
+       '/bidding': {
+          target: 'http://localhost:8086',
+          pathRewrite: { '/bidding': '' }, // proxy path 를 제거하도록 다시 쓴다
+          changeOrigin: true,
       },
     },
   },
