@@ -9,54 +9,16 @@ service:
   member:
     name: "member-service"
     url: "/member-service"
-# board-service 설정
-server:
-  port: 0
 spring:
-  application:
-    name: board-service
-  datasource:
-    url: ENC(0GVW2dA7FwZ/Uzdn9kZfvgwLtsTJzpZfGHB/jrciuXEOH5ME5cV7flFQkip5FyM3XeHuNArg9X336f0c/f8rftvZcCH4gJ3zL/GD48KqaS5EbkY3PBx8udlfoxEkjtDP)
-    username: ENC(Wt6Ag+sWOVVT/vbTtFuctg==)
-    password: ENC(O4LCGF7HLo4/rw1FGSJ9f9XkhrH/HRWl)
-    driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    active: board
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
-        physical_naming_strategy: com.farmted.boardservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
     show-sql: true
-  #swagger
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-## Discovery Client 세팅
-eureka:
-  client:
-    register-with-eureka: true  # 유레카 서버에 등록
-    fetch-registry: true  # 유레카 서버에서 서버 상태 지속적 감시 허락
-    service-url:
-      defaultZone: http://192.168.67.1:8761/eureka # 유레카 서버의 주소
-  instance:
-    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
 ## 스케줄러 세팅
 schedules:
   cron: "* * * * * *"  # 1초마다 스케줄러 실행
-## S3 세팅
-cloud:
-  aws:
-    region:
-      static: ENC(wqhCDJ9dx0FBBp7hKOeV2ZKR5P9dB2c1)
-    s3:
-      bucket: ENC(1LbmkoztxzLVHCy7CAyl55kXDxKl55Vr)
-    stack:
-      auto: false
-    credentials:
-      secret-key: ENC(vIFWjT26zjnOK7ppCAfxp80N3+kWu7Te/W6sf25BN+d9ZLZhMge/Yk+cKkrglubQA7Sqx31JmnQ=)
-      access-key: ENC(NP4ad3SSxOh9Ej/o4K8+hWJpZMxGNVdHAsPE7th2wZY=)
-# jasyptStringEncryptor 빈을 Jasypt 암호화에 사용하도록 설정
-jasypt:
-  encryptor:
-    bean: jasyptStringEncryptor

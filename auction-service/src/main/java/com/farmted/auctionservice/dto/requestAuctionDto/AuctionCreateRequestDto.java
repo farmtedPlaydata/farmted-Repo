@@ -3,14 +3,12 @@ package com.farmted.auctionservice.dto.requestAuctionDto;
 import com.farmted.auctionservice.domain.Auction;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter @Builder @AllArgsConstructor @NoArgsConstructor

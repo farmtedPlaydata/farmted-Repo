@@ -26,11 +26,11 @@ public class CommentCreateRequestDto {
     public Comment toEntity(String memberUUID, String boardUUID, MemberVo memberVo) {
         return Comment.builder()
         .commentContent(this.content)
-        .commentMemberName(this.name)
         .commentUuid(UUID.randomUUID().toString())
+        .memberName(this.name)
         .memberUuid(memberUUID)
         .boardUuid(boardUUID)
-        .memberName(memberVo.memberName())
+//        .memberName(memberVo.memberName())
         .memberImage(memberVo.memberImage())
                 .build();
     }

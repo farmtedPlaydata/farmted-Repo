@@ -45,6 +45,9 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.609'
     // 암호화 라이브러리
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+    // Spring Cloud Config Client 의존성
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
 }
 
 
