@@ -23,7 +23,7 @@ public class ProfileManager {
 
     private final AmazonS3 amazonS3;
 
-    @Value("${bucketName}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucketName;  // 버킷 이름
 
     // 이미지를 S3에 업로드하고 이미지의 url을 반환

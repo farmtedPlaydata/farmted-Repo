@@ -1,49 +1,20 @@
 spring:
+  profiles:
+    active: auction
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
   main:
     allow-bean-definition-overriding: true
-
   # Redis
   data:
     redis:
       host: 127.0.0.1
       port: 6379
-
-  application:
-    name: auction-service
-  profiles:
-    active: private
-
-
-  datasource:
-    driver-class-name: ${driverName}
-    url: ${dbURL}
-    username: ${dbName}
-    password: ${dbPwd}
-
-  jpa:
-    properties:
-      hibernate:
-        format_sql: true
-        show_sql: true
-        physical_naming_strategy: com.farmted.auctionservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
-    hibernate:
-      ddl-auto: create
-
-
-server:
-  port: 8086
-
-eureka:
-  client:
-    register-with-eureka: true # 유레카 서버에 등록하기
-    fetch-registry: true # 유레카 서버에서 서버 상태 지속적 감시
-    service-url:
-      defaultZone: http://127.0.0.1:8761/eureka # 타켓 유레카 서버
-
-  # 인스턴스별로 유레카에 보여지는 표기를 다르게 설정함
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-
 ## 스케줄러 세팅
 schedules:
   cron: "*/60 * * * * *"  # 1분마다

@@ -38,6 +38,13 @@ dependencies {
 	//eureka
 	// 추가 부분2 : dependencies
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	// 암호화 라이브러리
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+	// Spring Cloud Config Client 의존성
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+	// swagger
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 }
 
 tasks.named('bootBuildImage') {
