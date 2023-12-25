@@ -4,6 +4,7 @@ import CategoryList from "./boardUtil/CategoryList";
 import SearchBar from "./boardUtil/SearchBar";
 import WriteButton from "./boardUtil/WriteButton";
 import { BoardType } from "./boardUtil/BoardType";
+import {Button} from "react-bootstrap";
 
 interface Props{
     totalBoard? : number;
