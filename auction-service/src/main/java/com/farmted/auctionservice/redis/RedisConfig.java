@@ -24,44 +24,16 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int dockerRedisPort;
 
-//    @Bean
-//    public RedisMessageListenerContainer redisMessageListenerContainer(
-//            RedisConnectionFactory connectionFactory){
-//        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-//        container.setConnectionFactory(connectionFactory);
-//        return container;
-//    }
+    private static final String REDISSON_HOST_PREFIX = "redis://";
 
     @Bean
     public RedissonClient redissonClient() {
+        RedissonClient redisson = null;
         Config config = new Config();
         // Redis 호스트와 포트를 Docker에서 실행 중인 Redis의 정보로 설정
-        config.useSingleServer().setAddress("redis://" + dockerRedisHost + ":" + dockerRedisPort);
-        return Redisson.create(config);
+        config.useSingleServer().setAddress(REDISSON_HOST_PREFIX + dockerRedisHost + ":" + dockerRedisPort);
+        redisson = Redisson.create(config);
+        return redisson;
     }
 
-
-
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory(RedissonClient redisson){
-        return new RedissonConnectionFactory(redisson);
-        //RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(dockerRedisHost,dockerRedisPort);
-        //return new LettuceConnectionFactory(configuration);
-
-    }
-
-
-    @Bean
-    public RedisTemplate<String,Long> redisTemplate(RedisConnectionFactory redisConnectionFactory ){
-
-        // RedisTemplate 는 제네릭 타입 K,V 설정 가능
-        // 첫 번째는 레디스 key 에 해당하고, 두 번째는 레디스 value 에 해당함
-        RedisTemplate<String,Long> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-
-        // key 와 value 값을 직렬화/역직렬화하는 RedisSerializer 구현체 설정
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
-        return redisTemplate;
-    }
 }

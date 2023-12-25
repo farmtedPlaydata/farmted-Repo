@@ -23,6 +23,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     // 패인을 위한 ProductUuid를 기반으로 경매 생성
     public Optional<Product> findProductByUuid(String uuid);
 
+    // ProductType 기반으로 경매 조회
     public Slice<Product> findProductByProductType(ProductType type, Pageable pageable);
 
 

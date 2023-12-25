@@ -9,8 +9,8 @@ public enum RoleEnums {
     USER("ROLE_USER", "유저"),
     ADMIN("ROLE_ADMIN", "관리자");
 
-    private String roleEn;
-    private String roleKo;
+    private final String roleEn;
+    private final String roleKo;
 
     RoleEnums(String roleEn, String roleKo) {
         this.roleEn = roleEn;

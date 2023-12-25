@@ -1,32 +1,10 @@
 spring:
-  application:
-    name: product-service
-
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/farmted
-    username: root
-    password: 1234
-
+  profiles:
+    active: product
   jpa:
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
-        show_sql: true
         format_sql: true
-    hibernate:
-      ddl-auto: create
-
-server:
-  port: 8081
-
-eureka:
-  client:
-    register-with-eureka: true # 유레카 서버에 등록하기
-    fetch-registry: true # 유레카 서버에서 서버 상태 지속적 감시
-    service-url:
-      defaultZone: http://127.0.0.1:8761/eureka # 타켓 유레카 서버
-
-  # 인스턴스별로 유레카에 보여지는 표기를 다르게 설정함
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-
+    show-sql: true

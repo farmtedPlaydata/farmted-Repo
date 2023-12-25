@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          default-label: main
+          uri: https://github.com/farmtedPlaydata/configFiles.git
+#          basedir: ./repo
+server:
+  port: 9999

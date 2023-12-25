@@ -1,43 +1,11 @@
 spring:
   profiles:
-    active: private, local
-  datasource:
-    url: ${url}
-    username: ${username_}
-    password: ${password}
-    driver-class-name: ${driver-class-name}
-
+    active: member
   jpa:
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-        physical_naming_strategy: com.farmted.memberservice.config.CustomCamelCaseToSnakeAndLowerCaseStrategy
+        format_sql: true
     show-sql: true
-    hibernate:
-      ddl-auto: create
-  application:
-    name: member-service
-
-eureka:
-  client:
-    register-with-eureka: true # 유레카 서버에 등록하기
-    fetch-registry: true # 유레카 서버에서 서버 상태 지속적 감시
-    service-url:
-      defaultZone: http://127.0.0.1:8761/eureka # 타켓 유레카 서버
-
-  # 인스턴스별로 유레카에 보여지는 표기를 다르게 설정함
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-
-
-cloud:
-  aws:
-    region:
-      static: ${regionLocation}
-    s3:
-      bucket: ${bucketName}
-    stack:
-      auto: false
-    credentials:
-      secret-key: ${secret}
-      access-key: ${access}

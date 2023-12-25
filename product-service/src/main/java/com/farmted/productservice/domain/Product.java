@@ -29,7 +29,7 @@ public class Product extends TimeStamp{
     private int stock;
 
     @NotNull
-    private int price;
+    private Integer price;
 
     @NotNull
     private String source;
@@ -55,7 +55,7 @@ public class Product extends TimeStamp{
     public void createUuid(){
         uuid = UUID.randomUUID().toString();
         status = true;
-        auctionStatus = false;
+        auctionStatus = true; // 1이 경매중=> true, 0이 경매 완료=> false
     }
 
 
@@ -67,8 +67,8 @@ public class Product extends TimeStamp{
         this.image = productUpdateRequestDto.image();
     }
 
-    public void updateStatus(boolean auctionStatus){
-        this.auctionStatus=true;
+    public void closedStatus(){
+        this.auctionStatus=false;
     }
 
 

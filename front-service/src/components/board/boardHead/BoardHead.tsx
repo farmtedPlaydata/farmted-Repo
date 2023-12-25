@@ -1,49 +1,64 @@
 import React from "react"
 import styled from "styled-components"
+import CategoryList from "./boardUtil/CategoryList";
+import SearchBar from "./boardUtil/SearchBar";
+import WriteButton from "./boardUtil/WriteButton";
+import { BoardType } from "./boardUtil/BoardType";
 
 interface Props{
-    totalBoard : number;
+    totalBoard? : number;
     category: BoardType;
-}
-// 게시글 카테고리
-enum BoardType{
-    AUCTION = "경매",
-    COMMISTION = "구매요청",
-    SALE = "판매",
-    NOTICE = "공지사항",
-    CUSTOMER_SERVICE = "고객센터",
-    PRODUCT = "상품"
+    onCategoryChange: (newCategory: BoardType) => void;
 }
 const BoardHeadDiv = styled.div`
     padding-top: 48px;
     padding-left: 32px;
     padding-right: 32px;
     padding-bottom: 24px;
-    border-bottom: 1px solid #e9ecef;
-
-    h1{
+    border-bottom: 1px solid #20c997;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`;
+const HeadInfoDiv = styled.div`
+    h1 {
         margin: 0;
         font-size: 36px;
         color: #343a40;
     }
-    .day {
+    .category {
         margin-top: 4px;
         color: #868e96;
         font-size: 21px;
     }
-    .tasks-left {
+    .result-size {
         color: #20c997;
         font-size: 18px;
         margin-top: 40px;
         font-weight: bold;
     }
 `
+const SearchContainer = styled.div`
+    display: flex;
+    flex-direction: column; /* 추가: 수직 정렬 */
+    align-items: flex-end; /* 추가: 우측 정렬 */
+    margin-top: 20px;
+`;
+
 const BoardHead = (props:Props) => {
+    const { category, totalBoard = 0, onCategoryChange } = props;
     return (
         <BoardHeadDiv>
-            <h1>검색 결과</h1>
-            <div className="day">{props.category}</div>
-            <div className="tasks-left">{props.totalBoard}개 검색됨</div>
+            <HeadInfoDiv>
+                <h1>검색 결과</h1>
+                <div className="category">{category}</div>
+                <div className="result-size">{totalBoard}개 검색됨</div>
+            </HeadInfoDiv>
+            <SearchContainer>
+                <WriteButton/>
+                <SearchBar onSearch={(query) => console.log("Searching with query:", query)} />
+                <CategoryList categories={category} onCategoryChange={onCategoryChange} />
+            </SearchContainer>
         </BoardHeadDiv>
     )
 }

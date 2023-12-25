@@ -9,56 +9,16 @@ service:
   member:
     name: "member-service"
     url: "/member-service"
-# board-service 설정
-server:
-  port: 0
 spring:
   profiles:
-    active: enc
-  application:
-    name: board-service
-  datasource:
-    url: ${dbURL}
-    username: ${dbName}
-    password: ${dbPwd}
-    driver-class-name: ${driverName}
+    active: board
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
-        physical_naming_strategy: ${namingRoute}
     show-sql: true
-  #swagger
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-## Discovery Client 세팅
-eureka:
-  client:
-    register-with-eureka: true  # 유레카 서버에 등록
-    fetch-registry: true  # 유레카 서버에서 서버 상태 지속적 감시 허락
-    service-url:
-      defaultZone: http://192.168.67.1:8761/eureka # 유레카 서버의 주소
-  instance:
-    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
 ## 스케줄러 세팅
 schedules:
   cron: "* * * * * *"  # 1초마다 스케줄러 실행
-## S3 세팅
-cloud:
-  aws:
-    region:
-      static: ${regionLocation}
-    s3:
-      bucket: ${bucketName}
-    stack:
-      auto: false
-    credentials:
-      secret-key: ${secret}
-      access-key: ${access}
-# jasyptStringEncryptor 빈을 Jasypt 암호화에 사용하도록 설정
-jasypt:
-  encryptor:
-    bean: jasyptStringEncryptor
