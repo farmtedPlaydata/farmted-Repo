@@ -30,7 +30,7 @@ public class CommentCreateRequestDto {
         .memberName(this.name)
         .memberUuid(memberUUID)
         .boardUuid(boardUUID)
-        .memberName(memberVo.memberName())
+//        .memberName(memberVo.memberName())
         .memberImage(memberVo.memberImage())
                 .build();
     }

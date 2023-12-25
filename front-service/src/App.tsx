@@ -1,5 +1,7 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components"
+import Board from "./components/board/Board";
+import Login from "./Login";
 import { BrowserRouter } from 'react-router-dom';
 import Main from "./components/Main";
 
@@ -13,6 +15,7 @@ const GlobalStyle = createGlobalStyle`
 const App = () => (
     <BrowserRouter>
         <GlobalStyle/>
+<!--         <Login/> -->
         <Main/>
     </BrowserRouter>
 );
