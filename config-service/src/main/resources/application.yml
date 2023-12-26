@@ -4,7 +4,7 @@ spring:
       server:
         git:
           default-label: main
-          uri: https://github.com/farmtedPlaydata/configFiles.git
+          uri: ENC(SsVWZpxAzcEkFBdQoXE8Pro4E7M6hFafZKonzQN1TmE33Q9c2fY3xcn7rXBEv5W+2UID/9yPr3i7ButUzjPAfg==)
 #          basedir: ./repo
 server:
   port: 9999

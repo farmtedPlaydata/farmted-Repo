@@ -4,9 +4,11 @@ import com.farmted.boardservice.domain.Board;
 import com.farmted.boardservice.dto.response.detailDomain.ResponseGetBoardDetailDto;
 import com.farmted.boardservice.dto.response.listDomain.ResponseGetBoardDto;
 import com.farmted.boardservice.enums.BoardType;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
@@ -37,7 +39,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Optional<ResponseGetBoardDetailDto> findDetailByBoardUuid(String boardUuid);
 
 // 업데이트/삭제용 엔티티 불러오기 (영속성때문에)
+    @Lock(value = LockModeType.OPTIMISTIC)
     Optional<Board> findByBoardUuidAndBoardStatusTrue(String boardUuid);
-
-    Board getByBoardUuidAndBoardStatusTrue(String boardUuid);
 }

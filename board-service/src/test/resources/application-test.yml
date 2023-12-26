@@ -1,14 +1,16 @@
-eureka:
-  client:
-    register-with-eureka: false
-    fetch-registry: false
 spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
   datasource:
-    url: jdbc:mysql://localhost:3306/msa_db
-    username: root
-    password: 1234
+    url: ${dbURL}
+    username: ${dbName}
+    password: ${dbPwd}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
 ## S3 세팅
 cloud:
   aws:
@@ -21,3 +23,7 @@ cloud:
     credentials:
       secret-key: secret
       access-key: access
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false

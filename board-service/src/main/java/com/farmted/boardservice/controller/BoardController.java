@@ -75,7 +75,7 @@ public class BoardController {
     @Operation(summary = "특정 게시글 수정", description = "개별 경매 게시글에 대한 수정 요청")
     public ResponseEntity<GlobalResponseDto<?>> updateAuctionBoard(@PathVariable(value= "board_uuid") String boardUuid,
                                                 @Valid @RequestBody RequestUpdateProductBoardDto updateDTO,
-                                                @RequestHeader("UUID") String uuid){
+                                                @RequestHeader("UUID") String uuid) throws InterruptedException {
         boardFacade.updateBoard(updateDTO, boardUuid, uuid);
         return ResponseEntity.ok(
                 GlobalResponseDto.of(true)

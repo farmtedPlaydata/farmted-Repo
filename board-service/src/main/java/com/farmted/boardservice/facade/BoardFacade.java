@@ -119,11 +119,25 @@ public class BoardFacade {
 
     // 게시글 업데이트
     @Transactional
-    public void updateBoard(RequestUpdateProductBoardDto updateDTO, String boardUuid, String memberUuid) {
-        boolean productChange = boardService.updateBoard(updateDTO, boardUuid, memberUuid);
-         if(productChange)
-                productService.checkUpdateProduct(boardUuid, updateDTO, memberUuid);
-
+    public void updateBoard(RequestUpdateProductBoardDto updateDTO, String boardUuid, String memberUuid) throws InterruptedException {
+        // 재시도 폭주를 막기 위한 지수 백오프
+        int maxRetries = 3; // 최대 3회까지 시도
+        int retries = 0;
+        Boolean productChange = null;
+        while (retries < maxRetries) {
+            try {
+                productChange = boardService.updateBoard(updateDTO, boardUuid, memberUuid);
+                break;
+            } catch (Exception e) {
+                // 낙관적 락에 의해서 버전 정합성이 맞지 않아 예외가 발생했다면
+                int sleepTime = (int) Math.pow(2, retries++) * 100;  // 지수 백오프
+                Thread.sleep(sleepTime);
+            }
+        }
+        if(retries == maxRetries)    // 재시도 횟수가 넘으면 예외
+            throw new BoardException(ExceptionType.UPDATE);
+        if(Boolean.TRUE.equals(productChange))
+            productService.checkUpdateProduct(boardUuid, updateDTO, memberUuid);
     }
 
     // 게시글 삭제, 성공하면 1페이지로 리다이렉트
