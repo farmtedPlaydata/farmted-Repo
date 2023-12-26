@@ -22,6 +22,8 @@ ext {
 dependencies {
     implementation 'org.springframework.cloud:spring-cloud-config-server'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // 암호화 라이브러리
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 }
 
 dependencyManagement {

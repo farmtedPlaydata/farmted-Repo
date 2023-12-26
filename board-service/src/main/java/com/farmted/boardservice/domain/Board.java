@@ -57,6 +57,9 @@ public class Board extends TimeStamp {
     @Column(nullable = false, updatable = false, unique = true)
     private String boardUuid;
 
+    @Version// 낙관적 락에서 정합성을 맞추기 위해서 추가하는 필드
+    private Long version; //버전 어노테이션이 붙은 필드 하나 더 선언
+
     ////////////////////////////////////////////////
     // 엔티티 최초 생성 시 자동 초기화할 값
     // UUID, Status, viewCount

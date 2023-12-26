@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-@ActiveProfiles("test-private")
+@ActiveProfiles("test")
 class BoardServiceApplicationTests {
 
     @Test

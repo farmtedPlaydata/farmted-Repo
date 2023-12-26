@@ -1,9 +1,7 @@
 package com.farmted.boardservice.config;
 
 import com.farmted.boardservice.domain.Board;
-import com.farmted.boardservice.dto.request.RequestCreateBoardDto;
 import com.farmted.boardservice.enums.BoardType;
-import com.farmted.boardservice.vo.MemberVo;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Component
