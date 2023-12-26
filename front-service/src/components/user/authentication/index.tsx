@@ -381,7 +381,7 @@ export default function Authentication() {
                     {page === 2 && (<>
                         <InputBox label='이름*' type='text' placeholder='이름을 입력해주세요.' value={memberName} setValue={setmemberName} error={memberNameError} errorMessage={memberNameErrorMessage} />
                         <InputBox label='전화번호*' type='text' placeholder='전화번호를 입력해주세요.' value={memberPhone} setValue={setmemberPhone} error={memberPhoneError} errorMessage={telNumbeErrorMessage} />
-                        <InputBox label={'프로필 이미지 설정'} type={'text'} error={false} placeholder={'프로필 이미지를 설정할 수 있습니다.'} value={profileImage} setValue={setProfileImage} />
+                        <InputBox label='프로필 이미지 설정' type={'text'} error={false} placeholder={'프로필 이미지를 설정할 수 있습니다.'} value={profileImage} setValue={setProfileImage} />
                         <InputBox label='주소*' type='text' placeholder='우편번호 찾기' value={memberAddress} setValue={setMemberAddress} icon='right-arrow-icon' error={memberAddressError} errorMessage={memberAddressErrorMessage} onButtonClick={onmemberAddressIconClickHandler} />
                         <InputBox label='상세 주소' type='text' placeholder='상세 주소를 입력해주세요.' value={memberAddressDetail} setValue={setMemberAddressDetail} error={false} />
                     </>)}
