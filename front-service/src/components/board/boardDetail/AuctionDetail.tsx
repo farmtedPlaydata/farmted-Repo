@@ -102,7 +102,7 @@ const AuctionDetailComponent: React.FC<AuctionDetailProps> = ({ auctionDetail , 
           closeModal={closeBiddingModal}
           boardUuid={boardUuid} // 적절한 값을 전달
           memberUuid={"53bc6f2e-7686-4791-9591-f66762210c46"} // 적절한 값을 전달
-          modalContent={`입찰가: ${1000}, 마감 시간: ${"2024-01-25 21:45:00.000000"}`}
+          modalContent={`최상위 입찰가: ${1000}, 마감 시간: ${"2024-01-25 21:45:00.000000"}`}
         />
       )}
     </AuctionDetailContainer>

@@ -24,7 +24,7 @@ const ModalWrapper = styled.div`
 
 const BiddingModal: React.FC<BiddingModalProps> = ({ boardUuid, memberUuid, onClose, isOpen, closeModal, modalContent }) => {
   const [biddingPrice, setBiddingPrice] = useState<number>();
-  const [memberPrice, setMemberPrice] = useState<number>(100);
+  const [memberPrice, setMemberPrice] = useState<number>(0);
   const [biddingAutoPrice, setBiddingAutoPrice] = useState<number | null>(null);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
 
@@ -76,7 +76,7 @@ const BiddingModal: React.FC<BiddingModalProps> = ({ boardUuid, memberUuid, onCl
 
           {/* modalContent 표시 */}
           <div>{modalContent}</div>
-          <div>{memberPrice}</div>
+          <div>현재 잔고 :{memberPrice}</div>
 
       </ModalWrapper>
   );

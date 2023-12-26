@@ -18,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static java.rmi.server.LogStream.log;
@@ -118,15 +120,28 @@ public class BiddingService {
     }
 
     // 입찰 복구 통신 로직
-    public void setBalanceRecovery(String boardUuid){
+    public void setBalanceRecovery(String boardUuid) {
         List<Bidding> biddingList = biddingRepository.findBiddingByBoardUuid(boardUuid);
-        // memberUuid를 map에 넣어서 처리한 로직인지 확인
-        for (Bidding bidding : biddingList) {
-            BigDecimal price = biddingRepository.findMaxBiddingPriceByBoardUuidAndMemberUuid(boardUuid, bidding.getMemberUuid());
-            memberFeignClient.failedBidBalance(bidding.getMemberUuid(), price.intValue());
-        }
 
+        // 중복 처리를 방지하기 위한 Map
+        Map<String, BigDecimal> maxPriceMap = new HashMap<>();
+
+        for (Bidding bidding : biddingList) {
+            String memberUuid = bidding.getMemberUuid();
+
+            // 이미 최상위값이 계산되었는지 확인
+            if (!maxPriceMap.containsKey(memberUuid)) {
+                BigDecimal price = biddingRepository.findMaxBiddingPriceByBoardUuidAndMemberUuid(boardUuid, memberUuid);
+
+                // 최상위값을 Map에 저장
+                maxPriceMap.put(memberUuid, price);
+
+                // 최상위값을 기준으로 처리
+                memberFeignClient.failedBidBalance(memberUuid, price.intValue());
+            }
+        }
     }
+
 
 
 }
