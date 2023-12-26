@@ -150,6 +150,8 @@ class BoardServiceTest {
         String boardUuid = "board_uuid";
         when(boardRepository.findDetailByBoardUuid(anyString()))
                 .thenReturn(Optional.of(DUMMY_DATA));
+        when(boardRepository.findByBoardUuidAndBoardStatusTrue(anyString()))
+                .thenReturn(Optional.of(DUMMY_BOARD));
         // when
         ResponseGetCombinationDetailDto detailDTO = boardService.getBoard(boardUuid);
         // then

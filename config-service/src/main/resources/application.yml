@@ -4,7 +4,61 @@ spring:
       server:
         git:
           default-label: main
-          uri: ENC(SsVWZpxAzcEkFBdQoXE8Pro4E7M6hFafZKonzQN1TmE33Q9c2fY3xcn7rXBEv5W+2UID/9yPr3i7ButUzjPAfg==)
-#          basedir: ./repo
+          uri: ENC(H3/Fhmrraljpr8A8u2UXwmFzE6fSJf2CdvmIPrJNFgkcuUQFrC999EyBfKZ0ewxXMpZ61mPYGoItDBa22Sn41Q==)
+          ignore-local-ssh-settings: true
+          private-key: |
+            -----BEGIN RSA PRIVATE KEY-----
+            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
+            -----END RSA PRIVATE KEY-----
+          host-key: AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
+          host-key-algorithm: ecdsa-sha2-nistp256
 server:
   port: 9999

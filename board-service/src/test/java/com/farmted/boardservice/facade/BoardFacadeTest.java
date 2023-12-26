@@ -49,9 +49,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@ActiveProfiles({"test","test-private"})
+@ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.Random.class)
-@DisplayName("Board-Service 통합 테스트 코드")
+@DisplayName("Board-Facade 통합 테스트 코드")
 class BoardFacadeTest {
     // Feign통신 서비스
     @MockBean
