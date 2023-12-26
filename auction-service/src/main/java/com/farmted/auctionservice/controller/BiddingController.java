@@ -17,16 +17,17 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "bidding API", description = "사용자 입찰 부분 API+ Bidding-Service API")
+@CrossOrigin("*")
 public class BiddingController {
 
     private final BiddingService biddingService;
 
     // 입찰 신청
-    @PostMapping("/bid/{board_uuid}")
+    @PostMapping("/bid/{boardUuid}")
     public ResponseEntity<?> createBidding(
             @Valid @RequestBody BiddingCreateRequestDto biddingCreateRequestDto,
             @RequestHeader ("UUID") String memberUuid,
-            @PathVariable ("board_uuid") String boardUuid
+            @PathVariable ("boardUuid") String boardUuid
             ){
         biddingService.createBidding(biddingCreateRequestDto,boardUuid,memberUuid);
         return ResponseEntity.ok(HttpStatus.CREATED);

@@ -30,10 +30,15 @@ module.exports = {
     port: 3000,
     open: true,
     proxy: {
-      '/api/': {
-        target: 'http://localhost:8852', // 실제 서버 주소
+      '/api/*': {
+        target: 'http://localhost:8000', // 실제 서버 주소
         pathRewrite: { '/api': '' }, // proxy path 를 제거하도록 다시 쓴다
         changeOrigin: true,
+      },
+       '/bidding-service/*': {
+          target: 'http://localhost:8086',
+          pathRewrite: { '/bidding-service': '' }, // proxy path 를 제거하도록 다시 쓴다
+          changeOrigin: true,
       },
     },
   },
