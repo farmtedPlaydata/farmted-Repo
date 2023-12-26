@@ -114,7 +114,7 @@ public class MemberController {
     }
 
     @Operation(summary = "낙찰 실패", description = "낙찰 실패 시 잔고 변화")
-    @PutMapping("/after-bid/{uuid}")
+    @PutMapping("/faild-bid/{uuid}")
     public ResponseEntity<?> failedBidBalance(@PathVariable String uuid, int balance) {
         memberService.failedBid(uuid, balance);
         return ResponseEntity.ok(GlobalResponseDto.of(true));

@@ -333,23 +333,23 @@
 }
 
 .eye-light-on-icon {
-    background-image: url(src/images/eye-light-on.png);
+    background-image: url(/src/images/eye-light-on.png);
 }
 
 .eye-light-off-icon {
-    background-image: url(src/images/eye-light-off.png);
+    background-image: url(/src/images/eye-light-off.png);
 }
 
 .expand-right-light-icon {
-    background-image: url(src/images/expand-right-light.png);
+    background-image: url(/src/images/expand-right-light.png);
 }
 
 .logo-icon {
-    background-image: url(src/images/logo.png);
+    background-image: url(/src/images/logo.png);
 }
 
 .search-light-icon {
-    background-image: url(src/images/search-light.png);
+    background-image: url(/src/images/search-light.png);
 }
 
 .header-search-input-box {
@@ -379,9 +379,9 @@
 }
 
 .check-round-fill-icon {
-    background-image: url(src/images/check-round-fill.png);
+    background-image: url(/src/images/check-round-fill.png);
 }
 
 .check-ring-light-icon {
-    background-image: url(src/images/check-ring-light.png);
+    background-image: url(/src/images/check-ring-light.png);
 }

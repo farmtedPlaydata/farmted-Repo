@@ -9,8 +9,8 @@ import Authentication from "../../user/authentication";
 const BoardRouteController = () => {
     return(
         <Routes>
-            <Route path="/" element={<Authentication/>}/>
-            <Route path="/boards" element={<BoardBody/>}>
+            <Route path="/" element={<BoardBody/>}>
+                <Route path="/" element={<Authentication/>}/>
                 <Route path="/boards" element={<BoardMain/>}/>
                 <Route path="/boards/write" element={<CreateBoard/>}/>
                 <Route path="/boards/:boardUUID" element={<BoardDetail />}/>
