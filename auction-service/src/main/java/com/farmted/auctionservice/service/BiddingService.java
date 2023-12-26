@@ -64,6 +64,8 @@ public class BiddingService {
             // 입찰 신청 내역은 무조건 저장
             biddingRepository.save(savedBidding);
 
+            // 잔고 차감 Feign
+
             BigDecimal biddingPrice = savedBidding.getBiddingPrice();
             Auction auction = auctionRepository.findAuctionByBoardUuid(boardUuid);
 
@@ -118,6 +120,7 @@ public class BiddingService {
     // 입찰 복구 통신 로직
     public void setBalanceRecovery(String boardUuid){
         List<Bidding> biddingList = biddingRepository.findBiddingByBoardUuid(boardUuid);
+        // memberUuid를 map에 넣어서 처리한 로직인지 확인
         for (Bidding bidding : biddingList) {
             BigDecimal price = biddingRepository.findMaxBiddingPriceByBoardUuidAndMemberUuid(boardUuid, bidding.getMemberUuid());
             memberFeignClient.failedBidBalance(bidding.getMemberUuid(), price.intValue());
