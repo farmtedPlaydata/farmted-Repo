@@ -178,7 +178,8 @@ const BoardDetail = () => {
           )}
           {/* 경매 정보 표시 */}
           {board.auctionDetail && (
-            <AuctionComponent auctionDetail={board.auctionDetail} />
+            <AuctionComponent auctionDetail={board.auctionDetail} 
+            boardUuid={board.boardDetail.boardUuid}/>
           )}
           {/* 현재 사용자가 작성자인 경우에만 삭제 및 수정 버튼을 표시 */}
           {isCurrentUser && (

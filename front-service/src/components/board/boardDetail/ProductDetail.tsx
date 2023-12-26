@@ -80,3 +80,4 @@ const ProductDetailComponent: React.FC<ProductDetailProps> = ({ productDetail })
 );
 
 export default ProductDetailComponent;
+
