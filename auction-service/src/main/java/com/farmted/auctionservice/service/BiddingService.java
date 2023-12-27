@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import static java.rmi.server.LogStream.log;
 
 
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -44,6 +45,9 @@ public class BiddingService {
 
         // 레디스 락 전에 입찰 내역 조회하여 첫 입찰 케이스, 추가 입찰 신청 케이스 구분 로직
         boolean isFirstBidder = biddingRepository.countBiddingByBoardUuidAndMemberUuid(boardUuid, memberUuid) == 0;
+
+        // 잔고 차감 Feign
+        memberFeignClient.afterBidBalance(memberUuid,biddingCreateRequestDto.getBiddingPrice().intValue());
 
         if (!isFirstBidder) {
             // 첫 입찰 신청자가 아닌 경우 DB에서 값을 가져와서 추가 신청 금액을 합합니다.
@@ -66,7 +70,6 @@ public class BiddingService {
             // 입찰 신청 내역은 무조건 저장
             biddingRepository.save(savedBidding);
 
-            // 잔고 차감 Feign
 
             BigDecimal biddingPrice = savedBidding.getBiddingPrice();
             Auction auction = auctionRepository.findAuctionByBoardUuid(boardUuid);

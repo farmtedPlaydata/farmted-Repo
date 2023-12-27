@@ -5,24 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ef9efffa-6854-43fa-853a-8a50f38aca78" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../auction-service/src/main/java/com/farmted/auctionservice/util/JasyptConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../board-service/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../board-service/src/main/java/com/farmted/boardservice/util/JasyptConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../comment-service/src/main/java/com/farmted/commentservice/util/JasyptConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-service/dist/bundle.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-service/dist/bundle.js.LICENSE.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-service/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front-service/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-service/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front-service/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-service/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../front-service/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-service/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-service/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-service/src/components/board/boardRoute/BoardRouteController.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-service/src/components/board/boardRoute/BoardRouteController.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-service/src/components/sidebar/sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-service/src/components/sidebar/sidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-service/src/components/user/authentication/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../front-service/src/components/user/authentication/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-service/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/../front-service/webpack.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../member-service/src/main/generated/querydsl/com/farmted/memberservice/dto/response/QMemberResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/generated/querydsl/com/farmted/memberservice/dto/response/QMemberResponseDto.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,28 +56,28 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/#84&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/DevSoo/FarmtedProject/farmted-Repo/auction-service&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "chore/#86",
+    "last_opened_file_path": "C:/DevSoo/FarmtedProject/farmted-Repo/auction-service",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Global Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -147,8 +131,6 @@
       <workItem from="1703512556053" duration="618000" />
       <workItem from="1703519809648" duration="11000" />
       <workItem from="1703519898619" duration="110000" />
-      <workItem from="1703571335964" duration="530000" />
-      <workItem from="1703577427003" duration="1194000" />
     </task>
     <servers />
   </component>
