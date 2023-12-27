@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ef9efffa-6854-43fa-853a-8a50f38aca78" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../board-service/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../board-service/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../member-service/src/main/generated/querydsl/com/farmted/memberservice/dto/response/QMemberResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../member-service/src/main/generated/querydsl/com/farmted/memberservice/dto/response/QMemberResponseDto.java" afterDir="false" />
-    </list>
+    <list default="true" id="ef9efffa-6854-43fa-853a-8a50f38aca78" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,7 +62,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "chore/#86",
+    "git-widget-placeholder": "feature/#93",
     "last_opened_file_path": "C:/DevSoo/FarmtedProject/farmted-Repo/auction-service",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -131,6 +128,7 @@
       <workItem from="1703512556053" duration="618000" />
       <workItem from="1703519809648" duration="11000" />
       <workItem from="1703519898619" duration="110000" />
+      <workItem from="1703662531566" duration="234000" />
     </task>
     <servers />
   </component>
