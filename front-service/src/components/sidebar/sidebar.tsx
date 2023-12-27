@@ -3,7 +3,7 @@ import styled from "styled-components";
 import React from "react";
 
 interface Props {
-    children: JSX.Element;
+    // children: JSX.Element;
     menuName: string;
     path: string;
 }
@@ -11,10 +11,10 @@ interface ContainerProps {
     focus: boolean;
 }
 
-const ContentContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
+// const ContentContainer = styled.div`
+//   width: 100%;
+//   height: 100%;
+// `;
 
 const Container = styled.div<ContainerProps>`
   width: 100%;
@@ -51,10 +51,10 @@ const Menu = styled.div`
 const menuList = [
     { menuName: "Main", path: "/" },
     { menuName: "로그인", path: "/auth" },
-    { menuName: "게시물", path: "/board" },
+    { menuName: "게시물", path: "/boards" },
 ];
 
-const Sidebar = ({ children, path }: Props) => {
+const Sidebar = ({ path }: Props) => {
     const { pathname } = useLocation();
     const focus = pathname === path ? true : false;
     return (
@@ -68,7 +68,7 @@ const Sidebar = ({ children, path }: Props) => {
                     ))}
                 </Menu>
             </NavBar>
-            <ContentContainer>{children}</ContentContainer>
+            {/*<ContentContainer>{children}</ContentContainer>*/}
         </Container>
     );
 };

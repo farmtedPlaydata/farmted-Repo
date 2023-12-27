@@ -1,8 +1,6 @@
 #auth-wrapper {
     padding: 100px 0 150px;
-    min-width: 1440px;
     height: calc(100vh - 64px - 100px - 150px);
-    min-height: 960px;
 
     display: flex;
     justify-content: center;
@@ -16,7 +14,6 @@
     width: 1200px;
     height: 100%;
 
-    display: grid;
     grid-template-columns: 7fr 5fr;
     column-gap: 78px;
 }
