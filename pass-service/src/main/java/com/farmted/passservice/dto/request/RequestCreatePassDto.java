@@ -28,7 +28,7 @@ public class RequestCreatePassDto {
                 .email(this.email)
                 .password(this.password)
                 .uuid(UUID.randomUUID().toString())
-                .role(RoleEnums.GUEST)
+                .role(RoleEnums.USER)
                 .status(false)
                 .build();
     }

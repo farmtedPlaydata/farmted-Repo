@@ -79,13 +79,10 @@ export default function Authentication() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(requestBody),
-            });
-
-            const responseData = await response.json();
-            const memberUuid = responseData.uuid;
-            setUuid(memberUuid);
-
-            console.log('member UUID:', memberUuid);
+                }
+            ).then(
+                ()=>{ navigator("/boards");}
+            );
         };
 
         //          event handler: 회원가입 링크 클릭 이벤트 처리          //
@@ -301,7 +298,17 @@ export default function Authentication() {
                 } else {
                     throw new Error('회원 정보 작성에 실패했습니다.');
                 }
+            }).then(() => {
+                navigator("/");
+            })
+                .catch(()=>{
+                Swal.fire({
+                    icon: 'error',
+                    title: '이미 존재하는 회원이 있습니다.',
+                    text: '회원가입 중 오류가 발생했습니다.'
+                })
             });
+
         }
 
         //          event handler: 상세 정보 입력 버튼 클릭 이벤트 처리          //
@@ -381,7 +388,7 @@ export default function Authentication() {
                     {page === 2 && (<>
                         <InputBox label='이름*' type='text' placeholder='이름을 입력해주세요.' value={memberName} setValue={setmemberName} error={memberNameError} errorMessage={memberNameErrorMessage} />
                         <InputBox label='전화번호*' type='text' placeholder='전화번호를 입력해주세요.' value={memberPhone} setValue={setmemberPhone} error={memberPhoneError} errorMessage={telNumbeErrorMessage} />
-                        <InputBox label={'프로필 이미지 설정'} type={'text'} error={false} placeholder={'프로필 이미지를 설정할 수 있습니다.'} value={profileImage} setValue={setProfileImage} />
+                        <InputBox label='프로필 이미지 설정' type={'text'} error={false} placeholder={'프로필 이미지를 설정할 수 있습니다.'} value={profileImage} setValue={setProfileImage} />
                         <InputBox label='주소*' type='text' placeholder='우편번호 찾기' value={memberAddress} setValue={setMemberAddress} icon='right-arrow-icon' error={memberAddressError} errorMessage={memberAddressErrorMessage} onButtonClick={onmemberAddressIconClickHandler} />
                         <InputBox label='상세 주소' type='text' placeholder='상세 주소를 입력해주세요.' value={memberAddressDetail} setValue={setMemberAddressDetail} error={false} />
                     </>)}
@@ -398,7 +405,7 @@ export default function Authentication() {
                         <div className='auth-button' onClick={onSignUpButtonClickHandler}>{'회원가입'}</div>
                     </>)}
                     <div className='auth-description-box'>
-                        <div className='auth-description'>{'이미 계정이 있으신가요? '}<span className='description-emphasis'>{'로그인'}</span></div>
+                        <div className='auth-description'>{'이미 계정이 있으신가요? '}<span className='description-emphasis' >{'로그인'}</span></div>
                     </div>
                 </div>
             </div>
@@ -409,15 +416,7 @@ export default function Authentication() {
     return (
         <div id='auth-wrapper'>
             <div className='auth-container'>
-                <div className='auth-jumbotron-box'>
-                    <div className='auth-jumbotron-contents'>
-                        <div className='jumbotron-icon'></div>
-                        <div className='auth-jumbotron-text-box'>
-                            <div className='auth-jumbotron-text'>{'환영합니다.'}</div>
-                            <div className='auth-jumbotron-text'>{'Farmted 입니다.'}</div>
-                        </div>
-                    </div>
-                </div>
+
                 { view === 'sign-in' && <SignInCard /> }
                 { view === 'sign-up' && <SignUpCard /> }
             </div>

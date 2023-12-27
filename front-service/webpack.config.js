@@ -14,14 +14,14 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.(ts|js)x?$/,
+        test: /\.(ts|js)x?$/,
         exclude: /node_modules/,
         use: {
           loader: 'ts-loader',
         },
       },
       {
-        test: /.css$/,
+        test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
     ],
@@ -31,7 +31,7 @@ module.exports = {
     open: true,
     proxy: {
       '/api/*': {
-        target: 'http://3.36.96.40:8000/', // 실제 서버 주소
+        target: 'http://3.36.96.40:8000', // 실제 서버 주소
         pathRewrite: { '/api': '' }, // proxy path 를 제거하도록 다시 쓴다
         changeOrigin: true,
       },
