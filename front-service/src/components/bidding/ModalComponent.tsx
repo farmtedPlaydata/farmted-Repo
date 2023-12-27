@@ -35,7 +35,7 @@ const BiddingModal: React.FC<BiddingModalProps> = ({ boardUuid, memberUuid, onCl
       }
 
       try {
-          const response = await fetch(`/bidding-service/bidding-service/bid/${boardUuid}`, {
+          const response = await fetch(`/api//bidding-service/bid/${boardUuid}`, {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',

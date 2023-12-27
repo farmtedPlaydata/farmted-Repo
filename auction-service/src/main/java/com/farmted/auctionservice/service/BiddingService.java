@@ -67,6 +67,7 @@ public class BiddingService {
             biddingRepository.save(savedBidding);
 
             // 잔고 차감 Feign
+            memberFeignClient.afterBidBalance(memberUuid,biddingCreateRequestDto.getBiddingPrice().intValue());
 
             BigDecimal biddingPrice = savedBidding.getBiddingPrice();
             Auction auction = auctionRepository.findAuctionByBoardUuid(boardUuid);
