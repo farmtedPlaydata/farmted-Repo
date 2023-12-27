@@ -10,13 +10,7 @@ spring:
     show-sql: true
   main:
     allow-bean-definition-overriding: true
-  # Redis
-  data:
-    redis:
-      host: 127.0.0.1
-      port: 6379
 ## 스케줄러 세팅
 schedules:
   cron: "*/60 * * * * *"  # 1분마다
-
 
