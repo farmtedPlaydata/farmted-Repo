@@ -5,24 +5,22 @@ import BoardBody from "../BoardBody"
 import CreateBoard from "../createBoard/CreateBoard"
 import BoardDetail from "../boardDetail/BoardDetail"
 import Authentication from "../../user/authentication";
-import BiddingList from "../../bidding/biddingList/BiddingList"
 
 const BoardRouteController = () => {
-    return
+    return(
         <>
             {/*<Routes>*/}
             {/*    <Route path="/" element={<Sidebar path={"/"} menuName={"Main"}/>}/>*/}
             {/*</Routes>*/}
             <Routes>
                 <Route path="/" element={<BoardBody/>}>
-                    <Route path='/' element={<Authentication />} />
-                    <Route path="/boards" element={<BoardMain/>}/>
+                    <Route path="/" element={<BoardMain/>}/>
+                    <Route path='/auth' element={<Authentication />} />
                     <Route path="/boards/write" element={<CreateBoard/>}/>
                     <Route path="/boards/:boardUUID" element={<BoardDetail />}/>
                 </Route>
             </Routes>
         </>
-
     )
 }
 export default BoardRouteController
