@@ -35,11 +35,6 @@ module.exports = {
         pathRewrite: { '/api': '' }, // proxy path 를 제거하도록 다시 쓴다
         changeOrigin: true,
       },
-       '/bidding-service/*': {
-          target: 'http://localhost:57998',
-          pathRewrite: { '/bidding-service': '' }, // proxy path 를 제거하도록 다시 쓴다
-          changeOrigin: true,
-      },
     },
   },
 };
