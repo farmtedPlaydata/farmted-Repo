@@ -7,9 +7,11 @@ import Sidebar from "./components/sidebar/sidebar";
 
 const GlobalStyle = createGlobalStyle`
     body{
-        background: #e9ecef;
-        display: flex;
-        justify-content: flex-end;
+        all: unset;
+      display: flex;
+      width: 100vw;
+      justify-content: center;
+      flex-direction: column;
     }
 `
 const App = () => (
