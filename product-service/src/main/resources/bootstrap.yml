@@ -2,6 +2,8 @@
 spring:
   cloud:
     config:
-      uri: http://localhost:9999
+      uri: http://43.202.60.155:9999/
       name: config, server
 # config
+server:
+  port: 8081
