@@ -10,7 +10,3 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
-  mvc:
-    view:
-      prefix: /resources/static/**
-      suffix: .html
