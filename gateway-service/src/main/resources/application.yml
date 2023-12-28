@@ -35,7 +35,7 @@ spring:
           filters:
             - JwtTokenFilter
         - id: auction-service
-          uri: http://52.78.195.203:8080/
+          uri: http://13.125.245.67:8080/
           predicates:
             - Path=/auction-service/**
           filters:
