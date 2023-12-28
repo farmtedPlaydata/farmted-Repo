@@ -14,10 +14,11 @@ const BoardRouteController = () => {
             {/*</Routes>*/}
             <Routes>
                 <Route path="/" element={<BoardBody/>}>
-                    <Route path="/boards" element={<BoardMain/>}/>
+                    <Route path='/boards' element={<BoardMain />} />
                     <Route path='/' element={<Authentication />} />
                     <Route path="/boards/write" element={<CreateBoard/>}/>
                     <Route path="/boards/:boardUUID" element={<BoardDetail />}/>
+                    <Route path="/boards/writer/:memberUuid" element={<BoardMain/>}/>
                 </Route>
             </Routes>
         </>

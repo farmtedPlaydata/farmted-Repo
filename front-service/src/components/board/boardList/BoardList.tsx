@@ -8,6 +8,7 @@ interface Props {
 }
 interface Board{
     memberName: string;
+    memberUuid: string;
     boardUuid: string;
     boardType: BoardType;
     boardTitle: string;
