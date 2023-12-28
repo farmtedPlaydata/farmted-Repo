@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
 import BiddingModal from "../../bidding/ModalComponent";
 
 interface AuctionDetailProps {

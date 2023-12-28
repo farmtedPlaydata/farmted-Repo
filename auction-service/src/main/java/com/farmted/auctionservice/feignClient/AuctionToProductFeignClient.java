@@ -11,6 +11,6 @@ public interface AuctionToProductFeignClient {
     @PostMapping("{productUuid}/endAuctions")
     public void closedAuctionFromProduct(@PathVariable String productUuid);
 
-    @GetMapping("/products/{board_uuid}/boards")
+    @GetMapping("/products/{board_uuid}/products")
     public ProductVo getProductDetail(@PathVariable (value = "board_uuid") String boardUuid);
 }

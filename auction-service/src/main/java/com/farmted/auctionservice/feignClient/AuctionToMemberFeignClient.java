@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "member-service", path = "/member-service")
 public interface AuctionToMemberFeignClient {
-    @PutMapping("/after-bid/{uuid}")
+    @PutMapping("/faild-bid/{uuid}")
     public void failedBidBalance(@PathVariable String uuid, int balance); //MemberUuid
 
     @PutMapping("/after-bid/{uuid}")

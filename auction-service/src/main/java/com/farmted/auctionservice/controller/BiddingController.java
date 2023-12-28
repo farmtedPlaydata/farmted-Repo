@@ -1,12 +1,12 @@
 package com.farmted.auctionservice.controller;
 
+import com.farmted.auctionservice.domain.Bidding;
 import com.farmted.auctionservice.dto.ResponseBiddingDto.BiddingResponseDto;
 import com.farmted.auctionservice.dto.requestBiddingDto.BiddingCreateRequestDto;
 import com.farmted.auctionservice.service.BiddingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +25,8 @@ public class BiddingController {
 
     // 입찰 신청
     @PostMapping("/bid/{boardUuid}")
-    @Operation(summary = "입찰 조회 ", description = "희망가를 필수로 입력받아 입찰을 신청합니다.")
-    public ResponseEntity<?> createBidding(
+    @Operation(summary = "입찰 신청 ", description = "희망가를 필수로 입력받아 입찰을 신청합니다.")
+        public ResponseEntity<?> createBidding(
             @Valid @RequestBody BiddingCreateRequestDto biddingCreateRequestDto,
             @RequestHeader ("UUID") String memberUuid,
             @PathVariable ("boardUuid") String boardUuid
