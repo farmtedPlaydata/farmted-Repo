@@ -3,6 +3,7 @@ import styled, { createGlobalStyle } from "styled-components"
 import {BrowserRouter as Router} from 'react-router-dom';
 import Main from "./components/Main";
 import UserRouteController from "./components/user/userRoute/UserRouteController";
+import BiddingList from "./components/bidding/biddingList/BiddingList";
 
 const GlobalStyle = createGlobalStyle`
     body{
@@ -14,7 +15,8 @@ const GlobalStyle = createGlobalStyle`
 const App = () => (
     <Router>
         <GlobalStyle/>
-        <Main/>
+        <BiddingList/>
+        {/* <Main/> */}
     </Router>
 );
 

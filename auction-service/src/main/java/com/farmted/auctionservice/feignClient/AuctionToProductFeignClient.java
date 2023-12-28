@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(name = "PRODUCT-SERVICE", path = "product-service")
+@FeignClient(name = "product-service", path = "product-service")
 public interface AuctionToProductFeignClient {
     @PostMapping("/product-api/{productUuid}/endAuctions")
     public void closedAuctionFromProduct(@PathVariable String productUuid);

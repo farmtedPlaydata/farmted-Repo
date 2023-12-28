@@ -24,7 +24,7 @@ const BiddingList = () => {
     const fetchBiddingList = async () => {
       
       try {
-        const response = await fetch(`/bidding/bidding-service/${memberUuid}/bidding`);
+        const response = await fetch(`/api/auction-service/bidding-service/${memberUuid}/bidding`);
     
         if (!response.ok) {
           const errorText = await response.text();
