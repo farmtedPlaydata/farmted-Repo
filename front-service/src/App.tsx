@@ -15,8 +15,7 @@ const GlobalStyle = createGlobalStyle`
 const App = () => (
     <Router>
         <GlobalStyle/>
-        <BiddingList/>
-        {/* <Main/> */}
+        <Main/>
     </Router>
 );
 

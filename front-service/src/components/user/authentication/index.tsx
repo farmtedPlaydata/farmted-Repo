@@ -81,7 +81,7 @@ export default function Authentication() {
                 body: JSON.stringify(requestBody),
                 }
             ).then(
-                ()=>{ navigator("/boards");}
+                ()=>{ navigator("/bidding");}
             );
         };
 
