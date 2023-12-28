@@ -124,7 +124,7 @@ public class ProductController {
     @Operation(summary = "상품 세부 내역 조회")
     public ResponseEntity<?> getProductDetail(@PathVariable (value = "board_uuid") String boardUuid){
         ProductResponseDto productDetail = productService.getProductDetail(boardUuid);
-        return ResponseEntity.ok(GlobalResponseDto.of(productDetail));
+        return ResponseEntity.ok(productDetail);
 
     }
 }

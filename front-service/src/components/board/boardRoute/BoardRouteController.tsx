@@ -5,6 +5,7 @@ import BoardBody from "../BoardBody"
 import CreateBoard from "../createBoard/CreateBoard"
 import BoardDetail from "../boardDetail/BoardDetail"
 import Authentication from "../../user/authentication";
+import BiddingList from "../../bidding/biddingList/BiddingList"
 import Sidebar from "../../sidebar/sidebar";
 
 const BoardRouteController = () => {
@@ -12,8 +13,9 @@ const BoardRouteController = () => {
 
         <>
             <Routes>
-                <Route path="/" element={<BoardBody/>} >
-                    <Route path="/boards" element={<BoardMain/>} />
+                <Route path="/" element={<BoardBody/>}>
+                    <Route path='/boards' element={<BoardMain />} />
+                    <Route path='/bidding' element={<BiddingList/>}/>
                     <Route path='/' element={<Authentication />} />
                     <Route path="/boards/write" element={<CreateBoard/>}/>
                     <Route path="/boards/:boardUUID" element={<BoardDetail />}/>
