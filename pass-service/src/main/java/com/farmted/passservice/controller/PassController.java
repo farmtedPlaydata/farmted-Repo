@@ -37,9 +37,16 @@ public class PassController {
 
     @Operation(summary = "회원가입", description = "email, password를 입력받아 회원가입 처리, 기본 role = guest")
     @PostMapping("/passes")
-    public ResponseEntity<?> createPass(@RequestBody RequestCreatePassDto dto) {
-        passService.createPass(dto);
+    public ResponseEntity<?> createPass(@RequestBody RequestCreatePassDto dto, HttpServletResponse response) {
+        String token = passService.createPass(dto);
         String uuid = dto.getUuid();
+        cookieUtil.setToken(token, TokenType.ACCESS, response);
+        cookieUtil.setToken(token, TokenType.REFRESH, response);
+        String role = passService.setRole(RequestLoginDto
+                                                .builder()
+                        .email(dto.getEmail()).password(dto.getPassword())
+                                                .build());
+        cookieUtil.setRoleCookie(role, response);
         return ResponseEntity.ok(GlobalResponseDto.of(uuid));
     }
 
