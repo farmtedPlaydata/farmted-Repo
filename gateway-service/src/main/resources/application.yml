@@ -46,4 +46,3 @@ spring:
             - Path=/comment-service/**
           filters:
             - JwtTokenFilter
-            
