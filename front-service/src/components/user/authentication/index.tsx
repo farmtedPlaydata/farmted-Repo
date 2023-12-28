@@ -74,15 +74,18 @@ export default function Authentication() {
             const SIGN_IN_ENDPOINT = '/api/pass-service/login';
 
             const response = await fetch(SIGN_IN_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestBody),
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody),
                 }
-            ).then(
-                ()=>{ navigator("/bidding");}
-            );
+            ).then(response=>{
+                    const uuidFromHeader = response.headers.get("UUID");
+                    setUuid(uuidFromHeader);
+                    navigator("/boards");
+                }
+            )
         };
 
         //          event handler: 회원가입 링크 클릭 이벤트 처리          //
@@ -182,31 +185,15 @@ export default function Authentication() {
         const [consentError, setConsentError] = useState<boolean>(false);
 
         //          state: 프로필 이미지 상태          //
-        const [profileImage, setProfileImage] = useState<File | null>(null);
+        const [profileImage, setProfileImage] = useState<File | string>('');
 
-
-        const fileToString = (file: File | null): Promise<string | null> => {
-            return new Promise((resolve, reject) => {
-                if (!file) {
-                    resolve(null);
-                } else {
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                        const result = reader.result as string;
-                        resolve(result);
-                    };
-                    reader.onerror = reject;
-                    reader.readAsDataURL(file);
-                }
-            });
-        };
 
         //          event handler: 프로필 이미지 이벤트 처리          //
         const profileImageChange = (e: ChangeEvent<HTMLInputElement>) => {
             if (e.target.files) {
                 setProfileImage(e.target.files[0]);
             } else {
-                setProfileImage(null);
+                setProfileImage('https://framted-product.s3.ap-northeast-2.amazonaws.com/profile.png');
             }
         };
 
@@ -294,12 +281,14 @@ export default function Authentication() {
                 body: JSON.stringify(requestBody),
             }).then(response => {
                 if (response.ok) {
+                    const uuidFromHeader = response.headers.get("UUID");
+                    setUuid(uuidFromHeader);
                     return response.text();
                 } else {
                     throw new Error('회원 정보 작성에 실패했습니다.');
                 }
             }).then(() => {
-                navigator("/");
+                setPage(2);
             })
                 .catch(()=>{
                 Swal.fire({
@@ -321,6 +310,19 @@ export default function Authentication() {
             setMemberAddressError(false);
             setMemberAddressErrorMessage('');
             setConsentError(false);
+
+            // description: 이메일 여부 확인 //
+            const checkedEmail = email.trim().length === 0;
+            if (checkedEmail) {
+                setEmailError(true);
+                setEmailErrorMessage('이메일을 확일할 수 없습니다.');
+            }
+
+            // description: UUID 여부 확인 //
+            const checkedUuid = uuid?.trim().length === 0;
+            if (checkedUuid) {
+                alert('uuid를 확인할 수 없습니다.');
+            }
 
             // description: 이름 입력 여부 확인 //
             const checkedmemberName = memberName.trim().length === 0;
@@ -345,28 +347,35 @@ export default function Authentication() {
             // description: 개인정보동의 여부 확인 //
             if (!consent) setConsentError(true);
 
+            var myHeaders = new Headers();
+
+            const formData = new FormData();
+            formData.append("IMAGE", profileImage);
+
             if (checkedmemberName || checkedmemberPhone || checkedmemberAddress || !consent) return;
 
             const requestBody: SignUpRequestDto = {
                 email, uuid,
-                profileImage: profileImage ? await fileToString(profileImage) : undefined ?? null,
-                memberAddress, memberName, memberPhone, memberAddressDetail, consent};
+                memberAddress, memberName,
+                memberPhone, memberAddressDetail,
+                consent};
+            const data = new Blob([JSON.stringify(requestBody)], {type: "application/json"})
+            formData.append("CREATE", data);
 
             const DETAILS_ENDPOINT = '/api/member-service/members';
 
             fetch(DETAILS_ENDPOINT, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestBody),
+                headers: myHeaders,
+                body: formData,
             }).then(response => {
                 if (response.ok) {
-                    return response.text();
+                    return response.json();
                 } else {
                     throw new Error('회원 정보 작성에 실패했습니다.');
                 }
             });
+            navigator('/');
         }
 
 
@@ -383,14 +392,14 @@ export default function Authentication() {
                         <InputBox label='이메일 주소*' type='text' placeholder='이메일 주소를 입력해주세요.' value={email} setValue={setEmail} error={emailError} errorMessage={emailErrorMessage} />
                         <InputBox label='비밀번호*' type={passwordType} placeholder='비밀번호를 입력해주세요.' value={password} setValue={setPassword} icon={passwordIcon} error={passwordError} errorMessage={passwordErrorMessage} onButtonClick={onPasswordIconClickHandler} />
                         <InputBox label='비밀번호 확인*' type={passwordCheckType} placeholder='비밀번호를 다시 입력해주세요.' value={passwordCheck} setValue={setPasswordCheck} icon={passwordCheckIcon} error={passwordCheckError} errorMessage={passwordCheckErrorMessage} onButtonClick={onPasswordCheckIconClickHandler} />
-                        <div className='auth-button' onClick={onSignUpButtonClickHandler}>{'회원가입'}</div>
+                        <div className='auth-button' onClick={onSignUpButtonClickHandler}>{'다음으로'}</div>
                     </>)}
                     {page === 2 && (<>
                         <InputBox label='이름*' type='text' placeholder='이름을 입력해주세요.' value={memberName} setValue={setmemberName} error={memberNameError} errorMessage={memberNameErrorMessage} />
                         <InputBox label='전화번호*' type='text' placeholder='전화번호를 입력해주세요.' value={memberPhone} setValue={setmemberPhone} error={memberPhoneError} errorMessage={telNumbeErrorMessage} />
-                        <InputBox label='프로필 이미지 설정' type={'text'} error={false} placeholder={'프로필 이미지를 설정할 수 있습니다.'} value={profileImage} setValue={setProfileImage} />
                         <InputBox label='주소*' type='text' placeholder='우편번호 찾기' value={memberAddress} setValue={setMemberAddress} icon='right-arrow-icon' error={memberAddressError} errorMessage={memberAddressErrorMessage} onButtonClick={onmemberAddressIconClickHandler} />
                         <InputBox label='상세 주소' type='text' placeholder='상세 주소를 입력해주세요.' value={memberAddressDetail} setValue={setMemberAddressDetail} error={false} />
+                        <input type='file' accept='.png, .jpg, .jpeg' onChange={profileImageChange} />
                     </>)}
                 </div>
                 <div className='auth-card-bottom'>
@@ -402,7 +411,7 @@ export default function Authentication() {
                             <div className={consentError ? 'auth-consent-title-error' : 'auth-consent-title'}>{'개인정보동의'}</div>
                             <div className='auth-consent-link'>{'더보기>'}</div>
                         </div>
-                        <div className='auth-button' onClick={onSignUpButtonClickHandler}>{'회원가입'}</div>
+                        <div className='auth-button' onClick={onDetailsButtonClickHandler}>{'회원가입'}</div>
                     </>)}
                     <div className='auth-description-box'>
                         <div className='auth-description'>{'이미 계정이 있으신가요? '}<span className='description-emphasis' >{'로그인'}</span></div>
