@@ -133,8 +133,6 @@ const Board: React.FC<BoardProps> = ({ writerUuid }) => {
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
-  
-  console.dir(boardList)
 
   return (
       <>
