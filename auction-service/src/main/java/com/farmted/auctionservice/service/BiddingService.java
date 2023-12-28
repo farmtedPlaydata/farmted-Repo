@@ -42,6 +42,9 @@ public class BiddingService {
     @Transactional
     public void createBidding(BiddingCreateRequestDto biddingCreateRequestDto,String boardUuid,String memberUuid) {
 
+        // 잔고 차감 Feign
+        memberFeignClient.afterBidBalance(memberUuid,biddingCreateRequestDto.getBiddingPrice().intValue());
+
         // 레디스 락 전에 입찰 내역 조회하여 첫 입찰 케이스, 추가 입찰 신청 케이스 구분 로직
         boolean isFirstBidder = biddingRepository.countBiddingByBoardUuidAndMemberUuid(boardUuid, memberUuid) == 0;
 
@@ -66,8 +69,6 @@ public class BiddingService {
             // 입찰 신청 내역은 무조건 저장
             biddingRepository.save(savedBidding);
 
-            // 잔고 차감 Feign
-            memberFeignClient.afterBidBalance(memberUuid,biddingCreateRequestDto.getBiddingPrice().intValue());
 
             BigDecimal biddingPrice = savedBidding.getBiddingPrice();
             Auction auction = auctionRepository.findAuctionByBoardUuid(boardUuid);
@@ -112,11 +113,14 @@ public class BiddingService {
         List<Bidding> biddingList = biddingRepository.findBiddingByMemberUuid(memberUuid);
         List<BiddingResponseDto> createBiddingList = new ArrayList<>();
         for (Bidding bidding : biddingList) {
+            System.out.println(bidding.getBoardUuid());
             ProductVo productDetail = auctionFeignClient.getProductDetail(bidding.getBoardUuid());
             BiddingResponseDto biddingDetailList = new BiddingResponseDto(bidding,productDetail);
             createBiddingList.add(biddingDetailList);
         }
         return createBiddingList;
+
+
 
     }
 
