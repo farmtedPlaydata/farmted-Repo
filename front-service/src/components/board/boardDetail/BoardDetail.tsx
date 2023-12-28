@@ -139,7 +139,7 @@ const BoardDetail = () => {
   const handleImageError: ReactEventHandler<HTMLImageElement> = (e) => {
     e.currentTarget.src = 'https://framted-product.s3.ap-northeast-2.amazonaws.com/profile.png';
   };
-
+  console.dir(board);
   return (
     <BoardDetailContainer>
       {board && (
