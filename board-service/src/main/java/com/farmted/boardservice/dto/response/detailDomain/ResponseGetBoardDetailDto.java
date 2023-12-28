@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class ResponseGetBoardDetailDto {
     // 게시글용 정보
     private String boardUuid;
+    private String memberUuid;
     private String memberName;
     private String memberProfile;
     private BoardType boardType;
@@ -25,6 +26,7 @@ public class ResponseGetBoardDetailDto {
 
     public ResponseGetBoardDetailDto(Board board){
         this.memberName = board.getMemberName();
+        this.memberUuid = board.getMemberUuid();
         this.memberProfile = board.getMemberProfile();
         this.boardUuid = board.getBoardUuid();
         this.boardType = board.getBoardType();
