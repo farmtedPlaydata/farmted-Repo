@@ -42,12 +42,15 @@ public class PassServiceImpl implements PassService {
 
     @Override
     @Transactional
-    public void createPass(RequestCreatePassDto dto) {
+    public String createPass(RequestCreatePassDto dto) {
         duplicateUserCheck(dto);
         String password = dto.getPassword();
         dto.setPassword(passwordEncoder.encode(password));
         Pass pass = dto.toEntity();
         passRepository.save(pass);
+        return login(RequestLoginDto.builder()
+                .email(dto.getEmail())
+                .password(password).build());
     }
 
     @Override

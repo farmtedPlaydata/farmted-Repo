@@ -42,7 +42,9 @@ public class MemberController {
     @Operation(summary = "멤버의 상세 정보 등록", description = "회원가입이 완료된 멤버의 상세정보를 작성, 완료 시 Role을 User로 변경")
     @PostMapping("/members")
     public ResponseEntity<?> createMember(@Valid @RequestPart("CREATE") RequestCreateMemberDto dto,
-                                          @RequestPart("IMAGE")MultipartFile image) {
+                                          @RequestPart("IMAGE")MultipartFile image,
+                                          @RequestHeader("UUID") String memberUUID) {
+        dto.setMemberUuid(memberUUID);
         memberService.createMember(dto, image);
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
