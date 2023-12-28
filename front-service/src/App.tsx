@@ -19,8 +19,7 @@ const App = () => (
     <Router>
         <Sidebar />
         <GlobalStyle/>
-        <BiddingList/>
-        {/* <Main/> */}
+        <Main/>
     </Router>
 );
 

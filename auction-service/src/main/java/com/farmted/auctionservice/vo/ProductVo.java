@@ -1,8 +1,10 @@
 package com.farmted.auctionservice.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public record ProductVo(
-    String name,
-    int stock,
-    String source,
-    String image
+    @JsonProperty("name") String name,
+    @JsonProperty("stock") int stock,
+    @JsonProperty("source") String source,
+    @JsonProperty("image") String image
 ){}

@@ -18,6 +18,7 @@ public class BiddingResponseDto {
     private int stock;
     private String source;
     private String image;
+    private String boardUuid;
 
     public BiddingResponseDto(Bidding bidding, ProductVo productVo){
         biddingPrice = bidding.getBiddingPrice();
@@ -27,5 +28,6 @@ public class BiddingResponseDto {
         stock = productVo.stock();
         source=productVo.source();
         image = productVo.image();
+        boardUuid = bidding.getBoardUuid();
     }
 }
