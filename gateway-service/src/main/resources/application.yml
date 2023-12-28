@@ -40,3 +40,9 @@ spring:
             - Path=/auction-service/**
           filters:
             - JwtTokenFilter
+        - id: comment-service
+          uri: lb://comment-service
+          predicates:
+            - Path=/comment-service/**
+          filters:
+            - JwtTokenFilter
