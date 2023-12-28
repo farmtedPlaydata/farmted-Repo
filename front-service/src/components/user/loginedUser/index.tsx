@@ -1,10 +1,11 @@
-import './style.css'
+import './style.css';
 import {useNavigate, useParams} from "react-router-dom";
 import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import {useCookies} from "react-cookie";
-import useUserStore from "../store/user.store";
 import MembernameRequestDto from "../dto/request/memberNameRequestDto";
-
+import userLoginUserStore from "../store/user.store";
+import {GetSignInUserResponseDto} from "./apis/response";
+import User from "../types/user.interface";
 
 
 //          component: 유저 페이지          //
@@ -13,7 +14,7 @@ export default function User() {
     //          state: 조회하는 유저 이메일 path variable 상태           //
     const { searchEmail } = useParams();
     //          state: 로그인 유저 정보 상태           //
-    const { user, setUser } = useUserStore();
+    const { loginUser, setLoginUser } = userLoginUserStore();
     //          state: 본인 여부 상태           //
     const [isMyPage, setMyPage] = useState<boolean>(false);
 
@@ -25,8 +26,6 @@ export default function User() {
 
         //          state: 프로필 이미지 input ref 상태           //
         const fileInputRef = useRef<HTMLInputElement | null>(null);
-        //          state: cookie 상태           //
-        const [cookies, setCookie] = useCookies();
         //          state: 이메일 상태           //
         const [email, setEmail] = useState<string>('');
         //          state: 프로필 이미지 상태           //
@@ -37,6 +36,14 @@ export default function User() {
         const [memberName, setMemberName] = useState<string>('');
         //          state: 닉네임 변경 상태           //
         const [showChangememberName, setShowChangememberName] = useState<boolean>(false);
+
+
+        // function: get sign in user 처리 함수 //
+        const getSignInUserResponse = (responseBody: GetSignInUserResponseDto | null) => {
+            if (!responseBody) return;
+            const loginUser: User = {...(responseBody as GetSignInUserResponseDto)}
+            setLoginUser(loginUser);
+        }
 
 
         //          event handler: 프로필 이미지 클릭 이벤트 처리          //
@@ -57,9 +64,6 @@ export default function User() {
                 setShowChangememberName(false);
                 return;
             }
-
-            const accessToken = cookies.accessToken;
-            if (!accessToken) return;
 
             const requestBody: MembernameRequestDto = { memberName };
 

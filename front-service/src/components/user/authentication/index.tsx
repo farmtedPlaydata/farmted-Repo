@@ -1,13 +1,13 @@
 import './style.css';
-import useUserStore from "../store/user.store";
 import {useCookies} from "react-cookie";
 import {useRef, useState, KeyboardEvent, ChangeEvent} from "react";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import React from "react";
 import {SignInRequestDto, SignUpRequestDto} from "../dto/request";
 import Swal from "sweetalert2";
 import InputBox from "../../inputbox";
 import {Address, useDaumPostcodePopup} from "react-daum-postcode";
+import userLoginUserStore from "../store/user.store";
 
 
 
@@ -16,7 +16,7 @@ import {Address, useDaumPostcodePopup} from "react-daum-postcode";
 export default function Authentication() {
 
     //          state: 로그인 유저 전역 상태          //
-    const {user, setUser} = useUserStore();
+    const {loginUser, setLoginUser} = userLoginUserStore();
     //          state: 쿠키 상태          //
     const [cookies, setCookie] = useCookies();
     //          state: 화면 상태          //
@@ -93,6 +93,14 @@ export default function Authentication() {
             setView('sign-up');
         }
 
+        //          event handler: 구글 로그인 클릭 이벤트 처리          //
+        const onGoogleButtonClickHandler = () => {
+            const GOOGLE_URI = "/oauth2/authorization/google";
+
+            fetch(GOOGLE_URI, {method: "POST"})
+                .then(response => response.ok);
+        }
+
         //          render: sign in 카드 컴포넌트 렌더링         //
         return (
             <div className='auth-card'>
@@ -112,6 +120,10 @@ export default function Authentication() {
                         </div>
                     )}
                     <div className='auth-button' onClick={onSignInButtonClickHandler}>{'로그인'}</div>
+                    <div className='auth-button'>
+                        <img src="/icons/google-icon.png" alt="Icon" />
+                        Google로 계속
+                    </div>
                     <div className='auth-description-box'>
                         <div className='auth-description'>{'신규 사용자이신가요? '}<span className='description-emphasis' onClick={onSignUpLinkClickHandler}>{'회원가입'}</span></div>
                     </div>

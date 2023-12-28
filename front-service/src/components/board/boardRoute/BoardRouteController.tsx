@@ -7,6 +7,7 @@ import BoardDetail from "../boardDetail/BoardDetail"
 import Authentication from "../../user/authentication";
 import BiddingList from "../../bidding/biddingList/BiddingList"
 import Sidebar from "../../sidebar/sidebar";
+import User from "../../user/loginedUser";
 
 const BoardRouteController = () => {
     return(
@@ -14,12 +15,13 @@ const BoardRouteController = () => {
         <>
             <Routes>
                 <Route path="/" element={<BoardBody/>}>
-                    <Route path='/boards' element={<BoardMain />} />
+                    <Route path='/' element={<BoardMain />} />
                     <Route path='/bidding' element={<BiddingList/>}/>
-                    <Route path='/' element={<Authentication />} />
+                    <Route path='/auth' element={<Authentication />} />
                     <Route path="/boards/write" element={<CreateBoard/>}/>
                     <Route path="/boards/:boardUUID" element={<BoardDetail />}/>
                     <Route path="/boards/writer/:writerUuid" element={<BoardMain/>}/>
+                    <Route path='mypage' element={<User />} />
                 </Route>
             </Routes>
         </>

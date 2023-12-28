@@ -1,14 +1,17 @@
 import LoginUser from "../types/login-user.interface";
 import {create} from "zustand";
+import User from "../types/user.interface";
 
-interface UserStore {
-    user: LoginUser | null;
-    setUser: (user: LoginUser | null) => void;
-}
+interface LoginUserStore {
+    loginUser: User | null;
+    setLoginUser: (loginUser: User) => void;
+    resetLoginUser: () => void;
+};
 
-const useUserStore = create<UserStore>(set => ({
-    user: null,
-    setUser: (user: LoginUser | null) => {set((state) => ({ ...state, user }))},
+const userLoginUserStore = create<LoginUserStore>(set => ({
+    loginUser: null,
+    setLoginUser: loginUser => set(state => ({...state, loginUser})),
+    resetLoginUser: () => set(state => ({...state, loginUser: null}))
 }));
 
-export default useUserStore;
+export default userLoginUserStore;
