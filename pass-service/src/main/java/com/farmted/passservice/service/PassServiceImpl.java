@@ -48,6 +48,12 @@ public class PassServiceImpl implements PassService {
         dto.setPassword(passwordEncoder.encode(password));
         Pass pass = dto.toEntity();
         passRepository.save(pass);
+
+        login(
+        RequestLoginDto.builder()
+                .email(dto.getEmail())
+                .password(password)
+                        .build());
     }
 
     @Override
