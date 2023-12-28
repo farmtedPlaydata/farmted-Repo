@@ -12,5 +12,5 @@ public interface AuctionToProductFeignClient {
     public void closedAuctionFromProduct(@PathVariable String productUuid);
 
     @GetMapping("/products/{board_uuid}/products")
-    public ProductVo getProductDetail(@PathVariable (value = "board_uuid") String boardUuid);
+    public ProductVo getProductsDetail(@PathVariable (value = "board_uuid") String boardUuid);
 }
