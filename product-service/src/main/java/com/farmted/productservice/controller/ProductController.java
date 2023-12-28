@@ -7,6 +7,7 @@ import com.farmted.productservice.dto.response.SaleAuctionTypeResponseDto;
 import com.farmted.productservice.dto.response.SaleProductTypeResponseDto;
 import com.farmted.productservice.dto.response.ProductResponseDto;
 import com.farmted.productservice.enums.ProductType;
+import com.farmted.productservice.service.AuctionService;
 import com.farmted.productservice.service.ProductService;
 import com.farmted.productservice.util.GlobalResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,6 +27,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final ProductTypeFacade productTypeFactory;
+    private final AuctionService auctionService;
 
 // 판매자 상품 등록
     // TODO: 단순 상품, 경매 상품 구분
@@ -82,7 +84,7 @@ public class ProductController {
 // 상품 상세 조회
     @GetMapping("/products/{board_uuid}/boards")
     @Operation(summary = "상품 세부 내역 조회")
-    public ResponseEntity<?> getProductDetail(@PathVariable (value = "board_uuid") String boardUuid){
+    public ResponseEntity<?> getProductsDetail(@PathVariable (value = "board_uuid") String boardUuid){
         ProductResponseDto productDetail = productService.getProductDetail(boardUuid);
         return ResponseEntity.ok(GlobalResponseDto.of(productDetail));
 
@@ -107,6 +109,24 @@ public class ProductController {
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
+
+
+    // 상품 DB에 있는 경매 상태 값을 종료 상태로 변경
+    @PostMapping("/{productUuid}/endAuctions")
+    @Operation(summary = "경매 상태 받아옴", description = "상품 DB에 있는 경매 상태 값을 종료 상태로 변경")
+    public ResponseEntity<?> closedAuctionFromProduct(@PathVariable String productUuid){
+        auctionService.endAuctionFromProduct(productUuid);
+        return ResponseEntity.ok("상태값 변경 완료");
+    }
+
+    // 상품 상세 조회
+    @GetMapping("/products/{board_uuid}/products")
+    @Operation(summary = "상품 세부 내역 조회")
+    public ResponseEntity<?> getProductDetail(@PathVariable (value = "board_uuid") String boardUuid){
+        ProductResponseDto productDetail = productService.getProductDetail(boardUuid);
+        return ResponseEntity.ok(GlobalResponseDto.of(productDetail));
+
+    }
 }
 
 
