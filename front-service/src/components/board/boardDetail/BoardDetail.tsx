@@ -24,6 +24,7 @@ interface AuctionDetail {
 interface BoardDetailDto {
   boardDetail: {
     boardUuid: string;
+    memberUuid: string;
     memberName: string;
     memberProfile: string;
     boardType: string;
@@ -134,16 +135,11 @@ const BoardDetail = () => {
     }
   };
   
-  const handleGoBack = () => {
-    // 이전 페이지로 이동
-    navigate(-1);
-  };
-
 
   const handleImageError: ReactEventHandler<HTMLImageElement> = (e) => {
     e.currentTarget.src = 'https://framted-product.s3.ap-northeast-2.amazonaws.com/profile.png';
   };
-
+  console.dir(board);
   return (
     <BoardDetailContainer>
       {board && (
@@ -154,7 +150,7 @@ const BoardDetail = () => {
             <Title>{board.boardDetail.boardTitle}</Title>
           </TitleH2>
           <MemberInfo>
-            <strong>{board.boardDetail.memberName}</strong>님
+          <Link to={`/boards/writer/${board.boardDetail.memberUuid}`}><strong>{board.boardDetail.memberName}</strong>님</Link>
             <img
               src={board.boardDetail.memberProfile}
               alt="profile"
@@ -190,7 +186,7 @@ const BoardDetail = () => {
               </Link>
             </ButtonContainer>
           )}
-          <ListButton onClick={handleGoBack}>뒤로 가기 </ListButton>
+          <ListButton><Link to="/boards">목록으로</Link></ListButton>
         </div>
         </>
       )}

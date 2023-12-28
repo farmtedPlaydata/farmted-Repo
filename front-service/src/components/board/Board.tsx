@@ -3,9 +3,14 @@ import BoardHead from "./boardHead/BoardHead";
 import BoardList from "./boardList/BoardList";
 import PageInfomation from "./boardHead/boardUtil/PageInfo";
 import { BoardType } from "./boardHead/boardUtil/BoardType";
+import { useParams } from "react-router-dom";
 // 최초 랜더링 시 1페이지 고정
 
 // 요청받는 값
+interface BoardProps {
+  writerUuid?: string;
+}
+
 interface GlobalResponseDTO {
     page:PageInfo;
     boardList:Board[];
@@ -22,6 +27,7 @@ interface PageInfo {
 // 게시글 정보
 interface Board {
     memberName: string;
+    memberUuid: string;
     boardUuid: string;
     boardType: BoardType;
     boardTitle: string;
@@ -69,12 +75,10 @@ const transformData = (data: GlobalResponseDTO | undefined): Board[] => {
   });
 };
 
-const Board = () => {
+const Board: React.FC<BoardProps> = ({ writerUuid }) => {
   const [category, setCategory] = useState<BoardType>(BoardType.PRODUCT);
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState();
   const [boardList, setBoardList] = useState<GlobalResponseDTO>();
-
   useEffect(() =>{
     let current_category: string = "";
     switch (category) {
@@ -99,12 +103,25 @@ const Board = () => {
       default:
         break;
     }
+    let BOARD_API_ENDPOINT = `/api/board-service/boards`;
     console.log(current_category);
-      const BOARD_API_ENDPOINT = `/api/board-service/boards?page=${page}&category=${current_category}`;
-      console.log("통신 시작");
-      fetch(BOARD_API_ENDPOINT, {method:"GET"})  
-          .then(response => response.json())
-          .then(result => setBoardList(result.data))
+    if(writerUuid){
+      BOARD_API_ENDPOINT += `/seller/${writerUuid}?page=${page}&category=${current_category}`
+    } else {
+      BOARD_API_ENDPOINT += `?page=${page}&category=${current_category}`;
+    } 
+    console.log("통신 시작");
+    console.log(writerUuid)
+    fetch(BOARD_API_ENDPOINT, {method:"GET"})  
+        .then(response => {
+          if(response.status === 200)
+            return response.json()
+          else {
+            throw Error ('게시글 조회 실패')
+          }
+        })
+        .then(result => setBoardList(result.data))
+        .catch((error) => console.log("실패 사유 : "+error))
   }, [page, category]);
   
   // 카테고리 변경 시 호출되는 콜백 함수
@@ -116,8 +133,6 @@ const Board = () => {
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
-  
-  console.dir(boardList)
 
   return (
       <>

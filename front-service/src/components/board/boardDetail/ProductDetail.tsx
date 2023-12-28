@@ -70,6 +70,8 @@ const ProductDetailComponent: React.FC<ProductDetailProps> = ({ productDetail })
         </ProductDetailRow>
         <ProductDetailRow>
             <ProductDetailTitle>사진</ProductDetailTitle>
+        </ProductDetailRow>
+        <ProductDetailRow>
             <ProductDetailContent>
                 <ProductImage src={productDetail.productImage} alt="Product" />
             </ProductDetailContent>

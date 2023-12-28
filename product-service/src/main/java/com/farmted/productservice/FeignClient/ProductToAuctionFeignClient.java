@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "AUCTION-SERVICE", path = "auction-api")
+@FeignClient(name = "auction-service", path = "auction-service")
 public interface ProductToAuctionFeignClient {
-    @PostMapping("/product/auctions")
+    @PostMapping("/auction-api/product/auctions")
     public void createProductToAuctionFeign(
             @RequestHeader("UUID") String memberUuid,
             @RequestBody RequestAuctionCreateVo auctionCreateVo);
 
 
-    @GetMapping(value ="/products/auctions")
+    @GetMapping(value ="/auction-api/products/auctions")
     public List<ResponseAuctionGetVo> auctionProductList();
 
-    @GetMapping("/{auctionBuyer}")
+    @GetMapping("/auction-api/{auctionBuyer}")
     public List<ResponseAuctionGetVo> findAuctionBuyer(@PathVariable String auctionBuyer);
 }
 

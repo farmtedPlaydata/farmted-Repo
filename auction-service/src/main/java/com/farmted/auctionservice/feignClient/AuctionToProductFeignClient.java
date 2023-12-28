@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(name = "PRODUCT-SERVICE", path = "product-api")
+@FeignClient(name = "product-service", path = "product-service")
 public interface AuctionToProductFeignClient {
-    @PostMapping("{productUuid}/endAuctions")
+    @PostMapping("/product-api/{productUuid}/endAuctions")
     public void closedAuctionFromProduct(@PathVariable String productUuid);
 
-    @GetMapping("/products/{board_uuid}/boards")
-    public ProductVo getProductDetail(@PathVariable (value = "board_uuid") String boardUuid);
+    @GetMapping("/product-api/products/{board_uuid}/products")
+    public ProductVo getProductsDetail(@PathVariable (value = "board_uuid") String boardUuid);
 }

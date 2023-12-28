@@ -17,6 +17,7 @@ const BoardRouteController = () => {
                     <Route path='/' element={<Authentication />} />
                     <Route path="/boards/write" element={<CreateBoard/>}/>
                     <Route path="/boards/:boardUUID" element={<BoardDetail />}/>
+                    <Route path="/boards/writer/:writerUuid" element={<BoardMain/>}/>
                 </Route>
             </Routes>
         </>
