@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PassService {
 
-    void createPass(RequestCreatePassDto dto);
+    String createPass(RequestCreatePassDto dto);
     String login(RequestLoginDto dto);
     void logout(String uuid);
     List<ResponseListDto> getPassByAll(int pageNo);
