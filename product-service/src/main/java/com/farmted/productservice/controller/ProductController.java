@@ -109,10 +109,10 @@ public class ProductController {
         return ResponseEntity.ok(GlobalResponseDto.of(true));
     }
 
-
+//API Controller 옮겨오기
 
     // 상품 DB에 있는 경매 상태 값을 종료 상태로 변경
-    @PostMapping("/{productUuid}/endAuctions")
+    @PostMapping("/product-api/{productUuid}/endAuctions")
     @Operation(summary = "경매 상태 받아옴", description = "상품 DB에 있는 경매 상태 값을 종료 상태로 변경")
     public ResponseEntity<?> closedAuctionFromProduct(@PathVariable String productUuid){
         auctionService.endAuctionFromProduct(productUuid);
@@ -120,7 +120,7 @@ public class ProductController {
     }
 
     // 상품 상세 조회
-    @GetMapping("/products/{board_uuid}/products")
+    @GetMapping("/product-api/products/{board_uuid}/products")
     @Operation(summary = "상품 세부 내역 조회")
     public ResponseEntity<?> getProductDetail(@PathVariable (value = "board_uuid") String boardUuid){
         ProductResponseDto productDetail = productService.getProductDetail(boardUuid);
