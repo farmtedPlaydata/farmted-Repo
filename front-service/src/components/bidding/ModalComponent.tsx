@@ -24,7 +24,7 @@ const ModalWrapper = styled.div`
 
 const BiddingModal: React.FC<BiddingModalProps> = ({ boardUuid, memberUuid, onClose, isOpen, closeModal, modalContent }) => {
   const [biddingPrice, setBiddingPrice] = useState<number>();
-  const [memberPrice, setMemberPrice] = useState<number>(10000);
+  const [memberPrice, setMemberPrice] = useState<number>(0);
   const [biddingAutoPrice, setBiddingAutoPrice] = useState<number | null>(null);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
 
@@ -35,7 +35,7 @@ const BiddingModal: React.FC<BiddingModalProps> = ({ boardUuid, memberUuid, onCl
       }
 
       try {
-          const response = await fetch(`/api/auction-service/bidding-service/bid/${boardUuid}`, {
+          const response = await fetch(`/api//bidding-service/bid/${boardUuid}`, {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',

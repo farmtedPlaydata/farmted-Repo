@@ -12,7 +12,6 @@ interface Props{
 
 interface Board{
     memberName: string;
-    memberUuid: string;
     boardUuid: string;
     boardType: BoardType;
     boardTitle: string;
@@ -193,9 +192,7 @@ const BoardItem = (props:Props) => {
                         {board.boardTitle}
                     </ListTitle>
                     <ListWriter>
-                        <Link to={`/boards/writer/${board.memberUuid}`}>
-                            {board.memberName}
-                        </Link>
+                        {board.memberName}
                     </ListWriter>
                 </FlexContainer>
                 <ListTime>

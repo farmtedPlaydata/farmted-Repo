@@ -36,6 +36,5 @@ module.exports = {
         changeOrigin: true,
       },
     },
-    historyApiFallback: true, // 404 오류 시 /index.html로 리다이렉트
   },
 };
