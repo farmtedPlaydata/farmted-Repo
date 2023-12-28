@@ -6,13 +6,12 @@ import CreateBoard from "../createBoard/CreateBoard"
 import BoardDetail from "../boardDetail/BoardDetail"
 import Authentication from "../../user/authentication";
 import BiddingList from "../../bidding/biddingList/BiddingList"
+import Sidebar from "../../sidebar/sidebar";
 
 const BoardRouteController = () => {
     return(
+
         <>
-            {/*<Routes>*/}
-            {/*    <Route path="/" element={<Sidebar path={"/"} menuName={"Main"}/>}/>*/}
-            {/*</Routes>*/}
             <Routes>
                 <Route path="/" element={<BoardBody/>}>
                     <Route path='/boards' element={<BoardMain />} />
