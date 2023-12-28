@@ -114,7 +114,7 @@ public class BiddingService {
         List<BiddingResponseDto> createBiddingList = new ArrayList<>();
         for (Bidding bidding : biddingList) {
             System.out.println(bidding.getBoardUuid());
-            ProductVo productDetail = auctionFeignClient.getProductDetail(bidding.getBoardUuid());
+            ProductVo productDetail = auctionFeignClient.getProductsDetail(bidding.getBoardUuid());
             BiddingResponseDto biddingDetailList = new BiddingResponseDto(bidding,productDetail);
             createBiddingList.add(biddingDetailList);
         }
