@@ -79,7 +79,6 @@ const Board: React.FC<BoardProps> = ({ writerUuid }) => {
   const [category, setCategory] = useState<BoardType>(BoardType.PRODUCT);
   const [page, setPage] = useState(1);
   const [boardList, setBoardList] = useState<GlobalResponseDTO>();
-
   useEffect(() =>{
     let current_category: string = "";
     switch (category) {
@@ -123,7 +122,7 @@ const Board: React.FC<BoardProps> = ({ writerUuid }) => {
         })
         .then(result => setBoardList(result.data))
         .catch((error) => console.log("실패 사유 : "+error))
-  }, [page, category, writerUuid]);
+  }, [page, category]);
   
   // 카테고리 변경 시 호출되는 콜백 함수
   const handleCategoryChange = (newCategory: BoardType) => {
@@ -134,8 +133,6 @@ const Board: React.FC<BoardProps> = ({ writerUuid }) => {
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
-  
-  console.dir(boardList)
 
   return (
       <>
