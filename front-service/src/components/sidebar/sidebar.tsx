@@ -2,6 +2,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import React from "react";
 import {useNavigate} from "react-router-dom";
 import {Button, ButtonGroup} from "react-bootstrap";
+import './sidebarStyle.css';
 
 const Sidebar = () => {
 
@@ -12,7 +13,7 @@ const Sidebar = () => {
     };
     
     const handleAuthenticationClick = () => {
-        navigator('/authentication');
+        navigator('/auth');
     };
 
     const handleCreateBoardClick = () => {
@@ -24,7 +25,7 @@ const Sidebar = () => {
     };
 
     return (
-        <Accordion defaultActiveKey="0">
+        <Accordion className='flex-accordion'>
             <Accordion.Item eventKey="0">
                 <Accordion.Header>메뉴 바</Accordion.Header>
 

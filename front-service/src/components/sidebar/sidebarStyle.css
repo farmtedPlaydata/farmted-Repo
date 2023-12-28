@@ -1,0 +1,12 @@
+.flex-accordion {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-accordion .accordion-item {
+    flex: 1;
+}
+
+.flex-accordion .accordion-body {
+    flex: 1;
+}
