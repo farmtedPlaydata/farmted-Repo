@@ -51,7 +51,7 @@ const BiddingList = () => {
   const [biddingList, setBiddingList] = useState<BiddingResponseDto[]>([]);
   const [selectedBiddingItem, setSelectedBiddingItem] = useState<BiddingResponseDto | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const memberUuid = '6036e646-97d3-4e53-aee4-f88e00b57a4b';
+  const memberUuid = '8dc5c0a9-7ab4-4807-a66c-5080bd1c2451';
 
   useEffect(() => {
     let isMounted = true;

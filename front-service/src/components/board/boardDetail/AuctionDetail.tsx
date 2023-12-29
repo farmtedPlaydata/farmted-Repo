@@ -72,7 +72,7 @@ const AuctionDetailComponent: React.FC<AuctionDetailProps> = ({ auctionDetail , 
         <tbody>
           <AuctionDetailRow>
             <AuctionDetailTitle>입찰가</AuctionDetailTitle>
-            <AuctionDetailContent>{auctionDetail.auctionPrice}</AuctionDetailContent>
+            <AuctionDetailContent>{47000}</AuctionDetailContent>
           </AuctionDetailRow>
           <AuctionDetailRow>
             <AuctionDetailTitle>낙찰자</AuctionDetailTitle>
@@ -92,7 +92,7 @@ const AuctionDetailComponent: React.FC<AuctionDetailProps> = ({ auctionDetail , 
       </AuctionDetailTable>
 
       {/* "파란색 입찰 신청" 버튼 */}
-      <PlaceBidButton onClick={openBiddingModal}>파란색 입찰 신청</PlaceBidButton>
+      <PlaceBidButton onClick={openBiddingModal}>입찰 신청</PlaceBidButton>
       {/* "파란색 입찰 신청" 버튼 끝 */}
       
       {isBiddingModalOpen && (
@@ -102,7 +102,7 @@ const AuctionDetailComponent: React.FC<AuctionDetailProps> = ({ auctionDetail , 
           closeModal={closeBiddingModal}
           boardUuid={boardUuid} // 적절한 값을 전달
           memberUuid={"53bc6f2e-7686-4791-9591-f66762210c46"} // 적절한 값을 전달
-          modalContent={`최상위 입찰가: ${1000}, 마감 시간: ${"2024-01-25 21:45:00.000000"}`}
+          modalContent={`최상위 입찰가: ${47000}, 마감 시간: ${auctionDetail.auctionDeadline}`}
         />
       )}
     </AuctionDetailContainer>

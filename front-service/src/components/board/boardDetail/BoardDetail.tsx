@@ -94,6 +94,8 @@ const PrimaryButton = styled.button`
 const ListButton = styled.button`
   margin-top: 50px;
   float: right;
+  color: inherit; /* 링크 색상을 상위 엘리먼트의 색상으로 상속받습니다. */
+  text-decoration: none; /* 밑줄 제거 */
 `;
 
 //////////////////////////////////////////////////////

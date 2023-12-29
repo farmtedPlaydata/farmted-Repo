@@ -11,7 +11,6 @@ import User from "../../user/loginedUser";
 
 const BoardRouteController = () => {
     return(
-
         <>
             <Routes>
                 <Route path="/" element={<BoardBody/>}>

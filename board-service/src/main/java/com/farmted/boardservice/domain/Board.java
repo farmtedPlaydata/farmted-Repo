@@ -31,7 +31,7 @@ public class Board extends TimeStamp {
     @Column(nullable = false)
     private String boardTitle;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String boardContent;
 
     @Column

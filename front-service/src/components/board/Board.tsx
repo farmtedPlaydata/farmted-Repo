@@ -63,6 +63,9 @@ const transformData = (data: GlobalResponseDTO | undefined): Board[] => {
   return data.boardList.map((board, index) => {
     const product = data.productList?.[index];
     const auction = data.AuctionList?.[index];
+    // 하나라도 값이 있는 경우 해당 값을 auctionDeadline에 저장
+    const auctionDeadline = product?.auctionDeadline || auction?.auctionDeadline;
+
     return {
       ...board,
       productName: product?.productName,
@@ -70,7 +73,7 @@ const transformData = (data: GlobalResponseDTO | undefined): Board[] => {
       productImage: product?.productImage,
       productPrice: product?.productPrice,
       auctionPrice: auction?.auctionPrice,
-      auctionDeadline: auction?.auctionDeadline,
+      auctionDeadline: auctionDeadline,
     };
   });
 };

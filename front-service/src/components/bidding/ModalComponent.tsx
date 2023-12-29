@@ -24,7 +24,7 @@ const ModalWrapper = styled.div`
 
 const BiddingModal: React.FC<BiddingModalProps> = ({ boardUuid, memberUuid, onClose, isOpen, closeModal, modalContent }) => {
   const [biddingPrice, setBiddingPrice] = useState<number>();
-  const [memberPrice, setMemberPrice] = useState<number>(10000);
+  const [memberPrice, setMemberPrice] = useState<number>(100000);
   const [biddingAutoPrice, setBiddingAutoPrice] = useState<number | null>(null);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
 

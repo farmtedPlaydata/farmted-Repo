@@ -99,6 +99,7 @@ const RemainingTimeDiv = styled.div`
 
 const BoardItem = (props:Props) => {
     const { board } = props;
+    console.dir(board);
     const productName = board.productName ? <p>상품명: {board.productName}</p> : null;
     const productPrice = board.productPrice ? <p>상품 가격: {board.productPrice}</p> : null;
     const auctionPrice = board.auctionPrice ? <p>경매 가격: {board.auctionPrice}</p> : null;
@@ -112,30 +113,32 @@ const BoardItem = (props:Props) => {
     const cratedAt = parseLocalDateTime(board.createAt ?? '');
 
     let timeComponent;
-
-    if (board.auctionDeadline && auctionStatus) {
-        // 경매가 진행 중인 경우
-        const parsedDateTime = parseLocalDateTime(board.auctionDeadline);
-        if (parsedDateTime) {
-        const timeDiff = parsedDateTime.getTime() - new Date().getTime();
-        const secondsRemaining = Math.floor(timeDiff / 1000);
-        timeComponent = (
-            <RemainingTimeDiv style={{ color: 'red' }}>
-            <LiaStopwatchSolid />
-            {`남은 시간: ${secondsRemaining}초`}
+    console.log(board.auctionDeadline)
+    console.log(board.boardType)
+    if(board.boardType === BoardType.AUCTION){
+        if (board.auctionDeadline && auctionStatus) {
+            // 경매가 진행 중인 경우
+            const parsedDateTime = parseLocalDateTime(board.auctionDeadline);
+            if (parsedDateTime) {
+            const timeDiff = parsedDateTime.getTime() - new Date().getTime();
+            const secondsRemaining = Math.floor(timeDiff / 1000);
+            timeComponent = (
+                <RemainingTimeDiv style={{ color: 'red' }}>
+                <LiaStopwatchSolid />
+                {`남은 시간: ${secondsRemaining}초`}
+                </RemainingTimeDiv>
+            );
+            }
+        } else {
+            // 경매가 종료된 경우
+            timeComponent = (
+            <RemainingTimeDiv>
+                <LiaStopwatchSolid />
+                경매 종료
             </RemainingTimeDiv>
-        );
-        }
-    } else {
-        // 경매가 종료된 경우
-        timeComponent = (
-        <RemainingTimeDiv>
-            <LiaStopwatchSolid />
-            경매 종료
-        </RemainingTimeDiv>
-        );
+            );
+        }   
     }
-
     // 날짜 계산
     const detailDate = (a: Date): string => {
         const milliSeconds = new Date().getTime() - a.getTime();
