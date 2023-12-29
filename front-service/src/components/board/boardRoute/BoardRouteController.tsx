@@ -15,13 +15,13 @@ const BoardRouteController = () => {
         <>
             <Routes>
                 <Route path="/" element={<BoardBody/>}>
-                    <Route path='/' element={<BoardMain />} />
+                    <Route path='/' element={<Authentication />} />
+                    <Route path='/boards' element={<BoardMain />} />
                     <Route path='/bidding' element={<BiddingList/>}/>
-                    <Route path='/auth' element={<Authentication />} />
                     <Route path="/boards/write" element={<CreateBoard/>}/>
                     <Route path="/boards/:boardUUID" element={<BoardDetail />}/>
                     <Route path="/boards/writer/:writerUuid" element={<BoardMain/>}/>
-                    <Route path='mypage' element={<User />} />
+                    <Route path='/mypage' element={<User />} />
                 </Route>
             </Routes>
         </>
