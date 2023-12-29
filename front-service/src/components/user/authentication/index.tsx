@@ -372,7 +372,7 @@ export default function Authentication() {
                     throw new Error('회원 정보 작성에 실패했습니다.');
                 }
             });
-            navigator('/');
+            navigator('/boards');
         }
 
 
