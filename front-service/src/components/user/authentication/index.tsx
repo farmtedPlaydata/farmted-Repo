@@ -7,16 +7,12 @@ import {SignInRequestDto, SignUpRequestDto} from "../dto/request";
 import Swal from "sweetalert2";
 import InputBox from "../../inputbox";
 import {Address, useDaumPostcodePopup} from "react-daum-postcode";
-import userLoginUserStore from "../store/user.store";
-
 
 
 
 //          component: 인증 페이지          //
 export default function Authentication() {
 
-    //          state: 로그인 유저 전역 상태          //
-    const {loginUser, setLoginUser} = userLoginUserStore();
     //          state: 쿠키 상태          //
     const [cookies, setCookie] = useCookies();
     //          state: 화면 상태          //
@@ -24,7 +20,6 @@ export default function Authentication() {
     //          state: UUID 상태          //
     const [uuid, setUuid] = useState<string | null>(null);
     //          state: 페이지 번호 상태          //
-    const [page, setPage] = useState<1 | 2>(1);
 
     //          function: 네비게이트 함수          //
     const navigator = useNavigate();
@@ -93,20 +88,6 @@ export default function Authentication() {
         const onSignUpLinkClickHandler = () => {
             setView('sign-up');
         }
-
-        //          event handler: 구글 로그인 클릭 이벤트 처리          //
-        const onGoogleButtonClickHandler = ()  => {
-
-            const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
-            const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
-            window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=' +
-                CLIENT_ID + '&redirect_uri=' + REDIRECT_URI + '&response_type=code&scope=email profile';
-
-            setPage(2);
-            setView('sign-up');
-        }
-
-
 
 
         //          render: sign in 카드 컴포넌트 렌더링         //
@@ -200,6 +181,8 @@ export default function Authentication() {
 
         //          state: 프로필 이미지 상태          //
         const [profileImage, setProfileImage] = useState<File | string>('');
+        const [page, setPage] = useState<1 | 2>(1);
+
 
 
         //          event handler: 프로필 이미지 이벤트 처리          //
@@ -285,9 +268,11 @@ export default function Authentication() {
 
             const requestBody: SignInRequestDto = {email, password};
 
-            const DETAILS_ENDPOINT = '/api/pass-service/passes';
+            setEmail(email);
 
-            fetch(DETAILS_ENDPOINT, {
+            const SIGN_UP_ENDPOINT = '/api/pass-service/passes';
+
+            fetch(SIGN_UP_ENDPOINT, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -295,8 +280,6 @@ export default function Authentication() {
                 body: JSON.stringify(requestBody),
             }).then(response => {
                 if (response.ok) {
-                    const uuidFromHeader = response.headers.get("UUID");
-                    setUuid(uuidFromHeader);
                     return response.text();
                 } else {
                     throw new Error('회원 정보 작성에 실패했습니다.');
@@ -329,7 +312,7 @@ export default function Authentication() {
             const checkedEmail = email.trim().length === 0;
             if (checkedEmail) {
                 setEmailError(true);
-                setEmailErrorMessage('이메일을 확일할 수 없습니다.');
+                setEmailErrorMessage('이메일을 확인할 수 없습니다.');
             }
 
             // description: UUID 여부 확인 //
@@ -389,7 +372,7 @@ export default function Authentication() {
                     throw new Error('회원 정보 작성에 실패했습니다.');
                 }
             });
-            navigator('/');
+            navigator('/boards');
         }
 
 
