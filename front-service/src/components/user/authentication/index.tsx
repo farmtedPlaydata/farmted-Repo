@@ -128,10 +128,6 @@ export default function Authentication() {
                         </div>
                     )}
                     <div className='auth-button' onClick={onSignInButtonClickHandler}>{'로그인'}</div>
-                    <div className='auth-button' onClick={onGoogleButtonClickHandler}>
-                        <img src="/icons/google-icon.png" alt="Icon" />
-                        Google로 계속
-                    </div>
                     <div className='auth-description-box'>
                         <div className='auth-description'>{'신규 사용자이신가요? '}<span className='description-emphasis' onClick={onSignUpLinkClickHandler}>{'회원가입'}</span></div>
                     </div>

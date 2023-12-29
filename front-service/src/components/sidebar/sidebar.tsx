@@ -10,7 +10,7 @@ const Sidebar = () => {
     const navigator = useNavigate();
 
     const handleHomeClick = () => {
-        navigator('/');
+        navigator('/boards');
     };
     
     const handleAuthenticationClick = () => {
@@ -21,8 +21,8 @@ const Sidebar = () => {
         navigator('/boards/write');
     };
 
-    const handleBoardDetailClick = () => {
-        navigator(`/boards/firstBoardUUID`);
+    const handleBiddingClick = () => {
+        navigator(`/bidding`);
     };
     const handleMyPageClick = () => {
         navigator(`/mypage`);
@@ -33,7 +33,6 @@ const Sidebar = () => {
         <Accordion className='flex-accordion'>
             <Accordion.Item eventKey="0">
                 <Accordion.Header>메뉴 바</Accordion.Header>
-
                 <Accordion.Body>
                     <ButtonGroup vertical>
                         <Button variant="primary" size="sm" onClick={handleHomeClick} className="mb-2">
@@ -42,8 +41,8 @@ const Sidebar = () => {
                         <Button variant="primary" size="sm" onClick={handleCreateBoardClick} className="mb-2">
                             게시판 작성 페이지로 이동
                         </Button>
-                        <Button variant="primary" size="sm" onClick={handleBoardDetailClick} className="mb-2">
-                            게시판 상세 페이지로 이동
+                        <Button variant="primary" size="sm" onClick={handleBiddingClick} className="mb-2">
+                            입찰 내역 페이지로 이동
                         </Button>
                         <Button variant="primary" size="sm" onClick={handleAuthenticationClick} className="mb-2">
                             인증 페이지로 이동
@@ -54,7 +53,6 @@ const Sidebar = () => {
                     </ButtonGroup>
                 </Accordion.Body>
             </Accordion.Item>
-
         </Accordion>
     );
 };
