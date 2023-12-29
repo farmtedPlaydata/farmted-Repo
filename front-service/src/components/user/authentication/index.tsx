@@ -95,11 +95,13 @@ export default function Authentication() {
         }
 
         //          event handler: 구글 로그인 클릭 이벤트 처리          //
-        const onGoogleButtonClickHandler = () => {
-            const GOOGLE_URI = '/api/login/oauth2/code/google.com';
+        const onGoogleButtonClickHandler = ()  => {
 
-            fetch(GOOGLE_URI, {method: "POST"})
-                .then(response => response.ok);
+            const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+            const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
+            window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=' +
+                CLIENT_ID + '&redirect_uri=' + REDIRECT_URI + '&response_type=code&scope=email profile';
+
             setPage(2);
             setView('sign-up');
         }

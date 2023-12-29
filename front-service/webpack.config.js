@@ -1,4 +1,8 @@
 const path = require('path');
+const {DefinePlugin} = require('webpack');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 module.exports = {
   mode: 'development',
@@ -26,8 +30,11 @@ module.exports = {
       },
     ],
   },
+  plugins: [new DefinePlugin({
+    "process.env": JSON.stringify(process.env),
+  })],
   devServer: {
-    port: 9000,
+    port: 3000,
     open: true,
     proxy: {
       '/api/*': {
