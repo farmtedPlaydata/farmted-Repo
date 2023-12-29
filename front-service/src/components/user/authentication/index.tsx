@@ -23,7 +23,8 @@ export default function Authentication() {
     const [view, setView] = useState<'sign-in' | 'sign-up'>('sign-in');
     //          state: UUID 상태          //
     const [uuid, setUuid] = useState<string | null>(null);
-
+    //          state: 페이지 번호 상태          //
+    const [page, setPage] = useState<1 | 2>(1);
 
     //          function: 네비게이트 함수          //
     const navigator = useNavigate();
@@ -95,11 +96,16 @@ export default function Authentication() {
 
         //          event handler: 구글 로그인 클릭 이벤트 처리          //
         const onGoogleButtonClickHandler = () => {
-            const GOOGLE_URI = "/oauth2/authorization/google";
+            const GOOGLE_URI = '/api/login/oauth2/code/google.com';
 
             fetch(GOOGLE_URI, {method: "POST"})
                 .then(response => response.ok);
+            setPage(2);
+            setView('sign-up');
         }
+
+
+
 
         //          render: sign in 카드 컴포넌트 렌더링         //
         return (
@@ -120,7 +126,7 @@ export default function Authentication() {
                         </div>
                     )}
                     <div className='auth-button' onClick={onSignInButtonClickHandler}>{'로그인'}</div>
-                    <div className='auth-button'>
+                    <div className='auth-button' onClick={onGoogleButtonClickHandler}>
                         <img src="/icons/google-icon.png" alt="Icon" />
                         Google로 계속
                     </div>
@@ -135,8 +141,6 @@ export default function Authentication() {
     //          component: sign up 카드 컴포넌트          //
     const SignUpCard = () => {
 
-        //          state: 페이지 번호 상태          //
-        const [page, setPage] = useState<1 | 2>(1);
 
         //          state: 이메일 상태          //
         const [email, setEmail] = useState<string>('');
