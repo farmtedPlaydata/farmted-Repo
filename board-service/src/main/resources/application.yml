@@ -1,0 +1,24 @@
+# Feign 클라이언트 설정
+service:
+  product:
+    name: "product-service"
+    url: "/product-service"
+  auction:
+    name: "auction-service"
+    url: "/auction-service"
+  member:
+    name: "member-service"
+    url: "/member-service"
+spring:
+  profiles:
+    active: board
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+## 스케줄러 세팅
+schedules:
+  cron: "* * * * * *"  # 1초마다 스케줄러 실행

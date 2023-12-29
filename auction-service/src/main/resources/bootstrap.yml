@@ -1,0 +1,7 @@
+# bootstrap.yml
+spring:
+  cloud:
+    config:
+      uri: http://43.202.60.155:9999/
+      name: config, server
+# config

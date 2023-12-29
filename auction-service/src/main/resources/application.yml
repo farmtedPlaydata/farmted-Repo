@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: auction
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+  main:
+    allow-bean-definition-overriding: true
+## 스케줄러 세팅
+schedules:
+  cron: "*/60 * * * * *"  # 1분마다
+

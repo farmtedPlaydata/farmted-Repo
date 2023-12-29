@@ -1,0 +1,13 @@
+
+spring:
+  profiles:
+    active: pass
+  main:
+    allow-circular-references: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
