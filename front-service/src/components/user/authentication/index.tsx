@@ -94,20 +94,6 @@ export default function Authentication() {
             setView('sign-up');
         }
 
-        //          event handler: 구글 로그인 클릭 이벤트 처리          //
-        const onGoogleButtonClickHandler = ()  => {
-
-            const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
-            const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
-            window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=' +
-                CLIENT_ID + '&redirect_uri=' + REDIRECT_URI + '&response_type=code&scope=email profile';
-
-            setPage(2);
-            setView('sign-up');
-        }
-
-
-
 
         //          render: sign in 카드 컴포넌트 렌더링         //
         return (
@@ -128,10 +114,6 @@ export default function Authentication() {
                         </div>
                     )}
                     <div className='auth-button' onClick={onSignInButtonClickHandler}>{'로그인'}</div>
-                    <div className='auth-button' onClick={onGoogleButtonClickHandler}>
-                        <img src="/icons/google-icon.png" alt="Icon" />
-                        Google로 계속
-                    </div>
                     <div className='auth-description-box'>
                         <div className='auth-description'>{'신규 사용자이신가요? '}<span className='description-emphasis' onClick={onSignUpLinkClickHandler}>{'회원가입'}</span></div>
                     </div>
@@ -289,9 +271,11 @@ export default function Authentication() {
 
             const requestBody: SignInRequestDto = {email, password};
 
-            const DETAILS_ENDPOINT = '/api/pass-service/passes';
+            setEmail(email);
 
-            fetch(DETAILS_ENDPOINT, {
+            const SIGN_UP_ENDPOINT = '/api/pass-service/passes';
+
+            fetch(SIGN_UP_ENDPOINT, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -299,8 +283,6 @@ export default function Authentication() {
                 body: JSON.stringify(requestBody),
             }).then(response => {
                 if (response.ok) {
-                    const uuidFromHeader = response.headers.get("UUID");
-                    setUuid(uuidFromHeader);
                     return response.text();
                 } else {
                     throw new Error('회원 정보 작성에 실패했습니다.');
@@ -333,7 +315,7 @@ export default function Authentication() {
             const checkedEmail = email.trim().length === 0;
             if (checkedEmail) {
                 setEmailError(true);
-                setEmailErrorMessage('이메일을 확일할 수 없습니다.');
+                setEmailErrorMessage('이메일을 확인할 수 없습니다.');
             }
 
             // description: UUID 여부 확인 //
