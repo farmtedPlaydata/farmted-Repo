@@ -7,16 +7,12 @@ import {SignInRequestDto, SignUpRequestDto} from "../dto/request";
 import Swal from "sweetalert2";
 import InputBox from "../../inputbox";
 import {Address, useDaumPostcodePopup} from "react-daum-postcode";
-import userLoginUserStore from "../store/user.store";
-
 
 
 
 //          component: 인증 페이지          //
 export default function Authentication() {
 
-    //          state: 로그인 유저 전역 상태          //
-    const {loginUser, setLoginUser} = userLoginUserStore();
     //          state: 쿠키 상태          //
     const [cookies, setCookie] = useCookies();
     //          state: 화면 상태          //
@@ -24,7 +20,6 @@ export default function Authentication() {
     //          state: UUID 상태          //
     const [uuid, setUuid] = useState<string | null>(null);
     //          state: 페이지 번호 상태          //
-    const [page, setPage] = useState<1 | 2>(1);
 
     //          function: 네비게이트 함수          //
     const navigator = useNavigate();
@@ -186,6 +181,8 @@ export default function Authentication() {
 
         //          state: 프로필 이미지 상태          //
         const [profileImage, setProfileImage] = useState<File | string>('');
+        const [page, setPage] = useState<1 | 2>(1);
+
 
 
         //          event handler: 프로필 이미지 이벤트 처리          //
