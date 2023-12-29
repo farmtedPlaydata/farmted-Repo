@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {Button, ButtonGroup} from "react-bootstrap";
 import './sidebarStyle.css';
 
+
 const Sidebar = () => {
 
     const navigator = useNavigate();
@@ -23,6 +24,10 @@ const Sidebar = () => {
     const handleBoardDetailClick = () => {
         navigator(`/boards/firstBoardUUID`);
     };
+    const handleMyPageClick = () => {
+        navigator(`/mypage`);
+    };
+
 
     return (
         <Accordion className='flex-accordion'>
@@ -42,6 +47,9 @@ const Sidebar = () => {
                         </Button>
                         <Button variant="primary" size="sm" onClick={handleAuthenticationClick} className="mb-2">
                             인증 페이지로 이동
+                        </Button>
+                        <Button variant="primary" size="sm" onClick={handleMyPageClick} className="mb-2">
+                            마이 페이지로 이동
                         </Button>
                     </ButtonGroup>
                 </Accordion.Body>

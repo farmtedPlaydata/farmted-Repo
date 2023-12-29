@@ -1,6 +1,7 @@
 // src/components/LoginPage.tsx
 import React from 'react';
 import styled from 'styled-components';
+import {Link} from "react-router-dom";
 
 
 
@@ -133,7 +134,11 @@ const LoginPage: React.FC = () => {
                 <Button>계속</Button>
                 <SignupButton>회원가입</SignupButton>
                 <div style={{margin:'20px 0px'}}>──────  또는  ──────</div>
-                <Button1><img src="/icons/google-icon.png" alt="Icon" />Google로 계속</Button1>
+                <Button1>
+                    <Link to = "/oauth2/authorization/google" />
+                    <img src="/icons/google-icon.png" alt="Icon" />
+                    Google로 계속
+                </Button1>
                 <Button2><img src="/icons/kakaotalk-icon.png" alt="Icon" />Kakao Talk로 계속</Button2>
             </LoginForm>
         </Container>

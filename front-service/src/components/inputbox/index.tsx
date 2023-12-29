@@ -14,6 +14,7 @@ interface Props {
     errorMessage?: string;
     onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
     onButtonClick?: () => void;
+    onChange?: ChangeEvent;
 }
 
 //          component: Input 상자 컴포넌트          //
